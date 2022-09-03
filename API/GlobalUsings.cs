@@ -1,0 +1,17 @@
+﻿global using API.Extensions;
+global using API.Filters;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.Filters;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.IdentityModel.Tokens;
+global using Microsoft.OpenApi.Models;
+global using NLog;
+global using Repository;
+global using Service;
+global using Service.Contracts;
+global using Service.Implementations;
+global using Shared.ConfigurationModels;
+global using Shared.DataTransferObjects;
+global using System.Text;

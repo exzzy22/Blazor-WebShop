@@ -1,0 +1,15 @@
+﻿global using AutoMapper;
+global using Domain.Exceptions.ModelSpecific;
+global using Domain.Models;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.Extensions.Options;
+global using Microsoft.IdentityModel.Tokens;
+global using NLog;
+global using Repository;
+global using Service.Contracts;
+global using Shared.ConfigurationModels;
+global using Shared.DataTransferObjects;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
+global using System.Security.Cryptography;
+global using System.Text;
