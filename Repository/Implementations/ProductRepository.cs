@@ -12,7 +12,10 @@ internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepo
 
     public async Task<Product> GetProductAsync(int id, bool trackChanges) => await FindByCondition(p => p.Id.Equals(id), trackChanges).FirstOrDefaultAsync();
 
-    public async Task<IEnumerable<Product>> GetProductsAsync() => await FindAll(false).ToListAsync();
+    public async Task<IEnumerable<Product>> GetProductsAsync() => await FindAll(false)
+        .Include(p => p.SubCategory)
+        .ThenInclude(s => s.Category)
+        .ToListAsync();
 
     public void UpdateProduct(Product product) => Update(product);
 }

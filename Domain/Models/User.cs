@@ -8,6 +8,5 @@ namespace Domain.Models
         public string? LastName { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
-
     }
 }

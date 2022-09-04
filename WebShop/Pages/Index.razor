@@ -1,9 +1,9 @@
 ﻿@page "/"
 
 <TopCategories/>
-<Carousel/>
+<Carousel Products="Products" Title="NEW PRODUCTS"/>
 <HotDeal/>
-<Carousel/>
+<Carousel Products="Products" Title="BEST SELLER"/>
 <WidgetSlick/>
 
 @code
@@ -12,10 +12,13 @@
     public IJSRuntime JS { get; set; }
     [Inject]
     public IApiService ApiService { get; set; }
+    public List<ProductVM> Products { get; set; } = new();
+
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        Console.WriteLine("Index OnAfterRenderAsync");
+        Products = await ApiService.GetProductsAsync();
+        StateHasChanged();
     }
 }

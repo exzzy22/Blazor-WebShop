@@ -8,7 +8,7 @@
 			<!-- section title -->
 			<div class="col-md-12">
 				<div class="section-title">
-					<h3 class="title">New Products</h3>
+					<h3 class="title">@Title</h3>
 					<div class="section-nav">
 						<ul class="section-tab-nav tab-nav">
 							<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
@@ -50,21 +50,23 @@
 {
 	[Inject]
 	public IJSRuntime JS { get; set; }
-	[Inject]
-	public IApiService ApiService { get; set; }
-	private Guid guid { get; set; } = Guid.NewGuid();
-	public List<ProductVM> Products { get; set; } = new();
+	[Parameter]
+	public List<ProductVM> Products { get; set; }
+	[Parameter]
+	public string Title { get; set; }
+	private Guid guid = Guid.NewGuid();
+
 
 	protected override async Task OnInitializedAsync()
 	{
-		Products = await ApiService.GetProductsAsync();
+		//Products = await ApiService.GetProductsAsync();
 	}
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         Console.WriteLine($"{this.ToString()} OnAfterRenderAsync");
-		Console.WriteLine($"Products count {Products.Count}");
-		if(Products.Count>0)
+		//Console.WriteLine($"Products count {Products.Count}");
+		if(Products is not null && Products?.Count>0)
 			await JS.InvokeAsync<IJSObjectReference>("import", "/js/main.js");
     }
 }
