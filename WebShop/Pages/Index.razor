@@ -10,10 +10,12 @@
 {
     [Inject]
     public IJSRuntime JS { get; set; }
+    [Inject]
+    public IApiService ApiService { get; set; }
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if(firstRender)
-            await JS.InvokeAsync<IJSObjectReference>("import", "/js/main.js");
+        Console.WriteLine("Index OnAfterRenderAsync");
     }
 }

@@ -1,15 +1,21 @@
-﻿using System.Net.Http.Headers;
+﻿using AutoMapper;
+using Shared.DataTransferObjects;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using ViewModels;
 
-namespace ApiService;
+namespace ApiServices;
 
-internal sealed class ApiService : IApiService
+public sealed class ApiService : IApiService
 {
     private readonly HttpClient _httpClient;
+    private readonly IMapper _mapper;
 
-    public ApiService(IHttpClientFactory httpClientFactory)
+    public ApiService(IHttpClientFactory httpClientFactory, IMapper mapper)
     {
+        _mapper = mapper;
         _httpClient = httpClientFactory.CreateClient();
-        _httpClient.BaseAddress = new Uri("");
+        _httpClient.BaseAddress = new Uri("https://localhost:5000/");
     }
 
     public bool AuthenticationHeaderExits()
@@ -23,5 +29,13 @@ internal sealed class ApiService : IApiService
     public void SetAuthenticationHeader(string jwtToken)
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jwtToken);
+    }
+
+    public async Task<List<ProductVM>> GetProductsAsync()
+    {
+        var response = await _httpClient.GetAsync("api/Product");
+        var productsDtos = await response.Content.ReadFromJsonAsync<List<ProductDto>>();
+
+        return _mapper.Map<List<ProductVM>>(productsDtos);
     }
 }

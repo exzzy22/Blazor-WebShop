@@ -1,9 +1,12 @@
 ﻿using System.Net.Http.Headers;
+using ViewModels;
 
-namespace ApiService;
+namespace ApiServices;
 
 public interface IApiService
 {
-    public bool AuthenticationHeaderExits();
-    public void SetAuthenticationHeader(string jwtToken);
+    Task<List<ProductVM>> GetProductsAsync();
+
+    bool AuthenticationHeaderExits();
+    void SetAuthenticationHeader(string jwtToken);
 }
