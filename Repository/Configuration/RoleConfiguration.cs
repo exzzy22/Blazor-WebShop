@@ -14,13 +14,11 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
             { 
                 Id = 1,
                 Name = "Administrator",
-                NormalizedName = "Administrator".Normalize(),
             },
             new Role
             {
                 Id = 2,
                 Name = "User",
-                NormalizedName = "User".Normalize()
             }
         );
     }

@@ -15,3 +15,4 @@ global using Service.Implementations;
 global using Shared.ConfigurationModels;
 global using Shared.DataTransferObjects;
 global using System.Text;
+global using Microsoft.AspNetCore.Authorization;

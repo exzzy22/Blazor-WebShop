@@ -5,6 +5,7 @@ namespace Repository
     public interface IRepositoryManager
     {
         IProductRepository Product { get; }
+        ICategoryRepository Category { get; }
 
         Task SaveAsync();
         void Save();

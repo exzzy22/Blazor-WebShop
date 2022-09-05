@@ -1,4 +1,6 @@
-﻿namespace Service.Implementations;
+﻿using System.Linq.Expressions;
+
+namespace Service.Implementations;
 
 internal sealed class ProductService : IProductService
 {
@@ -12,23 +14,23 @@ internal sealed class ProductService : IProductService
         _mapper = mapper;
     }
 
-    public async Task<CarouselDto> GetCarouselProductsAsync()
+    public async Task<IEnumerable<CarouselDto>> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfCategories,int numberOfProducts)
     {
-        var products = await _repository.Product.GetProductsAsync();
+        IEnumerable<Product> products = await _repository.Product.GetProductsAsync();
 
-        products = products.OrderByDescending(x => (x.Sold * x.Price)).ToList();
+        IEnumerable<Category> categories = _repository.Category.GetTopCategoriesAsync(orderBy,numberOfCategories);
 
-        var categories = products.Select(p => p.SubCategory.Category.Name).Distinct().Take(4);
-
-        List<Product> productsList = new ();
+        List<CarouselDto> carousel = new ();
 
         foreach (var category in categories)
         {
-            var productsInCategory = products.Where(p => p.SubCategory.Category.Name.Equals(category)).Take(8);
-            productsList.AddRange(productsInCategory);
+            carousel.Add(
+                new CarouselDto (
+                Category: _mapper.Map<CategoryDto>(category),
+                Products: _mapper.Map<IEnumerable<ProductDto>>(products.Where(p => p.SubCategory.Category.Id.Equals(category.Id)).Take(numberOfProducts))));
         }
 
-        return new CarouselDto(_mapper.Map<IEnumerable<ProductDto>>(productsList), categories);
+        return carousel;
     }
 
     public async Task<IEnumerable<ProductDto>> GetProductsAsync()
