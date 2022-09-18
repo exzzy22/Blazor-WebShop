@@ -4,8 +4,12 @@ public class Mapper : Profile
 {
 	public Mapper()
 	{
-		CreateMap<Product, ProductDto>();
-        CreateMap<Category, CategoryDto>();
-        CreateMap<SubCategory, SubCategoryDto>();
+		CreateMap<Product, ProductForCreationDto>().ReverseMap();
+        CreateMap<Category, CategoryDto>().ReverseMap();
+        CreateMap<Attribute, AttributesForCreationDto>().ReverseMap();
+        CreateMap<CpuAtrributes, CpuAtrributesForCreationDto>().ReverseMap();
+        CreateMap<Price, PriceForCreationDto>().ReverseMap();
+        CreateMap<Currency, CurrencyDto>().ReverseMap();
+        CreateMap<Category, CategoryDto>().ReverseMap();
     }
 }

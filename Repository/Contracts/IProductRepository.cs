@@ -4,8 +4,9 @@ namespace Repository.Contracts;
 
 public interface IProductRepository
 {
-    Task<Product> GetProductAsync(int id, bool trackChanges);
-    void UpdateProduct(Product product);
-    void DeleteProduct(Product product);
+    void Create(Product product);
+    Task<Product?> GetProductAsync(int id, bool trackChanges);
+    void Update(Product product);
+    void Delete(Product product);
     Task<IEnumerable<Product>> GetProductsAsync();
 }

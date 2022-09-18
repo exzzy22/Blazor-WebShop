@@ -6,6 +6,7 @@ namespace Repository
     {
         IProductRepository Product { get; }
         ICategoryRepository Category { get; }
+        IAttributesRepository Attributes { get; }
 
         Task SaveAsync();
         void Save();

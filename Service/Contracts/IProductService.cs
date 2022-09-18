@@ -4,6 +4,7 @@ namespace Service.Contracts;
 
 public interface IProductService
 {
-    Task<IEnumerable<ProductDto>> GetProductsAsync();
-    public Task<IEnumerable<CarouselDto>> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfCategories, int numberOfProducts);
+    Task AddProduct(ProductForCreationDto product);
+    Task<IEnumerable<ProductForCreationDto>> GetProductsAsync();
+    public Task<CarouselDto> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy);
 }

@@ -1,24 +1,26 @@
 ﻿@page "/"
 
 <TopCategories/>
-<Carousel Products="Products" Title="NEW PRODUCTS"/>
+<Carousel Carousels="Carousels" Title="NEW PRODUCTS" />
 <HotDeal/>
-<Carousel Products="Products" Title="BEST SELLER"/>
+<Carousel Carousels="Carousels" Title="BEST SELLER" />
 <WidgetSlick/>
 
 @code
 {
     [Inject]
-    public IJSRuntime JS { get; set; }
+    public IJSRuntime JS { get; set; } = null!;
     [Inject]
-    public IApiService ApiService { get; set; }
-    public List<ProductVM> Products { get; set; } = new();
+    public IApiService ApiService { get; set; } = null!;
+    public List<CarouselVM> Carousels { get; set; } = new();
 
-
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        Products = await ApiService.GetProductsAsync();
-        StateHasChanged();
+        Carousels = await ApiService.GetCarouselTopSelling(4, 8);
     }
+
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    Carousels = await ApiService.GetCarouselTopSelling(4, 8);
+    //}
 }

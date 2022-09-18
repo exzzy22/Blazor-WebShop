@@ -1,14 +1,11 @@
-﻿using AutoMapper;
-using Domain.Models;
-using Shared.DataTransferObjects;
-using ViewModels;
-
-namespace ApiServices;
+﻿namespace ApiServices;
 
 public class Mapper : Profile
 {
     public Mapper()
     {
-        CreateMap<ProductDto, ProductVM>();
+        CreateMap<ProductForCreationDto, ProductVM>().ReverseMap();
+        CreateMap<CarouselDto, CarouselVM>().ReverseMap();
+        CreateMap<CategoryDto, CategoryVM>().ReverseMap();
     }
 }
