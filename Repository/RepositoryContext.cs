@@ -13,15 +13,20 @@ namespace Repository
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
             modelBuilder.Entity<Product>()
-                .HasOne(p => p.Attributes)
-                .WithOne(a => a.Product)
-                .HasForeignKey<Attributes>(p => p.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
+                        .Navigation(p => p.Prices)
+                        .AutoInclude(true);
+
+            modelBuilder.Entity<Product>()
+                        .HasOne(p => p.Attributes)
+                        .WithOne(a => a.Product)
+                        .HasForeignKey<Attributes>(p => p.ProductId)
+                        .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Attributes>()
                         .ToTable("Attributes")
-                        .HasDiscriminator<string>("AttributesType")
-                        .HasValue<CpuAtrributes>(nameof(CpuAtrributes));
+                        .HasDiscriminator<int>("AttributesType")
+                        .HasValue<Attributes>(0)
+                        .HasValue<CpuAtrributes>(1);
 
             base.OnModelCreating(modelBuilder);
         }

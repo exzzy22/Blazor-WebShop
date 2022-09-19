@@ -1,6 +1,6 @@
 ﻿namespace Shared.DataTransferObjects;
 
-public record PriceForCreationDto
+public record PriceDto
 {
     public float Value { get; init; }
     public int CurrencyId { get; set; }

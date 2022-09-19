@@ -12,5 +12,6 @@ internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepo
 
     public async Task<IEnumerable<Product>> GetProductsAsync() => await FindAll(false)
         .Include(p => p.Category)
+        .Include(p => p.Attributes)
         .ToListAsync();
 }

@@ -16,6 +16,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await ApiService.GetProductsAsync();
+
         Carousels = await ApiService.GetCarouselTopSelling(4, 8);
     }
 

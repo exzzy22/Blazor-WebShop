@@ -1,3 +1,3 @@
 ﻿namespace Shared.DataTransferObjects;
 
-public record CarouselDto(IEnumerable<CategoryDto> Categories, IEnumerable<ProductForCreationDto> Products);
+public record CarouselDto(IEnumerable<CategoryDto> Categories, IEnumerable<ProductCarouselDto> Products);

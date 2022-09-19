@@ -2,6 +2,7 @@
 using Shared.DataTransferObjects;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 using ViewModels;
 
 namespace ApiServices;
@@ -34,9 +35,11 @@ public sealed class ApiService : IApiService
     public async Task<List<ProductVM>> GetProductsAsync()
     {
         var response = await _httpClient.GetAsync("api/product/all");
-        var productsDtos = await response.Content.ReadFromJsonAsync<List<ProductForCreationDto>>();
 
-        return _mapper.Map<List<ProductVM>>(productsDtos);
+        var products = await response.Content.ReadFromJsonAsync<List<ProductDto>>();
+
+
+        return _mapper.Map<List<ProductVM>>(products);
     }
 
     public async Task<List<CarouselVM>> GetCarouselTopSelling(int numberOfCategories, int numberOfProducts)

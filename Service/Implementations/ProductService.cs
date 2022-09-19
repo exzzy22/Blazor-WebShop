@@ -42,22 +42,22 @@ internal sealed class ProductService : IProductService
             filteredProducts.AddRange(categoryProducts);
         }
 
-        return new CarouselDto(_mapper.Map<IEnumerable<CategoryDto>>(categories),_mapper.Map<IEnumerable<ProductForCreationDto>>(filteredProducts));
+        return new CarouselDto(_mapper.Map<IEnumerable<CategoryDto>>(categories),_mapper.Map<IEnumerable<ProductCarouselDto>>(filteredProducts));
     }
 
-    public async Task<IEnumerable<ProductForCreationDto>> GetProductsAsync()
+    public async Task<IEnumerable<ProductDto>> GetProductsAsync()
     {
         var products = await _repository.Product.GetProductsAsync();
 
-        return _mapper.Map<IEnumerable<ProductForCreationDto>>(products);
+        return _mapper.Map<IEnumerable<ProductDto>>(products);
     }
 
     private dynamic? GetAttributesType(string derivedType, string json)
     {
         switch (derivedType)
         {
-            case nameof(CpuAtrributesForCreationDto):
-                    return _mapper.Map<CpuAtrributes>(JsonSerializer.Deserialize<CpuAtrributesForCreationDto>(json));
+            case nameof(CpuAtrributesDto):
+                    return _mapper.Map<CpuAtrributes>(JsonSerializer.Deserialize<CpuAtrributesDto>(json));
 
         }
 

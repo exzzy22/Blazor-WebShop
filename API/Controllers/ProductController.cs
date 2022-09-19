@@ -14,12 +14,12 @@ public class ProductController : ControllerBase
     [HttpGet("all")]
     public async Task<IActionResult> GetProducts()
     {
-        var products = await _service.ProductService.GetProductsAsync();
+        IEnumerable<ProductDto>? products = await _service.ProductService.GetProductsAsync();
 
         return Ok(products);
     }
 
-    [HttpGet("carousel/topSelling/")]
+    [HttpGet("carousel/topSelling")]
     public async Task<IActionResult> GetCarouselTopSelling()
     {
         var carousel = await _service.ProductService.GetCarouselProductsAsync(x => (x.Sold));

@@ -1,6 +1,6 @@
 ﻿namespace Shared.DataTransferObjects;
 
-public record CpuAtrributesForCreationDto : AttributesForCreationDto
+public record CpuAtrributesDto : AttributesDto
 {
     public string Model { get; init; } = null!;
     public string Socket { get; init; } = null!;

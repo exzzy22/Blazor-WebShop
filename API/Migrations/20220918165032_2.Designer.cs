@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,10 @@ using Repository;
 namespace API.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20220918165032_2")]
+    partial class _2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,8 +32,9 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AttributesType")
-                        .HasColumnType("int");
+                    b.Property<string>("AttributesType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Manufacturer")
                         .IsRequired()
@@ -47,7 +50,7 @@ namespace API.Migrations
 
                     b.ToTable("Attributes", (string)null);
 
-                    b.HasDiscriminator<int>("AttributesType").HasValue(0);
+                    b.HasDiscriminator<string>("AttributesType").HasValue("Attributes");
                 });
 
             modelBuilder.Entity("Domain.Models.Category", b =>
@@ -178,13 +181,13 @@ namespace API.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "5c74c992-d4f9-4906-9757-e95663b4d58d",
+                            ConcurrencyStamp = "813d98f8-b1b2-42b4-ad16-b6cb410ad60b",
                             Name = "Administrator"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "7b71929f-133d-48a9-b07f-a7cb2406ee24",
+                            ConcurrencyStamp = "08e3de14-eee8-40e7-aa47-b600c56dac3e",
                             Name = "User"
                         });
                 });
@@ -406,7 +409,7 @@ namespace API.Migrations
                     b.Property<int>("ThreadCount")
                         .HasColumnType("int");
 
-                    b.HasDiscriminator().HasValue(1);
+                    b.HasDiscriminator().HasValue("CpuAtrributes");
                 });
 
             modelBuilder.Entity("Domain.Models.Attributes", b =>
