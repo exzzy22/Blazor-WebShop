@@ -16,6 +16,10 @@ namespace Repository
                         .Navigation(p => p.Prices)
                         .AutoInclude(true);
 
+            modelBuilder.Entity<Price>()
+                        .Navigation(p => p.Currency)
+                        .AutoInclude(true);
+
             modelBuilder.Entity<Product>()
                         .HasOne(p => p.Attributes)
                         .WithOne(a => a.Product)

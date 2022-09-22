@@ -2,5 +2,5 @@
 
 public sealed class ProductCountNotFound : NotFoundException
 {
-    public ProductCountNotFound(string categoryName) : base($"{categoryName} doesn't have 8 products"){}
+    public ProductCountNotFound(string categoryName, int numberOfProducts) : base($"{categoryName} doesn't have {numberOfProducts} products"){}
 }

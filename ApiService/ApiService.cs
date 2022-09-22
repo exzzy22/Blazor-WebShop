@@ -38,15 +38,15 @@ public sealed class ApiService : IApiService
 
         var products = await response.Content.ReadFromJsonAsync<List<ProductDto>>();
 
-
         return _mapper.Map<List<ProductVM>>(products);
     }
 
-    public async Task<List<CarouselVM>> GetCarouselTopSelling(int numberOfCategories, int numberOfProducts)
+    public async Task<CarouselVM> GetCarouselTopSelling(int numberOfCategories, int numberOfProducts)
     {
         var response = await _httpClient.GetAsync($"api/product/carousel/topSelling/{numberOfCategories}/{numberOfProducts}");
-        var carousel = await response.Content.ReadFromJsonAsync<List<CarouselDto>>();
 
-        return _mapper.Map<List<CarouselVM>>(carousel);
+        var carousel = await response.Content.ReadFromJsonAsync<CarouselDto>();
+
+        return _mapper.Map<CarouselVM>(carousel);
     }
 }

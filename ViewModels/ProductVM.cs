@@ -4,13 +4,12 @@ namespace ViewModels;
 
 public class ProductVM
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    public double Price { get; set; }
-    [Range(10, 100, ErrorMessage = "Value must be between 0 and 100")]
-    public int Discount { get; set; } = 0;
-    public int InStock { get; set; } = 0;
-    public int Sold { get; set; } = 0;
+    public string Name { get; init; } = null!;
+    public int Discount { get; init; }
+    public int InStock { get; init; }
+    public int Sold { get; init; }
+    public int CategoryId { get; init; }
+    public AttributesVM Attributes { get; init; } = null!;
 
-    public virtual CategoryVM Category { get; set; } = null!;
+    public virtual ICollection<PriceVM> Prices { get; init; } = null!;
 }

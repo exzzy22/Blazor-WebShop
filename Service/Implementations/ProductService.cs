@@ -14,30 +14,25 @@ internal sealed class ProductService : IProductService
         _mapper = mapper;
     }
 
-    public async Task AddProduct(ProductForCreationDto product)
+    public async Task AddProduct(ProductDto product)
     {
-        var attributes = GetAttributesType(product.DerivedType, product.AttributesJSON);
-        _repository.Attributes.Create(attributes);
-
-
         var productToInsert = _mapper.Map<Product>(product);
-        productToInsert.Attributes = attributes;
         _repository.Product.Create(productToInsert);
         await _repository.SaveAsync();
     }
-    public async Task<CarouselDto> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy)
+    public async Task<CarouselDto> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfCategories, int numberOfProducts)
     {
         IEnumerable<Product> products = await _repository.Product.GetProductsAsync();
 
-        IEnumerable<Category> categories = _repository.Category.GetTopCategoriesAsync(orderBy,4);
+        IEnumerable<Category> categories = _repository.Category.GetTopCategoriesAsync(orderBy,numberOfCategories);
 
         List<Product> filteredProducts = new();
 
         foreach (Category category in categories)
         {
-            var categoryProducts = products.Where(p => p.Category.Id.Equals(category.Id)).Take(8);
-            if (categoryProducts.Count() != 8)
-                throw new ProductCountNotFound(category.Name);
+            var categoryProducts = products.Where(p => p.Category.Id.Equals(category.Id)).Take(numberOfProducts);
+            if (categoryProducts.Count() != numberOfProducts)
+                throw new ProductCountNotFound(category.Name, numberOfProducts);
 
             filteredProducts.AddRange(categoryProducts);
         }

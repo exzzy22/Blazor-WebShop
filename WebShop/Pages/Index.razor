@@ -1,9 +1,9 @@
 ﻿@page "/"
 
 <TopCategories/>
-<Carousel Carousels="Carousels" Title="NEW PRODUCTS" />
+<Carousel CarouselModel="Carousel" Title="NEW PRODUCTS" />
 <HotDeal/>
-<Carousel Carousels="Carousels" Title="BEST SELLER" />
+<Carousel CarouselModel="Carousel" Title="BEST SELLER" />
 <WidgetSlick/>
 
 @code
@@ -12,13 +12,11 @@
     public IJSRuntime JS { get; set; } = null!;
     [Inject]
     public IApiService ApiService { get; set; } = null!;
-    public List<CarouselVM> Carousels { get; set; } = new();
+    public CarouselVM Carousel { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        await ApiService.GetProductsAsync();
-
-        Carousels = await ApiService.GetCarouselTopSelling(4, 8);
+        Carousel = await ApiService.GetCarouselTopSelling(2, 8);
     }
 
     //protected override async Task OnAfterRenderAsync(bool firstRender)

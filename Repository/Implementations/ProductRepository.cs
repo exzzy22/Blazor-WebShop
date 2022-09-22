@@ -1,8 +1,4 @@
-﻿using Domain.Models;
-using Repository.Base;
-using Repository.Contracts;
-
-namespace Repository.Implementations;
+﻿namespace Repository.Implementations;
 
 internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepository
 {

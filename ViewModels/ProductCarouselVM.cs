@@ -1,6 +1,6 @@
-﻿namespace Shared.DataTransferObjects;
+﻿namespace ViewModels;
 
-public record ProductCarouselDto
+public class ProductCarouselVM
 {
     public string Name { get; init; } = null!;
     public int Discount { get; init; } = 0;
@@ -8,5 +8,5 @@ public record ProductCarouselDto
     public int Sold { get; init; } = 0;
     public int CategoryId { get; init; }
 
-    public virtual ICollection<PriceDto> Prices { get; init; } = null!;
+    public virtual ICollection<PriceVM> Prices { get; init; } = null!;
 }

@@ -4,43 +4,40 @@
 	<div class="container">
 		<!-- row -->
 		<div class="row">
-			@foreach (var carousel in Carousels)
-			{
-				<!-- section title -->
-				<div class="col-md-12">
-					<div class="section-title">
-						<h3 class="title">@Title</h3>
-						<div class="section-nav">
-							<ul class="section-tab-nav tab-nav">
-								<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
-								<li><a data-toggle="tab" href="#tab1">Smartphones</a></li>
-								<li><a data-toggle="tab" href="#tab1">Cameras</a></li>
-								<li><a data-toggle="tab" href="#tab1">Accessories</a></li>
-							</ul>
-						</div>
+			<!-- section title -->
+			<div class="col-md-12">
+				<div class="section-title">
+					<h3 class="title">@Title</h3>
+					<div class="section-nav">
+						<ul class="section-tab-nav tab-nav">
+							@foreach (var category in CarouselModel.Categories)
+							{
+								<li><a @onclick="( () => _activeProducts = CarouselModel.Products.Where(p => p.CategoryId == category.Id).ToList())" data-toggle="tab" href="#tab1">@category.Name</a></li>
+							}
+						</ul>
 					</div>
 				</div>
-				<!-- /section title -->
-				<!-- Products tab & slick -->
-				<div class="col-md-12">
-					<div class="row">
-						<div class="products-tabs">
-							<!-- tab -->
-							<div id="tab1" class="tab-pane active">
-								<div class="products-slick" data-nav="#@guid">
-									@foreach (var product in carousel.Products)
-									{
-										<ProductCard Product="product" />
-									}
-								</div>
-								<div id="@guid" class="products-slick-nav"></div>
+			</div>
+			<!-- /section title -->
+			<!-- Products tab & slick -->
+			<div class="col-md-12">
+				<div class="row">
+					<div class="products-tabs">
+						<!-- tab -->
+						<div id="tab1" class="tab-pane active">
+							<div class="products-slick" data-nav="#@_guid">
+								@foreach (var product in _activeProducts)
+								{
+									<ProductCard Product="product" />
+								}
 							</div>
-							<!-- /tab -->
+							<div id="@_guid" class="products-slick-nav"></div>
 						</div>
+						<!-- /tab -->
 					</div>
 				</div>
-				<!-- Products tab & slick -->
-			}
+			</div>
+			<!-- Products tab & slick -->
 		</div>
 		<!-- /row -->
 	</div>
@@ -53,10 +50,12 @@
 	[Inject]
 	public IJSRuntime JS { get; set; } = null!;
 	[Parameter]
-	public List<CarouselVM> Carousels { get; set; } = null!;
+	public CarouselVM CarouselModel { get; set; } = null!;
 	[Parameter]
 	public string Title { get; set; } = null!;
-	private Guid guid = Guid.NewGuid();
+
+	private Guid _guid = Guid.NewGuid();
+	private List<ProductCarouselVM> _activeProducts = null!;
 
 
 	protected override async Task OnInitializedAsync()
@@ -64,11 +63,16 @@
 		//Products = await ApiService.GetProductsAsync();
 	}
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
+	protected override async Task OnParametersSetAsync()
+	{
+		_activeProducts = CarouselModel.Products.OrderBy(p => p.Sold).Take(8).ToList();
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
         Console.WriteLine($"{this.ToString()} OnAfterRenderAsync");
 		//Console.WriteLine($"Products count {Products.Count}");
-		if (Carousels is not null && Carousels?.Count > 0)
+		if (CarouselModel is not null && CarouselModel.Products.Count > 0)
 			await JS.InvokeAsync<IJSObjectReference>("import", "/js/main.js");
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace API.Controllers;
+﻿namespace API.Controllers;
 
 [Route("api/product")]
 [ApiController]
@@ -19,16 +17,16 @@ public class ProductController : ControllerBase
         return Ok(products);
     }
 
-    [HttpGet("carousel/topSelling")]
-    public async Task<IActionResult> GetCarouselTopSelling()
+    [HttpGet("carousel/topSelling/{numberOfCategories}/{numberOfProducts}")]
+    public async Task<IActionResult> GetCarouselTopSelling(int numberOfCategories, int numberOfProducts)
     {
-        var carousel = await _service.ProductService.GetCarouselProductsAsync(x => (x.Sold));
+        var carousel = await _service.ProductService.GetCarouselProductsAsync(p => (p.Sold), numberOfCategories, numberOfProducts);
 
         return Ok(carousel);
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddProduct(ProductForCreationDto product)
+    public async Task<IActionResult> AddProduct(ProductDto product)
     {
         await _service.ProductService.AddProduct(product);
 

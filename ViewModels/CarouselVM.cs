@@ -2,6 +2,6 @@
 
 public class CarouselVM
 {
-    public CategoryVM Category { get; set; }
-    public List<ProductVM> Products { get; set; }
+    public List<CategoryVM> Categories { get; set; } = null!;
+    public List<ProductCarouselVM> Products { get; set; } = null!;
 }
