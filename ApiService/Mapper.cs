@@ -9,7 +9,7 @@ public class Mapper : Profile
         CreateMap<CarouselDto, CarouselVM>().ReverseMap();
         CreateMap<CategoryDto, CategoryVM>().ReverseMap();
         CreateMap<ProductDto, ProductVM>().ReverseMap();
-        CreateMap<AttributesDto, AttributesVM>().ReverseMap();
+        CreateMap<AttributesDto, AttributesVM>().IncludeAllDerived().ReverseMap();
         CreateMap<CpuAtrributesDto, CpuAtrributesVM>().ReverseMap();
         CreateMap<PriceDto, PriceVM>().ReverseMap();
         CreateMap<CurrencyDto, CurrencyVM>().ReverseMap();

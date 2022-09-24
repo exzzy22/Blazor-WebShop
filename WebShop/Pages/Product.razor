@@ -1,4 +1,4 @@
-﻿@page "/product"
+﻿@page "/product/{ProductId:int}"
 
 <!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
@@ -490,8 +490,18 @@
 <!-- /Section -->
 @code
 {
+	[Parameter]
+	public int ProductId { get; set; }
 	[Inject]
-	public IJSRuntime JS { get; set; }
+	public IJSRuntime JS { get; set; } = null!;
+	[Inject]
+	public IApiService ApiService { get; set; } = null!;
+	public ProductVM ProductVM { get; set; } = null!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		ProductVM = await ApiService.GetProduct(ProductId);
+	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{

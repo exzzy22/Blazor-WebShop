@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Models;
 using Shared.DataTransferObjects;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -30,6 +31,15 @@ public sealed class ApiService : IApiService
     public void SetAuthenticationHeader(string jwtToken)
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jwtToken);
+    }
+
+    public async Task<ProductVM> GetProduct(int productId)
+    {
+        var response = await _httpClient.GetAsync($"api/product/{productId}");
+
+        var product = await response.Content.ReadFromJsonAsync<ProductDto>();
+
+        return _mapper.Map<ProductVM>(product);
     }
 
     public async Task<List<ProductVM>> GetProductsAsync()

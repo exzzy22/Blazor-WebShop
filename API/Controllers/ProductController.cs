@@ -9,6 +9,14 @@ public class ProductController : ControllerBase
 
     public ProductController(IServiceManager service) => _service = service;
 
+    [HttpGet("{productId}")]
+    public async Task<IActionResult> GetProduct(int productId)
+    {
+        ProductDto product = await _service.ProductService.GetProduct(productId);
+
+        return Ok(product);
+    }
+
     [HttpGet("all")]
     public async Task<IActionResult> GetProducts()
     {

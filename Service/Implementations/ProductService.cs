@@ -14,6 +14,15 @@ internal sealed class ProductService : IProductService
         _mapper = mapper;
     }
 
+    public async Task<ProductDto> GetProduct(int productId)
+    {
+        Product? product = await _repository.Product.GetProductAsync(productId, false);
+        if (product is null)
+            throw new ProductNotFound(productId);
+
+        return _mapper.Map<ProductDto>(product);
+    }
+
     public async Task AddProduct(ProductDto product)
     {
         var productToInsert = _mapper.Map<Product>(product);
