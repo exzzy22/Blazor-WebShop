@@ -1,21 +1,25 @@
-﻿namespace Service.Implementations
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Service.Implementations
 {
     internal sealed class AuthenticationService : IAuthenticationService
     {
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly IOptions<JwtConfiguration> _configuration;
         private readonly JwtConfiguration _jwtConfiguration;
 
         private User? _user;
 
-        public AuthenticationService(ILoggerManager logger, IMapper mapper,
+        public AuthenticationService(ILoggerManager logger, IMapper mapper, RoleManager<Role> roleManager,
             UserManager<User> userManager, IOptions<JwtConfiguration> configuration)
         {
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
+            _roleManager = roleManager;
             _configuration = configuration;
             _jwtConfiguration = _configuration.Value;
         }
@@ -78,6 +82,28 @@
             _user = user;
 
             return await CreateToken(populateExp: false);
+        }
+
+        public IEnumerable<RoleDto> Roles()
+        {
+            var roles = _roleManager.Roles.AsEnumerable();
+
+            return _mapper.Map<IEnumerable<RoleDto>>(roles);
+        }
+
+        public async Task<IdentityResult> CreateRole(string roleName)
+        {
+            return await _roleManager.CreateAsync(new Role { Name = roleName });
+        }
+
+        public async Task<IdentityResult> RemoveRole(int roleId)
+        {
+            var role = await _roleManager.FindByIdAsync(roleId.ToString());
+            
+            if (role == null)
+                throw new RoleNotFound(roleId);
+
+            return await _roleManager.DeleteAsync(role);
         }
 
         private string GenerateRefreshToken()

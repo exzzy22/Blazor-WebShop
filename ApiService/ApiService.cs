@@ -1,10 +1,4 @@
-﻿using AutoMapper;
-using Domain.Models;
-using Shared.DataTransferObjects;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json;
-using ViewModels;
+﻿using Domain.Models;
 
 namespace ApiServices;
 
@@ -59,4 +53,29 @@ public sealed class ApiService : IApiService
 
         return _mapper.Map<CarouselVM>(carousel);
     }
+
+    public async Task<List<RoleVM>> GetRoles()
+    {
+        var response = await _httpClient.GetAsync("api/account/role");
+
+        var roles = await response.Content.ReadFromJsonAsync<List<RoleDto>>();
+
+        return _mapper.Map<List<RoleVM>>(roles);
+    }
+
+    public async Task<bool> CreateRole(RoleDto role)
+    {
+        var response = await _httpClient.PostAsJsonAsync("api/account/role/new", role);
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> RemoveRole(int roleId)
+    {
+        var response = await _httpClient.DeleteAsync($"api/account/role/remove/{roleId}");
+
+        return response.IsSuccessStatusCode;
+    }
+
+
 }

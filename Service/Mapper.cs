@@ -13,5 +13,6 @@ public class Mapper : Profile
         CreateMap<Price, PriceDto>().ReverseMap();
         CreateMap<Currency, CurrencyDto>().ReverseMap();
         CreateMap<Category, CategoryDto>().ReverseMap();
+        CreateMap<Role, RoleDto>().ReverseMap();
     }
 }

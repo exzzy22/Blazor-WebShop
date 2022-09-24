@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1AFED766
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiTests", "ApiTests\ApiTests.csproj", "{3F1AE54F-DC2B-415F-81F4-1A1ABCB5361D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS", "CMS\CMS.csproj", "{E7398635-FEE9-4D62-8F04-E69DC8B38332}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS", "CMS\CMS.csproj", "{E7398635-FEE9-4D62-8F04-E69DC8B38332}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

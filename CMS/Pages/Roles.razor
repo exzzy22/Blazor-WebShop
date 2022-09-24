@@ -1,0 +1,46 @@
+﻿@page "/roles"
+@using static MudBlazor.CategoryTypes
+
+    <MudTable Items="@_roles" FixedHeader="true" Hover="true" CanCancelEdit="true" CommitEditTooltip="Commit Edit"
+          OnCommitEditClick="@Test" IsEditRowSwitchingBlocked="true" ApplyButtonPosition="TableApplyButtonPosition.End" Loading="@_loader" @bind-SelectedItem="_selectedItem">
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Name</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Name">
+            <MudTextField @bind-Value="@context.Name" Required />
+        </MudTd>
+    </RowEditingTemplate>
+</MudTable>
+
+
+@code {
+    [Inject]
+    public IApiService ApiService { get; set; } = null!;
+    private HashSet<RoleVM> _selectedItems = new HashSet<RoleVM>();
+
+    private IEnumerable<RoleVM> _roles = new List<RoleVM>();
+    private RoleVM _selectedItem = null;
+    private bool _loader = true;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _roles = await ApiService.GetRoles();
+        _loader = false;
+    }
+
+    private async Task Test() 
+    {
+    }
+    //[Icommand]
+    //private async Task Update()
+    //{ 
+    
+    //}
+}
