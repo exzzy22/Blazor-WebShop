@@ -10,6 +10,7 @@ public interface IApiService
     Task<List<RoleVM>> GetRoles();
     Task<bool> CreateRole(RoleDto role);
     Task<bool> RemoveRole(int roleId);
+    Task<bool> UpdateRole(RoleDto role);
 
     bool AuthenticationHeaderExits();
     void SetAuthenticationHeader(string jwtToken);

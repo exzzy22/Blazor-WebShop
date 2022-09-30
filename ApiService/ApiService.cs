@@ -77,5 +77,10 @@ public sealed class ApiService : IApiService
         return response.IsSuccessStatusCode;
     }
 
+    public async Task<bool> UpdateRole(RoleDto role)
+    {
+        var response = await _httpClient.PostAsJsonAsync("api/account/role/edit", role);
 
+        return response.IsSuccessStatusCode;
+    }
 }

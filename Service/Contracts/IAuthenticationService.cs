@@ -9,5 +9,7 @@
         IEnumerable<RoleDto> Roles();
         Task<IdentityResult> CreateRole(string roleName);
         Task<IdentityResult> RemoveRole(int roleId);
+        Task<IdentityResult> UpdateRole(RoleDto role);
+
     }
 }

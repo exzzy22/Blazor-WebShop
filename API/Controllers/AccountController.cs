@@ -67,8 +67,25 @@
             return StatusCode(201);
         }
 
-        [HttpDelete("role/remove/{roleId}")]
+        [HttpPost("role/edit")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> UpdateRole(RoleDto role)
+        {
+            var result = await _service.AuthenticationService.UpdateRole(role);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.TryAddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete("role/remove/{roleId}")]
         public async Task<IActionResult> RemoveRole(int roleId)
         {
             var result = await _service.AuthenticationService.RemoveRole(roleId);

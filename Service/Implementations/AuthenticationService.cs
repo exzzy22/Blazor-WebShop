@@ -106,6 +106,16 @@ namespace Service.Implementations
             return await _roleManager.DeleteAsync(role);
         }
 
+        public async Task<IdentityResult> UpdateRole(RoleDto role)
+        {
+            var dbRole = await _roleManager.FindByIdAsync(role.Id.ToString());
+
+            if (dbRole == null)
+                throw new RoleNotFound(role.Id);
+
+            return await _roleManager.UpdateAsync(_mapper.Map(role, dbRole));
+        }
+
         private string GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
