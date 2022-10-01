@@ -6,10 +6,10 @@
         Task<bool> ValidateUser(UserForAuthenticationDto userForAuth);
         Task<TokenDto> CreateToken(bool populateExp);
         Task<TokenDto> RefreshToken(TokenDto tokenDto);
-        IEnumerable<RoleDto> Roles();
-        Task<IdentityResult> CreateRole(string roleName);
-        Task<IdentityResult> RemoveRole(int roleId);
-        Task<IdentityResult> UpdateRole(RoleDto role);
+        Task<IList<User>> Admins();
+        Task<IdentityResult> CreateAdmin(AdminForCreationDto admin);
+        Task<IdentityResult> UpdateAdmin(AdminDto admin);
+        Task<IdentityResult> DeleteAdmin(int adminId);
 
     }
 }

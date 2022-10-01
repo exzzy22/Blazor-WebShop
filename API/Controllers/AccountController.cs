@@ -12,7 +12,7 @@
 
         public AccountController(IServiceManager service) => _service = service;
 
-        [HttpPost("new")]
+        [HttpPost("user/new")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDto userForRegistration)
         {
@@ -41,19 +41,19 @@
             return Ok(tokenDto);
         }
 
-        [HttpGet("role")]
-        public async Task<IActionResult> GetRoles()
+        [HttpGet("admin")]
+        public async Task<IActionResult> GetAdmins()
         {
-            var roles = _service.AuthenticationService.Roles();
+            var admins = await _service.AuthenticationService.Admins();
 
-            return Ok(roles);
+            return Ok(admins);
         }
 
-        [HttpPost("role/new")]
+        [HttpPost("admin/new")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> CreateRole(RoleDto role)
+        public async Task<IActionResult> CreateAdmin(AdminForCreationDto admin)
         {
-            var result = await _service.AuthenticationService.CreateRole(role.Name);
+            var result = await _service.AuthenticationService.CreateAdmin(admin);
 
             if (!result.Succeeded)
             {
@@ -67,11 +67,11 @@
             return StatusCode(201);
         }
 
-        [HttpPost("role/edit")]
+        [HttpPost("admin/edit")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> UpdateRole(RoleDto role)
+        public async Task<IActionResult> UpdateAdmin(AdminDto admin)
         {
-            var result = await _service.AuthenticationService.UpdateRole(role);
+            var result = await _service.AuthenticationService.UpdateAdmin(admin);
 
             if (!result.Succeeded)
             {
@@ -85,10 +85,10 @@
             return Ok();
         }
 
-        [HttpDelete("role/remove/{roleId}")]
-        public async Task<IActionResult> RemoveRole(int roleId)
+        [HttpDelete("admin/delete/{adminId}")]
+        public async Task<IActionResult> DeleteAdmin(int adminId)
         {
-            var result = await _service.AuthenticationService.RemoveRole(roleId);
+            var result = await _service.AuthenticationService.DeleteAdmin(adminId);
 
             if (!result.Succeeded)
             {

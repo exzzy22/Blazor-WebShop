@@ -1,0 +1,26 @@
+﻿<MudDialog>
+    <DialogContent>
+        <EditForm Model="_admin" OnValidSubmit="Submit">
+            <MudCard>
+                <MudTextField @bind-Value="_admin.FirstName" Label="First Name" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField @bind-Value="_admin.LastName" Label="Last Name" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField @bind-Value="_admin.Email" Label="Email" Variant="Variant.Outlined" Required></MudTextField>
+                <MudTextField @bind-Value="_admin.Password" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" Required></MudTextField>
+                <MudTextField @bind-Value="_admin.Password2" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" Required></MudTextField>
+            </MudCard>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Create</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; } = null!;
+    private AdminForCreationVM _admin = new AdminForCreationVM();
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(_admin));
+    void Cancel() => MudDialog.Cancel();
+}

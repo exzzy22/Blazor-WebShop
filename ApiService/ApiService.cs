@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using ViewModels;
 
 namespace ApiServices;
 
@@ -54,32 +55,33 @@ public sealed class ApiService : IApiService
         return _mapper.Map<CarouselVM>(carousel);
     }
 
-    public async Task<List<RoleVM>> GetRoles()
+    public async Task<List<AdminVM>> GetAdmins()
     {
-        var response = await _httpClient.GetAsync("api/account/role");
+        var response = await _httpClient.GetAsync("api/account/admin");
 
-        var roles = await response.Content.ReadFromJsonAsync<List<RoleDto>>();
+        var admins = await response.Content.ReadFromJsonAsync<List<AdminDto>>();
 
-        return _mapper.Map<List<RoleVM>>(roles);
+        return _mapper.Map<List<AdminVM>>(admins);
     }
 
-    public async Task<bool> CreateRole(RoleDto role)
+    public async Task<bool> CreateAdmin(AdminForCreationVM admin)
     {
-        var response = await _httpClient.PostAsJsonAsync("api/account/role/new", role);
+        var aa = _mapper.Map<AdminForCreationDto>(admin);
+        var response = await _httpClient.PostAsJsonAsync("api/account/admin/new", _mapper.Map<AdminForCreationDto>(admin));
 
         return response.IsSuccessStatusCode;
     }
 
-    public async Task<bool> RemoveRole(int roleId)
+    public async Task<bool> DeleteAdmin(int adminId)
     {
-        var response = await _httpClient.DeleteAsync($"api/account/role/remove/{roleId}");
+        var response = await _httpClient.DeleteAsync($"api/account/admin/delete/{adminId}");
 
         return response.IsSuccessStatusCode;
     }
 
-    public async Task<bool> UpdateRole(RoleDto role)
+    public async Task<bool> UpdateAdmin(AdminVM admin)
     {
-        var response = await _httpClient.PostAsJsonAsync("api/account/role/edit", role);
+        var response = await _httpClient.PostAsJsonAsync("api/account/admin/edit", _mapper.Map<AdminDto>(admin));
 
         return response.IsSuccessStatusCode;
     }

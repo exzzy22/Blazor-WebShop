@@ -48,10 +48,10 @@ namespace API.Extensions
             var builder = services.AddIdentity<User, Role>(o =>
             {
                 o.Password.RequireDigit = true;
-                o.Password.RequireLowercase = false;
-                o.Password.RequireUppercase = false;
+                o.Password.RequireLowercase = true;
+                o.Password.RequireUppercase = true;
                 o.Password.RequireNonAlphanumeric = false;
-                o.Password.RequiredLength = 10;
+                o.Password.RequiredLength = 8;
                 o.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<RepositoryContext>()

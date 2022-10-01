@@ -13,11 +13,16 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
             new Role 
             { 
                 Id = 1,
-                Name = "Administrator",
+                Name = "Super Administrator",
             },
             new Role
             {
                 Id = 2,
+                Name = "Administrator",
+            },
+            new Role
+            {
+                Id = 3,
                 Name = "User",
             }
         );

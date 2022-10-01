@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Shared.ConfigurationModels;
 
 namespace Service.Implementations
 {
@@ -32,7 +33,7 @@ namespace Service.Implementations
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
+                await _userManager.AddToRoleAsync(user, RoleConfiguration.User.Name);
             }
 
             return result;
@@ -82,38 +83,6 @@ namespace Service.Implementations
             _user = user;
 
             return await CreateToken(populateExp: false);
-        }
-
-        public IEnumerable<RoleDto> Roles()
-        {
-            var roles = _roleManager.Roles.AsEnumerable();
-
-            return _mapper.Map<IEnumerable<RoleDto>>(roles);
-        }
-
-        public async Task<IdentityResult> CreateRole(string roleName)
-        {
-            return await _roleManager.CreateAsync(new Role { Name = roleName });
-        }
-
-        public async Task<IdentityResult> RemoveRole(int roleId)
-        {
-            var role = await _roleManager.FindByIdAsync(roleId.ToString());
-            
-            if (role == null)
-                throw new RoleNotFound(roleId);
-
-            return await _roleManager.DeleteAsync(role);
-        }
-
-        public async Task<IdentityResult> UpdateRole(RoleDto role)
-        {
-            var dbRole = await _roleManager.FindByIdAsync(role.Id.ToString());
-
-            if (dbRole == null)
-                throw new RoleNotFound(role.Id);
-
-            return await _roleManager.UpdateAsync(_mapper.Map(role, dbRole));
         }
 
         private string GenerateRefreshToken()
@@ -191,6 +160,39 @@ namespace Service.Implementations
             );
 
             return tokenOptions;
+        }
+
+        public async Task<IList<User>> Admins()
+        {
+            return await _userManager.GetUsersInRoleAsync(RoleConfiguration.Administrator.Name);
+        }
+
+        public async Task<IdentityResult> CreateAdmin(AdminForCreationDto admin)
+        {
+            var user = _mapper.Map<User>(admin);
+
+            var result = await _userManager.CreateAsync(user, admin.Password);
+
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, RoleConfiguration.Administrator.Name);
+            }
+
+            return result;
+        }
+
+        public async Task<IdentityResult> UpdateAdmin(AdminDto admin)
+        {
+            var adminDb = await _userManager.FindByIdAsync(admin.Id.ToString());
+
+            return await _userManager.UpdateAsync(_mapper.Map(admin, adminDb));
+        }
+
+        public async Task<IdentityResult> DeleteAdmin(int adminId)
+        {
+            var admin = await _userManager.FindByIdAsync(adminId.ToString());
+
+            return await _userManager.DeleteAsync(admin);
         }
     }
 }
