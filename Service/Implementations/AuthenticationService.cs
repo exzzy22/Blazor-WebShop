@@ -171,6 +171,8 @@ namespace Service.Implementations
         {
             var user = _mapper.Map<User>(admin);
 
+            user.UserName = Guid.NewGuid().ToString();
+
             var result = await _userManager.CreateAsync(user, admin.Password);
 
             if (result.Succeeded)

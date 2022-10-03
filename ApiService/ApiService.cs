@@ -66,7 +66,6 @@ public sealed class ApiService : IApiService
 
     public async Task<bool> CreateAdmin(AdminForCreationVM admin)
     {
-        var aa = _mapper.Map<AdminForCreationDto>(admin);
         var response = await _httpClient.PostAsJsonAsync("api/account/admin/new", _mapper.Map<AdminForCreationDto>(admin));
 
         return response.IsSuccessStatusCode;
@@ -81,6 +80,8 @@ public sealed class ApiService : IApiService
 
     public async Task<bool> UpdateAdmin(AdminVM admin)
     {
+        var aaa = _mapper.Map<AdminDto>(admin);
+
         var response = await _httpClient.PostAsJsonAsync("api/account/admin/edit", _mapper.Map<AdminDto>(admin));
 
         return response.IsSuccessStatusCode;
