@@ -15,5 +15,6 @@ public class Mapper : Profile
         CreateMap<CurrencyDto, CurrencyVM>().ReverseMap();
         CreateMap<AdminVM, AdminDto>().ReverseMap();
         CreateMap<AdminForCreationVM, AdminForCreationDto>().ReverseMap();
+        CreateMap<UserDto, UserVM>();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Shared.DataTransferObjects;
 
-public record AdminDto()
+public record UserDto
 {
     public int Id { get; init; }
     [Required]
@@ -10,4 +10,5 @@ public record AdminDto()
     [Required]
     [EmailAddress]
     public string Email { get; init; } = null!;
+    public string? PhoneNumber { get; set; }
 }

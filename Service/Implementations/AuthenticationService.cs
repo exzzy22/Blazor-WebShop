@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Shared.ConfigurationModels;
-
-namespace Service.Implementations
+﻿namespace Service.Implementations
 {
     internal sealed class AuthenticationService : IAuthenticationService
     {
@@ -25,11 +22,11 @@ namespace Service.Implementations
             _jwtConfiguration = _configuration.Value;
         }
 
-        public async Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistration)
+        public async Task<IdentityResult> RegisterUserAsync(UserForRegistrationDto userForRegistration)
         {
-            var user = _mapper.Map<User>(userForRegistration);
+            User user = _mapper.Map<User>(userForRegistration);
 
-            var result = await _userManager.CreateAsync(user, userForRegistration.Password);
+            IdentityResult result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
             if (result.Succeeded)
             {
@@ -39,24 +36,28 @@ namespace Service.Implementations
             return result;
         }
 
-        public async Task<bool> ValidateUser(UserForAuthenticationDto userForAuth)
+        public async Task<bool> ValidateUserAsync(UserForAuthenticationDto userForAuth)
         {
             _user = await _userManager.FindByNameAsync(userForAuth.UserName);
 
-            var result = (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
+            bool result = (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
+
             if (!result)
-                _logger.LogWarn($"{nameof(ValidateUser)}: Authentication failed. Wrong user name or password.");
+                _logger.LogWarn($"{nameof(ValidateUserAsync)}: Authentication failed. Wrong user name or password.");
 
             return result;
         }
 
-        public async Task<TokenDto> CreateToken(bool populateExp)
+        public async Task<TokenDto> CreateTokenAsync(bool populateExp)
         {
-            var signingCredentials = GetSigningCredentials();
-            var claims = await GetClaims();
-            var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
+            SigningCredentials signingCredentials = GetSigningCredentials();
+            List<Claim> claims = await GetClaims();
+            JwtSecurityToken tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
-            var refreshToken = GenerateRefreshToken();
+            string refreshToken = GenerateRefreshToken();
+
+            if (_user is null)
+                throw new UserNotFound();
 
             _user.RefreshToken = refreshToken;
 
@@ -65,39 +66,76 @@ namespace Service.Implementations
 
             await _userManager.UpdateAsync(_user);
 
-            var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            string accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
             return new TokenDto(accessToken, refreshToken);
         }
 
-        public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
+        public async Task<TokenDto> RefreshTokenAsync(TokenDto tokenDto)
         {
-            var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+            ClaimsPrincipal principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
 
-            var user = await _userManager.FindByNameAsync(principal.Identity.Name);
+            User? user = await _userManager.FindByNameAsync(principal.Identity?.Name);
+
+            if (user is null)
+                throw new UserNotFound();
+
             if (user == null ||
                 user.RefreshToken != tokenDto.RefreshToken ||
                 user.RefreshTokenExpiryTime <= DateTime.Now)
                 throw new RefreshTokenBadRequest();
 
-            _user = user;
+            this._user = user;
 
-            return await CreateToken(populateExp: false);
+            return await CreateTokenAsync(populateExp: false);
         }
 
-        private string GenerateRefreshToken()
+        public async Task<IdentityResult> UpdateAdminAsync(AdminDto admin)
         {
-            var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
+            User adminDb = await _userManager.FindByIdAsync(admin.Id.ToString());
+
+            return await _userManager.UpdateAsync(_mapper.Map(admin, adminDb));
+        }
+
+        public async Task<IdentityResult> DeleteAdminAsync(int adminId)
+        {
+            User admin = await _userManager.FindByIdAsync(adminId.ToString());
+
+            return await _userManager.DeleteAsync(admin);
+        }
+
+        public async Task<IList<User>> GetUsersInRoleAsync(string roleName)
+        {
+            return await _userManager.GetUsersInRoleAsync(roleName);
+        }
+
+        public async Task<IdentityResult> CreateAdminAsync(AdminForCreationDto admin)
+        {
+            User user = _mapper.Map<User>(admin);
+
+            user.UserName = Guid.NewGuid().ToString();
+
+            IdentityResult result = await _userManager.CreateAsync(user, admin.Password);
+
+            if (result.Succeeded)
             {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
+                await _userManager.AddToRoleAsync(user, RoleConfiguration.Administrator.Name);
             }
+
+            return result;
+        }
+
+        private static string GenerateRefreshToken()
+        {
+            byte[] randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
         }
 
         private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
-            var tokenValidationParameters = new TokenValidationParameters
+            TokenValidationParameters tokenValidationParameters = new ()
             {
                 ValidateAudience = true,
                 ValidateIssuer = true,
@@ -109,12 +147,11 @@ namespace Service.Implementations
                 ValidAudience = _jwtConfiguration.ValidAudience
             };
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            JwtSecurityTokenHandler tokenHandler = new ();
+            ClaimsPrincipal principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
 
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+
+            if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                 StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new SecurityTokenException("Invalid token");
@@ -125,20 +162,23 @@ namespace Service.Implementations
 
         private SigningCredentials GetSigningCredentials()
         {
-            var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Secret);
-            var secret = new SymmetricSecurityKey(key);
+            byte[] key = Encoding.UTF8.GetBytes(_jwtConfiguration.Secret);
+            SymmetricSecurityKey secret = new (key);
 
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
         private async Task<List<Claim>> GetClaims()
         {
-            var claims = new List<Claim>
+            if (_user is null)
+                throw new UserNotFound();
+
+            List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.Name, _user.UserName)
             };
 
-            var roles = await _userManager.GetRolesAsync(_user);
+            IList<string> roles = await _userManager.GetRolesAsync(_user);
 
             foreach (var role in roles)
             {
@@ -150,7 +190,7 @@ namespace Service.Implementations
 
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
         {
-            var tokenOptions = new JwtSecurityToken
+            JwtSecurityToken tokenOptions = new
             (
                 issuer: _jwtConfiguration.ValidIssuer,
                 audience: _jwtConfiguration.ValidAudience,
@@ -160,41 +200,6 @@ namespace Service.Implementations
             );
 
             return tokenOptions;
-        }
-
-        public async Task<IList<User>> Admins()
-        {
-            return await _userManager.GetUsersInRoleAsync(RoleConfiguration.Administrator.Name);
-        }
-
-        public async Task<IdentityResult> CreateAdmin(AdminForCreationDto admin)
-        {
-            var user = _mapper.Map<User>(admin);
-
-            user.UserName = Guid.NewGuid().ToString();
-
-            var result = await _userManager.CreateAsync(user, admin.Password);
-
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(user, RoleConfiguration.Administrator.Name);
-            }
-
-            return result;
-        }
-
-        public async Task<IdentityResult> UpdateAdmin(AdminDto admin)
-        {
-            var adminDb = await _userManager.FindByIdAsync(admin.Id.ToString());
-
-            return await _userManager.UpdateAsync(_mapper.Map(admin, adminDb));
-        }
-
-        public async Task<IdentityResult> DeleteAdmin(int adminId)
-        {
-            var admin = await _userManager.FindByIdAsync(adminId.ToString());
-
-            return await _userManager.DeleteAsync(admin);
         }
     }
 }

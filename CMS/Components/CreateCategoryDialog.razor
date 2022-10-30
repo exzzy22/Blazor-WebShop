@@ -1,0 +1,29 @@
+﻿<EditForm Model="model" OnValidSubmit="Submit" OnInvalidSubmit="Invalid">
+<DataAnnotationsValidator />
+<MudDialog>
+    <DialogContent>
+            <MudCard>
+                <MudTextField @bind-Value="model.Name" For="@(() => model.Name)" Label="Name" Variant="Variant.Outlined"></MudTextField>
+            </MudCard>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Create</MudButton>
+    </DialogActions>
+</MudDialog>
+</EditForm>
+
+
+@code {
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; } = null!;
+    CategoryVM model = new CategoryVM();
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(model));
+    void Cancel() => MudDialog.Cancel();
+
+    void Invalid()
+    {
+
+    }
+}

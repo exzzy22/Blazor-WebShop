@@ -7,6 +7,8 @@ internal sealed class CategoryRepository : RepositoryBase<Category>, ICategoryRe
 
     public void DeleteCategory(Category category) => Delete(category);
 
+    public async Task<IEnumerable<Category>> GetCategoriesAsync() => await _repositoryContext.Categories.ToListAsync();
+
     public async Task<Category?> GetCategoryAsync(int id, bool trackChanges) => await FindByCondition(p => p.Id.Equals(id), trackChanges).FirstOrDefaultAsync();
 
     public IEnumerable<Category> GetTopCategoriesAsync<T>(Expression<Func<Product, T>> orderBy, int take) => _repositoryContext.Products

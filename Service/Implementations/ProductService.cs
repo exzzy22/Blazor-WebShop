@@ -25,10 +25,11 @@ internal sealed class ProductService : IProductService
 
     public async Task AddProduct(ProductDto product)
     {
-        var productToInsert = _mapper.Map<Product>(product);
+        Product productToInsert = _mapper.Map<Product>(product);
         _repository.Product.Create(productToInsert);
         await _repository.SaveAsync();
     }
+
     public async Task<CarouselDto> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfCategories, int numberOfProducts)
     {
         IEnumerable<Product> products = await _repository.Product.GetProductsAsync();
@@ -51,20 +52,8 @@ internal sealed class ProductService : IProductService
 
     public async Task<IEnumerable<ProductDto>> GetProductsAsync()
     {
-        var products = await _repository.Product.GetProductsAsync();
+        IEnumerable<Product> products = await _repository.Product.GetProductsAsync();
 
         return _mapper.Map<IEnumerable<ProductDto>>(products);
-    }
-
-    private dynamic? GetAttributesType(string derivedType, string json)
-    {
-        switch (derivedType)
-        {
-            case nameof(CpuAtrributesDto):
-                    return _mapper.Map<CpuAtrributes>(JsonSerializer.Deserialize<CpuAtrributesDto>(json));
-
-        }
-
-        return null;
     }
 }

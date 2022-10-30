@@ -47,7 +47,7 @@
     private DialogOptions _dialogOptions = new DialogOptions { DisableBackdropClick = true };
     private HashSet<AdminVM> _selectedItems = new HashSet<AdminVM>();
     private IEnumerable<AdminVM> _admins = new List<AdminVM>();
-    private AdminVM _selectedItem = null;
+    private AdminVM _selectedItem;
     private bool _loader = true;
 
 
@@ -60,6 +60,7 @@
     private async Task UpdateAdmin() 
     {
         await apiService.UpdateAdmin(_selectedItem);
+        _admins = await apiService.GetAdmins();
     }
 
     private async Task ShowDeleteMessageBox(AdminVM admin)

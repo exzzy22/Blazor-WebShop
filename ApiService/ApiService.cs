@@ -28,62 +28,106 @@ public sealed class ApiService : IApiService
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jwtToken);
     }
 
+    #region Products
     public async Task<ProductVM> GetProduct(int productId)
     {
-        var response = await _httpClient.GetAsync($"api/product/{productId}");
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/product/{productId}");
 
-        var product = await response.Content.ReadFromJsonAsync<ProductDto>();
+        ProductDto product = await response.Content.ReadFromJsonAsync<ProductDto>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<ProductVM>(product);
     }
 
     public async Task<List<ProductVM>> GetProductsAsync()
     {
-        var response = await _httpClient.GetAsync("api/product/all");
+        HttpResponseMessage response = await _httpClient.GetAsync("api/product/all");
 
-        var products = await response.Content.ReadFromJsonAsync<List<ProductDto>>();
+        List<ProductDto> products = await response.Content.ReadFromJsonAsync<List<ProductDto>>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<ProductVM>>(products);
     }
 
     public async Task<CarouselVM> GetCarouselTopSelling(int numberOfCategories, int numberOfProducts)
     {
-        var response = await _httpClient.GetAsync($"api/product/carousel/topSelling/{numberOfCategories}/{numberOfProducts}");
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/product/carousel/topSelling/{numberOfCategories}/{numberOfProducts}");
 
-        var carousel = await response.Content.ReadFromJsonAsync<CarouselDto>();
+        CarouselDto carousel = await response.Content.ReadFromJsonAsync<CarouselDto>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<CarouselVM>(carousel);
     }
+    #endregion
 
+    #region Accounts
     public async Task<List<AdminVM>> GetAdmins()
     {
-        var response = await _httpClient.GetAsync("api/account/admin");
+        HttpResponseMessage response = await _httpClient.GetAsync("api/account/admin");
 
-        var admins = await response.Content.ReadFromJsonAsync<List<AdminDto>>();
+        List<AdminDto> admins = await response.Content.ReadFromJsonAsync<List<AdminDto>>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<AdminVM>>(admins);
     }
 
     public async Task<bool> CreateAdmin(AdminForCreationVM admin)
     {
-        var response = await _httpClient.PostAsJsonAsync("api/account/admin/new", _mapper.Map<AdminForCreationDto>(admin));
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/account/admin/new", _mapper.Map<AdminForCreationDto>(admin));
 
         return response.IsSuccessStatusCode;
     }
 
     public async Task<bool> DeleteAdmin(int adminId)
     {
-        var response = await _httpClient.DeleteAsync($"api/account/admin/delete/{adminId}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync($"api/account/admin/delete/{adminId}");
 
         return response.IsSuccessStatusCode;
     }
 
     public async Task<bool> UpdateAdmin(AdminVM admin)
     {
-        var aaa = _mapper.Map<AdminDto>(admin);
-
-        var response = await _httpClient.PostAsJsonAsync("api/account/admin/edit", _mapper.Map<AdminDto>(admin));
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/account/admin/edit", _mapper.Map<AdminDto>(admin));
 
         return response.IsSuccessStatusCode;
     }
+
+    public async Task<List<UserVM>> GetUsers()
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync("api/account/user");
+
+        List<UserDto> admins = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+
+        return _mapper.Map<List<UserVM>>(admins);
+    }
+    #endregion
+
+    #region Category
+    public async Task<bool> AddCategory(CategoryVM category)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/category/add", _mapper.Map<CategoryDto>(category));
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<List<CategoryVM>> GetCategories()
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/product/category/all");
+
+        List<CategoryDto> categories = await response.Content.ReadFromJsonAsync<List<CategoryDto>>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+
+        return _mapper.Map<List<CategoryVM>>(categories);
+    }
+
+    public async Task<bool> DeleteCategory(int categoryId)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsync($"api/product/category/delete/{categoryId}", null);
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> UpdateCategory(CategoryVM category)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/category/update", _mapper.Map<CategoryDto>(category));
+
+        return response.IsSuccessStatusCode;
+    }
+
+    #endregion
 }

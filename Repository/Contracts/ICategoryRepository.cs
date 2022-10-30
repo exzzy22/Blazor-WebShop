@@ -6,4 +6,6 @@ public interface ICategoryRepository
     void UpdateCategory(Category category);
     void DeleteCategory(Category category);
     IEnumerable<Category> GetTopCategoriesAsync<T>(Expression<Func<Product, T>> orderBy, int take);
+    void Create(Category category);
+    Task<IEnumerable<Category>> GetCategoriesAsync();
 }

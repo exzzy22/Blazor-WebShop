@@ -1,0 +1,95 @@
+﻿@page "/categories"
+
+<MudTable Items="@_categories" FixedHeader="true" Hover="true" CanCancelEdit="true" CommitEditTooltip="Commit Edit" Class="d-flex flex-grow-1 gap-4"
+          OnCommitEditClick="@(async () => await UpdateCategory())" IsEditRowSwitchingBlocked="true" ApplyButtonPosition="TableApplyButtonPosition.End" Loading="@_loader" @bind-SelectedItem="_selectedItem">
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Action">
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="async () => await ShowDeleteMessageBox(context)" Class="ma-2">Delete</MudButton>
+        </MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="FirstName">
+            <MudTextField @bind-Value="@context.Name" />
+        </MudTd>
+    </RowEditingTemplate>
+</MudTable>
+<div class="d-flex justify-end">
+    <MudButton Disabled="false" OnClick="@(() => OpenDialog(_dialogOptions))" Variant="Variant.Filled" Color="Color.Primary" Class="ma-6">Create</MudButton>
+</div>
+
+
+@code {
+    [Inject]
+    private IApiService _apiService { get; set; } = null!;
+    [Inject]
+    private IMapper _mapper { get; set; } = null!;
+    [Inject]
+    private IDialogService _dialogService { get; set; } = null!;
+
+    private DialogOptions _dialogOptions = new DialogOptions { DisableBackdropClick = true };
+    private HashSet<CategoryVM> _selectedItems = new HashSet<CategoryVM>();
+    private IEnumerable<CategoryVM> _categories = new List<CategoryVM>();
+    private CategoryVM _selectedItem;
+    private bool _loader = true;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _categories = await _apiService.GetCategories();
+        _loader = false;
+    }
+
+    private async Task UpdateCategory()
+    {
+        await _apiService.UpdateCategory(_selectedItem);
+        _categories = await _apiService.GetCategories();
+    }
+
+    private async Task ShowDeleteMessageBox(CategoryVM category)
+    {
+        bool? result = await _dialogService.ShowMessageBox("Warning", $"text", cancelText: "Cancel");
+
+        if (result is not null && (bool)result)
+        {
+            _loader = true;
+
+            var isRemoved = await _apiService.DeleteCategory(category.Id);
+
+            if (isRemoved)
+            {
+                _categories = await _apiService.GetCategories();
+            }
+
+            _loader = false;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task OpenDialog(DialogOptions options)
+    {
+        var result = await _dialogService.Show<CreateCategoryDialog>("Create category", options).Result;
+
+        if (!result.Cancelled)
+        {
+            _loader = true;
+
+            var response = await _apiService.AddCategory((CategoryVM)result.Data);
+
+            if (response)
+            {
+                _categories = await _apiService.GetCategories();
+            }
+
+            _loader = false;
+        }
+    }
+}

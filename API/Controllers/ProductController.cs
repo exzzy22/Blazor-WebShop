@@ -38,6 +38,38 @@ public class ProductController : ControllerBase
     {
         await _service.ProductService.AddProduct(product);
 
+        return StatusCode(201);
+    }
+
+    [HttpPost("category/add")]
+    public async Task<IActionResult> AddCategory(CategoryDto category)
+    {
+        await _service.CategoryService.AddCategory(category);
+
+        return StatusCode(201);
+    }
+
+    [HttpPost("category/delete/{categoryId}")]
+    public async Task<IActionResult> DeleteCategory(int categoryId)
+    {
+        await _service.CategoryService.DeleteCategory(categoryId);
+
+        return NoContent();
+    }
+
+    [HttpPost("category/update")]
+    public async Task<IActionResult> UpdateCategory(CategoryDto category)
+    {
+        await _service.CategoryService.UpdateCategory(category);
+
         return Ok();
+    }
+
+    [HttpGet("category/all")]
+    public async Task<IActionResult> GetCategories()
+    {
+        IEnumerable<CategoryDto> categories = await _service.CategoryService.GetCategoriesAsync();
+
+        return Ok(categories);
     }
 }

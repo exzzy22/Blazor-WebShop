@@ -4,5 +4,7 @@
     {
         IAuthenticationService AuthenticationService { get; }
         IProductService ProductService { get; }
+        ICategoryService CategoryService { get; }
+
     }
 }

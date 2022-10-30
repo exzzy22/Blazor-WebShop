@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,10 @@ using Repository;
 namespace API.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20221029121624_4")]
+    partial class _4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,23 +180,20 @@ namespace API.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "2a222f9f-b5fd-4e64-9e91-8ac8fae193de",
-                            Name = "Super Administrator",
-                            NormalizedName = "SUPER ADMINISTRATOR"
+                            ConcurrencyStamp = "6fdd6e8a-10da-4bbd-acb8-e5b316eed13b",
+                            Name = "Super Administrator"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "084adb65-94cd-4d59-bbbb-bd4e00236aef",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
+                            ConcurrencyStamp = "e3062acb-0ec1-4f15-ac28-3fa977c33244",
+                            Name = "Administrator"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "6dc02842-6185-4d3c-b5ee-8b3a6768e177",
-                            Name = "User",
-                            NormalizedName = "USER"
+                            ConcurrencyStamp = "ca1631fa-8242-471d-b9c8-e643a5a37ef0",
+                            Name = "User"
                         });
                 });
 

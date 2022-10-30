@@ -13,7 +13,7 @@ public class UserController : ControllerBase
     [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> NewUser(UserForRegistrationDto userForRegistration)
     {
-        var result = await _service.AuthenticationService.RegisterUser(userForRegistration);
+        var result = await _service.AuthenticationService.RegisterUserAsync(userForRegistration);
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)

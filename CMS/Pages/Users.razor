@@ -1,0 +1,42 @@
+﻿@page "/user"
+
+<MudTable Items="@users" ReadOnly="true" FixedHeader="true" Hover="true" Class="d-flex flex-grow-1 gap-4" ApplyButtonPosition="TableApplyButtonPosition.End" Loading="@_loader" @bind-SelectedItem="_selectedItem">
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>First Name</MudTh>
+        <MudTh>Last Name</MudTh>
+        <MudTh>Email</MudTh>
+        <MudTh>Phone number</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="FirstName">@context.FirstName</MudTd>
+        <MudTd DataLabel="LastName">@context.LastName</MudTd>
+        <MudTd DataLabel="Email">@context.Email</MudTd>
+        <MudTd DataLabel="Email">@context.PhoneNumber</MudTd>
+    </RowTemplate>
+</MudTable>
+
+
+@code {
+    [Inject]
+    private IApiService apiService { get; set; } = null!;
+    [Inject]
+    private IMapper mapper { get; set; } = null!;
+    [Inject]
+    private IDialogService dialogService { get; set; } = null!;
+
+    private DialogOptions _dialogOptions = new DialogOptions { DisableBackdropClick = true };
+    private HashSet<UserVM> _selectedItems = new HashSet<UserVM>();
+    private IEnumerable<UserVM> users = new List<UserVM>();
+    private UserVM _selectedItem;
+    private bool _loader = true;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await apiService.GetUsers();
+        _loader = false;
+    }
+}
