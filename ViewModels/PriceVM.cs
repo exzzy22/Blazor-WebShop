@@ -2,8 +2,8 @@
 
 public class PriceVM
 {
-    public float Value { get; init; }
+    public float Value { get; set; }
     public int CurrencyId { get; set; }
 
-    public virtual CurrencyVM Currency { get; init; } = null!;
+    public virtual CurrencyVM Currency { get; set; } = null!;
 }

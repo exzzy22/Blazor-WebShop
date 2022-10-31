@@ -2,11 +2,11 @@
 
 public class ProductCarouselVM
 {
-    public string Name { get; init; } = null!;
-    public int Discount { get; init; } = 0;
-    public int InStock { get; init; } = 0;
-    public int Sold { get; init; } = 0;
-    public int CategoryId { get; init; }
+    public string Name { get; set; } = null!;
+    public int Discount { get; set; } = 0;
+    public int InStock { get; set; } = 0;
+    public int Sold { get; set; } = 0;
+    public int CategoryId { get; set; }
 
-    public virtual ICollection<PriceVM> Prices { get; init; } = null!;
+    public virtual ICollection<PriceVM> Prices { get; set; } = null!;
 }

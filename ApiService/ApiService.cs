@@ -38,7 +38,28 @@ public sealed class ApiService : IApiService
         return _mapper.Map<ProductVM>(product);
     }
 
-    public async Task<List<ProductVM>> GetProductsAsync()
+    public async Task<bool> AddProduct(ProductVM product)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/add", _mapper.Map<ProductDto>(product));
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteProduct(int productId)
+    {
+        HttpResponseMessage response = await _httpClient.DeleteAsync($"api/product/delete/{productId}");
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> UpdateProduct(ProductVM product)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/update", _mapper.Map<ProductVM>(product));
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<List<ProductVM>> GetProducts()
     {
         HttpResponseMessage response = await _httpClient.GetAsync("api/product/all");
 
@@ -117,7 +138,7 @@ public sealed class ApiService : IApiService
 
     public async Task<bool> DeleteCategory(int categoryId)
     {
-        HttpResponseMessage response = await _httpClient.PostAsync($"api/product/category/delete/{categoryId}", null);
+        HttpResponseMessage response = await _httpClient.DeleteAsync($"api/product/category/delete/{categoryId}");
 
         return response.IsSuccessStatusCode;
     }

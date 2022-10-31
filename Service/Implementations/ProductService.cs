@@ -30,6 +30,19 @@ internal sealed class ProductService : IProductService
         await _repository.SaveAsync();
     }
 
+    public async Task DeleteProduct(int productId)
+    {
+        Product product = await _repository.Product.GetProductAsync(productId, false) ?? throw new ProductNotFound(productId);
+        _repository.Product.Delete(product);
+        await _repository.SaveAsync();
+    }
+    public async Task UpdateProduct(ProductDto product)
+    {
+        Product dBproduct = await _repository.Product.GetProductAsync(product.Id, false) ?? throw new ProductNotFound(product.Id);
+        Product updated = _mapper.Map(product, dBproduct);
+        _repository.Product.Update(updated);
+        await _repository.SaveAsync();
+    }
     public async Task<CarouselDto> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfCategories, int numberOfProducts)
     {
         IEnumerable<Product> products = await _repository.Product.GetProductsAsync();

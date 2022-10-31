@@ -4,7 +4,10 @@ public interface IApiService
 {
     #region Products
     Task<ProductVM> GetProduct(int productId);
-    Task<List<ProductVM>> GetProductsAsync();
+    Task<bool> AddProduct(ProductVM product);
+    Task<bool> DeleteProduct(int productId);
+    Task<bool> UpdateProduct(ProductVM product);
+    Task<List<ProductVM>> GetProducts();
     Task<CarouselVM> GetCarouselTopSelling(int numberOfCategories, int numberOfProducts);
     #endregion
 

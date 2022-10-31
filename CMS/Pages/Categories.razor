@@ -55,7 +55,7 @@
 
     private async Task ShowDeleteMessageBox(CategoryVM category)
     {
-        bool? result = await _dialogService.ShowMessageBox("Warning", $"text", cancelText: "Cancel");
+        bool? result = await _dialogService.ShowMessageBox(title: "Warning", message: $"Do you really want delete category {category.Name}", cancelText: "Cancel", yesText: "Ok");
 
         if (result is not null && (bool)result)
         {

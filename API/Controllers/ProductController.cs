@@ -41,6 +41,22 @@ public class ProductController : ControllerBase
         return StatusCode(201);
     }
 
+    [HttpDelete("delete/{productId}")]
+    public async Task<IActionResult> DeleteProduct(int productId)
+    {
+        await _service.ProductService.DeleteProduct(productId);
+
+        return NoContent();
+    }
+
+    [HttpPost("update")]
+    public async Task<IActionResult> UpdateProduct(ProductDto product)
+    {
+        await _service.ProductService.UpdateProduct(product);
+
+        return Ok();
+    }
+
     [HttpPost("category/add")]
     public async Task<IActionResult> AddCategory(CategoryDto category)
     {

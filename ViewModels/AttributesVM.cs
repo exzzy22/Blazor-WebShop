@@ -2,5 +2,5 @@
 
 public abstract class AttributesVM
 {
-    public string Manufacturer { get; init; } = null!;
+    public string Manufacturer { get; set; } = null!;
 }

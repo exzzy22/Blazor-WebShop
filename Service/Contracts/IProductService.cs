@@ -6,6 +6,8 @@ public interface IProductService
 {
     Task<ProductDto> GetProduct(int productId);
     Task AddProduct(ProductDto product);
+    Task DeleteProduct(int productId);
+    Task UpdateProduct(ProductDto product);
     Task<IEnumerable<ProductDto>> GetProductsAsync();
     public Task<CarouselDto> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfCategories, int numberOfProducts);
 }

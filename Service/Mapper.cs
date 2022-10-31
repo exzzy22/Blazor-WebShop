@@ -4,7 +4,6 @@ public class Mapper : Profile
 {
 	public Mapper()
 	{
-        CreateMap<ProductForCreationDto, Product>();
         CreateMap<AdminForCreationDto, User>();
         CreateMap<Product, ProductCarouselDto>();
         CreateMap<Product, ProductDto>().ReverseMap();
