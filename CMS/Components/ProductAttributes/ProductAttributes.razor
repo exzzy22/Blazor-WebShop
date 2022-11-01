@@ -1,0 +1,37 @@
+﻿@if (Specification is null)
+{
+    return;
+}
+@switch (Specification)
+{
+    case "CPU Specifications":
+        <MudTextField @bind-Value="_cpuAtrributes.TDP" For="@(() => _cpuAtrributes.TDP)" Label="TDP" Variant="Variant.Outlined"></MudTextField>
+        <MudTextField @bind-Value="_cpuAtrributes.BaseClock" For="@(() => _cpuAtrributes.BaseClock)" Label="BaseClock" Variant="Variant.Outlined"></MudTextField>
+        <MudTextField @bind-Value="_cpuAtrributes.BoostClock" For="@(() => _cpuAtrributes.BoostClock)" Label="BoostClock" Variant="Variant.Outlined"></MudTextField>
+        break;
+}
+
+
+@code{
+    [Parameter]
+    public string Specification { get; set; } = null!;
+    AttributesVM _attributes { get; set; }
+    CpuAtrributesVM _cpuAtrributes { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        switch (Specification)
+        {
+            case "CPU Specifications":
+                _cpuAtrributes = new();
+                _attributes = _cpuAtrributes;
+                break;
+        }
+        base.OnParametersSet();
+    }
+
+    public AttributesVM GetAttributes()
+    {
+        return _attributes;
+    }
+}

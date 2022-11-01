@@ -4,6 +4,7 @@ public class Mapper : Profile
 {
     public Mapper()
     {
+        CreateMap<ProductForCreationVM, ProductDto>().ReverseMap();
         CreateMap<ProductCarouselDto, ProductCarouselVM>().ReverseMap();
         CreateMap<CarouselDto, CarouselVM>().ReverseMap();
         CreateMap<CategoryDto, CategoryVM>().ReverseMap();

@@ -12,24 +12,30 @@
     <RowTemplate>
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Name">@context.Name</MudTd>
-        <MudTd DataLabel="Prices">@context.Prices</MudTd>
+        <MudTd DataLabel="Prices">
+            <MudSimpleTable Dense="@true" Hover="@true" Striped="@true" Style="overflow-x: auto;">
+                <thead>
+                    <tr>
+                        <th>Price</th>
+                        <th>Currency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var price in context.Prices)
+                    {
+                        <tr>
+                            <td>@price.Value</td>
+                            <td>@price.Currency?.ISO4217</td>
+                        </tr>
+                    }
+                </tbody>
+            </MudSimpleTable>
+        </MudTd>
         <MudTd DataLabel="Sold">@context.Sold</MudTd>
         <MudTd DataLabel="Action">
             <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="async () => await ShowDeleteMessageBox(context)" Class="ma-2">Delete</MudButton>
         </MudTd>
     </RowTemplate>
-@*    <RowEditingTemplate>
-        <MudTd DataLabel="Id">@context.Id</MudTd>
-        <MudTd DataLabel="FirstName">
-            <MudTextField @bind-Value="@context.FirstName" />
-        </MudTd>
-        <MudTd DataLabel="LastName">
-            <MudTextField @bind-Value="@context.LastName" />
-        </MudTd>
-        <MudTd DataLabel="Email">
-            <MudTextField @bind-Value="@context.Email" Required />
-        </MudTd>
-    </RowEditingTemplate>*@
 </MudTable>
 <div class="d-flex justify-end">
     <MudButton Disabled="false" OnClick="@(() => OpenDialog(_dialogOptions))" Variant="Variant.Filled" Color="Color.Primary" Class="ma-6">Create</MudButton>
@@ -38,17 +44,17 @@
 
 @code {
     [Inject]
-    private IApiService _apiService { get; set; } = null!;
+    IApiService _apiService { get; set; } = null!;
     [Inject]
-    private IMapper _mapper { get; set; } = null!;
+    IMapper _mapper { get; set; } = null!;
     [Inject]
-    private IDialogService _dialogService { get; set; } = null!;
+    IDialogService _dialogService { get; set; } = null!;
 
-    private DialogOptions _dialogOptions = new DialogOptions { DisableBackdropClick = true };
-    private HashSet<ProductVM> _selectedItems = new HashSet<ProductVM>();
-    private IEnumerable<ProductVM> _products = new List<ProductVM>();
-    private ProductVM _selectedItem;
-    private bool _loader = true;
+    DialogOptions _dialogOptions = new DialogOptions { DisableBackdropClick = true };
+    HashSet<ProductVM> _selectedItems = new HashSet<ProductVM>();
+    IEnumerable<ProductVM> _products = new List<ProductVM>();
+    ProductVM _selectedItem;
+    bool _loader = true;
 
 
     protected override async Task OnInitializedAsync()
@@ -86,13 +92,13 @@
 
     private async Task OpenDialog(DialogOptions options)
     {
-        var result = await _dialogService.Show<CreateAdminDialog>("Create admin", options).Result;
+        var result = await _dialogService.Show<CreateProductDialog>("Create product", options).Result;
 
         if (!result.Cancelled)
         {
             _loader = true;
 
-            var response = await _apiService.AddProduct((ProductVM)result.Data);
+            var response = await _apiService.AddProduct((ProductForCreationVM)result.Data);
 
             if (response)
             {

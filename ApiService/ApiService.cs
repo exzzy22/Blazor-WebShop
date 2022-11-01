@@ -38,7 +38,7 @@ public sealed class ApiService : IApiService
         return _mapper.Map<ProductVM>(product);
     }
 
-    public async Task<bool> AddProduct(ProductVM product)
+    public async Task<bool> AddProduct(ProductForCreationVM product)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/add", _mapper.Map<ProductDto>(product));
 
@@ -146,6 +146,39 @@ public sealed class ApiService : IApiService
     public async Task<bool> UpdateCategory(CategoryVM category)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/category/update", _mapper.Map<CategoryDto>(category));
+
+        return response.IsSuccessStatusCode;
+    }
+
+    #endregion
+
+    #region Currency
+    public async Task<bool> AddCurrency(CurrencyDto currency)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/currency/add", _mapper.Map<CurrencyDto>(currency));
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<List<CurrencyVM>> GetCurrencies()
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/product/currency/all");
+
+        List<CurrencyDto> currencies = await response.Content.ReadFromJsonAsync<List<CurrencyDto>>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+
+        return _mapper.Map<List<CurrencyVM>>(currencies);
+    }
+
+    public async Task<bool> DeleteCurrency(int currencyId)
+    {
+        HttpResponseMessage response = await _httpClient.DeleteAsync($"api/product/currency/delete/{currencyId}");
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> UpdateCurrency(CurrencyVM currency)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/currency/update", _mapper.Map<CurrencyDto>(currency));
 
         return response.IsSuccessStatusCode;
     }

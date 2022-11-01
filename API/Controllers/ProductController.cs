@@ -12,7 +12,7 @@ public class ProductController : ControllerBase
     [HttpGet("{productId}")]
     public async Task<IActionResult> GetProduct(int productId)
     {
-        ProductDto product = await _service.ProductService.GetProduct(productId);
+        ProductDto product = await _service.ProductService.GetProductAsync(productId);
 
         return Ok(product);
     }
@@ -36,7 +36,7 @@ public class ProductController : ControllerBase
     [HttpPost("add")]
     public async Task<IActionResult> AddProduct(ProductDto product)
     {
-        await _service.ProductService.AddProduct(product);
+        await _service.ProductService.AddProductAsync(product);
 
         return StatusCode(201);
     }
@@ -44,7 +44,7 @@ public class ProductController : ControllerBase
     [HttpDelete("delete/{productId}")]
     public async Task<IActionResult> DeleteProduct(int productId)
     {
-        await _service.ProductService.DeleteProduct(productId);
+        await _service.ProductService.DeleteProductAsync(productId);
 
         return NoContent();
     }
@@ -52,7 +52,7 @@ public class ProductController : ControllerBase
     [HttpPost("update")]
     public async Task<IActionResult> UpdateProduct(ProductDto product)
     {
-        await _service.ProductService.UpdateProduct(product);
+        await _service.ProductService.UpdateProductAsync(product);
 
         return Ok();
     }
@@ -88,4 +88,37 @@ public class ProductController : ControllerBase
 
         return Ok(categories);
     }
+
+    [HttpGet("currency/all")]
+    public async Task<IActionResult> Getcurrencies()
+    {
+        IEnumerable<CurrencyDto> currencies = await _service.CurrencyService.GetCurrenciesAsync();
+
+        return Ok(currencies);
+    }
+
+    [HttpPost("currency/add")]
+    public async Task<IActionResult> Addcurrency(CurrencyDto currency)
+    {
+        await _service.CurrencyService.AddCurrencyAsync(currency);
+
+        return StatusCode(201);
+    }
+
+    [HttpPost("currency/delete/{currencyId}")]
+    public async Task<IActionResult> Deletecurrency(int currencyId)
+    {
+        await _service.CurrencyService.DeleteCurrencyAsync(currencyId);
+
+        return NoContent();
+    }
+
+    [HttpPost("currency/update")]
+    public async Task<IActionResult> Updatecurrency(CurrencyDto currency)
+    {
+        await _service.CurrencyService.UpdateCurrencyAsync(currency);
+
+        return Ok();
+    }
+
 }

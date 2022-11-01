@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace Service.Implementations;
+﻿namespace Service.Implementations;
 
 internal sealed class ProductService : IProductService
 {
@@ -14,29 +12,27 @@ internal sealed class ProductService : IProductService
         _mapper = mapper;
     }
 
-    public async Task<ProductDto> GetProduct(int productId)
+    public async Task<ProductDto> GetProductAsync(int productId)
     {
-        Product? product = await _repository.Product.GetProductAsync(productId, false);
-        if (product is null)
-            throw new ProductNotFound(productId);
+        Product product = await _repository.Product.GetProductAsync(productId, false) ?? throw new ProductNotFound(productId);
 
         return _mapper.Map<ProductDto>(product);
     }
 
-    public async Task AddProduct(ProductDto product)
+    public async Task AddProductAsync(ProductDto product)
     {
         Product productToInsert = _mapper.Map<Product>(product);
         _repository.Product.Create(productToInsert);
         await _repository.SaveAsync();
     }
 
-    public async Task DeleteProduct(int productId)
+    public async Task DeleteProductAsync(int productId)
     {
         Product product = await _repository.Product.GetProductAsync(productId, false) ?? throw new ProductNotFound(productId);
         _repository.Product.Delete(product);
         await _repository.SaveAsync();
     }
-    public async Task UpdateProduct(ProductDto product)
+    public async Task UpdateProductAsync(ProductDto product)
     {
         Product dBproduct = await _repository.Product.GetProductAsync(product.Id, false) ?? throw new ProductNotFound(product.Id);
         Product updated = _mapper.Map(product, dBproduct);

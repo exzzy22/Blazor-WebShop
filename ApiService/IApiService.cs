@@ -1,10 +1,12 @@
-﻿namespace ApiServices;
+﻿using System.Net.Http;
+
+namespace ApiServices;
 
 public interface IApiService
 {
     #region Products
     Task<ProductVM> GetProduct(int productId);
-    Task<bool> AddProduct(ProductVM product);
+    Task<bool> AddProduct(ProductForCreationVM product);
     Task<bool> DeleteProduct(int productId);
     Task<bool> UpdateProduct(ProductVM product);
     Task<List<ProductVM>> GetProducts();
@@ -24,6 +26,13 @@ public interface IApiService
     Task<List<CategoryVM>> GetCategories();
     Task<bool> DeleteCategory(int categoryId);
     Task<bool> UpdateCategory(CategoryVM category);
+    #endregion
+
+    #region Currency
+    Task<bool> AddCurrency(CurrencyDto currency);
+    Task<List<CurrencyVM>> GetCurrencies();
+    Task<bool> DeleteCurrency(int currencyId);
+    Task<bool> UpdateCurrency(CurrencyVM currency);
     #endregion
 
     bool AuthenticationHeaderExits();

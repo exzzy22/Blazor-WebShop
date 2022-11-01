@@ -1,25 +1,132 @@
-﻿<EditForm Model="_model" OnValidSubmit="Submit" OnInvalidSubmit="Invalid">
-    <DataAnnotationsValidator />
-    <MudDialog>
-        <DialogContent>
-            <MudCard>
-                <MudTextField @bind-Value="_model.Name" For="@(() => _model.Name)" Label="First Name" Variant="Variant.Outlined"></MudTextField>
-            </MudCard>
-        </DialogContent>
-        <DialogActions>
-            <MudButton OnClick="Cancel">Cancel</MudButton>
-            <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Create</MudButton>
-        </DialogActions>
-    </MudDialog>
-</EditForm>
+﻿<MudCard>
+    <EditForm Model="_model" OnValidSubmit="Submit" OnInvalidSubmit="Invalid">
+        <DataAnnotationsValidator />
+        <MudDialog>
+            <DialogContent>
+                <MudCardContent>
+                    <MudTextField @bind-Value="_model.Name" For="@(() => _model.Name)" Label="Name" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_model.Discount" For="@(() => _model.Discount)" Label="Discount" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentText="%"></MudTextField>
+                    <MudTextField @bind-Value="_model.InStock" For="@(() => _model.InStock)" Label="In Stock" Variant="Variant.Outlined"></MudTextField>
+                    <MudSelect @bind-Value="_model.CategoryId" For="() => _model.CategoryId" T="int?" Label="Category" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Required="true">
+                        @if (_categories is not null)
+                        {
+                            foreach (var category in _categories)
+                            {
+                                <MudSelectItem T="int?" Value="category.Id">@category.Name</MudSelectItem>
+                            }
+                        }
+                    </MudSelect>
+                    <MudDivider Class="ma-4"/>
+                    <MudSimpleTable Style="overflow-x: auto;" Outlined="true">
+                        <thead>
+                            <tr>
+                                <th>Price</th>
+                                <th>Currency</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var price in _model.Prices)
+                            {
+                                <tr>
+                                    <td>@price.Value</td>
+                                    <td>@price.Currency?.ISO4217</td>
+                                    <td>
+                                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => RemovePriceFromProduct(price)" />
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td>
+                                    <MudTextField @bind-Value="@_price.Value" Label="Price" Variant="Variant.Text" Required="true"></MudTextField>
+
+                                </td>
+                                <td>
+                                    @if (_currencies is not null)
+                                    {
+                                        <MudSelect @bind-Value="@_price.Currency" T="CurrencyVM" Label="Currency" Variant="Variant.Text" AnchorOrigin="Origin.BottomCenter" Required="true">
+                                            @foreach (var currency in _currencies)
+                                            {
+                                                <MudSelectItem T="CurrencyVM" Value="@currency">
+                                                    @currency.ISO4217
+                                                </MudSelectItem>
+                                            }
+                                        </MudSelect>
+                                    }
+                                </td>
+                                <td>
+                                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Info" OnClick="AddPriceToProduct" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </MudSimpleTable>
+                    @if (_priceError)
+                    {
+                        <MudText Align="Align.Left" Color="Color.Error" Class="ma-2">@_priceErrorMessage</MudText>
+                    }
+                </MudCardContent>
+            </DialogContent>
+            <DialogActions>
+                <MudButton OnClick="Cancel">Cancel</MudButton>
+                <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Create</MudButton>
+            </DialogActions>
+        </MudDialog>
+    </EditForm>
+</MudCard>
+
 
 
 @code {
     [CascadingParameter]
     MudDialogInstance _mudDialog { get; set; } = null!;
-    ProductVM _model = new ();
+    [Inject]
+    IApiService _apiService { get; set; } = null!;
+    ProductForCreationVM _model = new();
+    List<CategoryVM> _categories { get; set; } = null!;
+    IEnumerable<CurrencyVM> _currencies = new List<CurrencyVM>();
+    PriceVM _price = new();
+    bool _priceError = false;
+    string _priceErrorMessage = "";
 
-    void Submit() => _mudDialog.Close(DialogResult.Ok(_model));
+    protected override async Task OnInitializedAsync()
+    {
+        _categories = await _apiService.GetCategories();
+        _currencies = await _apiService.GetCurrencies();
+    }
+
+    void AddPriceToProduct()
+    {
+        if (_price.Value is null || _price.Currency is null)
+        {
+            _priceErrorMessage = "Please fill up the fields";
+            _priceError = true;
+
+            return;
+        }
+
+        _model.Prices.Add(_price);
+        _price = new();
+        _priceError = false;
+    }
+
+    void RemovePriceFromProduct(PriceVM price)
+    {
+        _model.Prices.Remove(price);
+    }
+
+    void Submit()
+    {
+        if (_model.Prices.Count <= 0)
+        { 
+            _priceErrorMessage = "Product must containt at least one price";
+            _priceError = true;
+
+            return;
+        }
+
+        _mudDialog.Close(DialogResult.Ok(_model));
+        _priceError = false;
+    }
     void Cancel() => _mudDialog.Cancel();
 
     void Invalid()

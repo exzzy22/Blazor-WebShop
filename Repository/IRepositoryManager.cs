@@ -7,6 +7,8 @@ namespace Repository
         IProductRepository Product { get; }
         ICategoryRepository Category { get; }
         IAttributesRepository Attributes { get; }
+        ICurrencyRepository Currency { get; }
+
 
         Task SaveAsync();
         void Save();

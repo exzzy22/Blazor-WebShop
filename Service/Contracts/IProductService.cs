@@ -1,13 +1,11 @@
-﻿using System.Linq.Expressions;
-
-namespace Service.Contracts;
+﻿namespace Service.Contracts;
 
 public interface IProductService
 {
-    Task<ProductDto> GetProduct(int productId);
-    Task AddProduct(ProductDto product);
-    Task DeleteProduct(int productId);
-    Task UpdateProduct(ProductDto product);
+    Task<ProductDto> GetProductAsync(int productId);
+    Task AddProductAsync(ProductDto product);
+    Task DeleteProductAsync(int productId);
+    Task UpdateProductAsync(ProductDto product);
     Task<IEnumerable<ProductDto>> GetProductsAsync();
-    public Task<CarouselDto> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfCategories, int numberOfProducts);
+    Task<CarouselDto> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfCategories, int numberOfProducts);
 }

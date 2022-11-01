@@ -1,6 +1,4 @@
-﻿using Domain.Models;
-
-namespace Repository.Contracts;
+﻿namespace Repository.Contracts;
 
 public interface IProductRepository
 {
