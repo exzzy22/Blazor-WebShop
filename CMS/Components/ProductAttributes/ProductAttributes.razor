@@ -2,14 +2,25 @@
 {
     return;
 }
-@switch (Specification)
-{
-    case "CPU Specifications":
-        <MudTextField @bind-Value="_cpuAtrributes.TDP" For="@(() => _cpuAtrributes.TDP)" Label="TDP" Variant="Variant.Outlined"></MudTextField>
-        <MudTextField @bind-Value="_cpuAtrributes.BaseClock" For="@(() => _cpuAtrributes.BaseClock)" Label="BaseClock" Variant="Variant.Outlined"></MudTextField>
-        <MudTextField @bind-Value="_cpuAtrributes.BoostClock" For="@(() => _cpuAtrributes.BoostClock)" Label="BoostClock" Variant="Variant.Outlined"></MudTextField>
-        break;
-}
+<div class="mt-8">
+    @switch (Specification)
+    {
+        case "CPU Specifications":
+            <EditForm Model="_cpuAtrributes" @ref="_editForm">
+                <DataAnnotationsValidator />
+                <MudTextField @bind-Value="_cpuAtrributes.Model" For="@(() => _cpuAtrributes.Model)" Label="Model" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField @bind-Value="_cpuAtrributes.Socket" For="@(() => _cpuAtrributes.Socket)" Label="Socket" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField @bind-Value="_cpuAtrributes.CoreCount" For="@(() => _cpuAtrributes.CoreCount)" Label="Core Count" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField @bind-Value="_cpuAtrributes.ThreadCount" For="@(() => _cpuAtrributes.ThreadCount)" Label="Thread Count" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField @bind-Value="_cpuAtrributes.CacheL3" For="@(() => _cpuAtrributes.CacheL3)" Label="Cache L3" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField @bind-Value="_cpuAtrributes.BaseClock" For="@(() => _cpuAtrributes.BaseClock)" Label="BaseClock" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField @bind-Value="_cpuAtrributes.BoostClock" For="@(() => _cpuAtrributes.BoostClock)" Label="BoostClock" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField @bind-Value="_cpuAtrributes.TDP" For="@(() => _cpuAtrributes.TDP)" Label="TDP" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField @bind-Value="_cpuAtrributes.Graphics" For="@(() => _cpuAtrributes.Graphics)" Label="Graphics" Variant="Variant.Outlined"></MudTextField>
+            </EditForm>
+            break;
+    }
+</div>
 
 
 @code{
@@ -17,7 +28,7 @@
     public string Specification { get; set; } = null!;
     AttributesVM _attributes { get; set; }
     CpuAtrributesVM _cpuAtrributes { get; set; }
-
+    public EditForm? _editForm { get; set; }
     protected override void OnParametersSet()
     {
         switch (Specification)
@@ -28,10 +39,5 @@
                 break;
         }
         base.OnParametersSet();
-    }
-
-    public AttributesVM GetAttributes()
-    {
-        return _attributes;
     }
 }

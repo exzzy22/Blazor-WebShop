@@ -14,4 +14,8 @@ public class ProductForCreationVM
     public int? CategoryId { get; set; }
     public AttributesVM Attributes { get; set; } = null!;
     public List<PriceVM> Prices { get; set; } = new();
+    public List<string> Specifications { get; } = new List<string> { "CPU Specifications" };
+    [Required]
+    public string? SelectedSpecification { get; set; }
+
 }
