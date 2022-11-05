@@ -8,4 +8,5 @@ global using AutoMapper;
 global using Shared.DataTransferObjects;
 global using static MudBlazor.CategoryTypes;
 global using CMS.Components;
+global using Shared.Extensions;
 

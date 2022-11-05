@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
 
 namespace ViewModels;
 
@@ -14,7 +15,7 @@ public class ProductForCreationVM
     public int? CategoryId { get; set; }
     public AttributesVM Attributes { get; set; } = null!;
     public List<PriceVM> Prices { get; set; } = new();
-    public List<string> Specifications { get; } = new List<string> { "CPU Specifications" };
+    public ImmutableList<string> Specifications { get; } = new List<string>() { "CPU Specifications" }.ToImmutableList();
     [Required]
     public string? SelectedSpecification { get; set; }
 

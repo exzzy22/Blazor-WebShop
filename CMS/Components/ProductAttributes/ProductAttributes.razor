@@ -26,9 +26,11 @@
 @code{
     [Parameter]
     public string Specification { get; set; } = null!;
+    public EditForm? _editForm { get; set; }
+
     AttributesVM _attributes { get; set; }
     CpuAtrributesVM _cpuAtrributes { get; set; }
-    public EditForm? _editForm { get; set; }
+
     protected override void OnParametersSet()
     {
         switch (Specification)
