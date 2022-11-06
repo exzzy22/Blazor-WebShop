@@ -1,8 +1,7 @@
 ﻿namespace Shared.DataTransferObjects;
 
-public record ProductDto
+public record ProductForCreationDto
 {
-    public int Id { get; init; }
     public string Name { get; init; } = null!;
     public int Discount { get; init; }
     public int InStock { get; init; }
@@ -10,5 +9,5 @@ public record ProductDto
     public int CategoryId { get; init; }
     public AttributesDto Attributes { get; init; } = null!;
     public ICollection<PictureForCreationDto> Pictures { get; set; } = null!;
-    public ICollection<PriceDto> Prices { get; init; } = null!;
+    public ICollection<PriceForCreationDto> Prices { get; init; } = null!;
 }

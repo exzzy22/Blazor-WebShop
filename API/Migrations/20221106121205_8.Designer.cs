@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,10 @@ using Repository;
 namespace API.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20221106121205_8")]
+    partial class _8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,21 +205,21 @@ namespace API.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "89642d05-dd3e-4a93-95a4-f27555055863",
+                            ConcurrencyStamp = "3599bb1e-207b-4b3e-a5a3-0014d114f8f4",
                             Name = "Super Administrator",
                             NormalizedName = "SUPER ADMINISTRATOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "7fb3a5bb-deb2-4acd-b8e0-1cf95731c146",
+                            ConcurrencyStamp = "fb5e9ce8-4ce9-46c1-889b-6fe7367a2b07",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "195e83a8-5926-4245-916a-158d7f7e2f7e",
+                            ConcurrencyStamp = "f60aafc0-6546-49f9-b291-421cf460e3b8",
                             Name = "User",
                             NormalizedName = "USER"
                         });

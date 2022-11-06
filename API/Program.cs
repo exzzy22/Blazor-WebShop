@@ -1,8 +1,12 @@
+using Shared.ConfigurationModels.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 builder.Services.ConfigureSqlContext(builder.Configuration);
+builder.Services.Configure<Configuration>(builder.Configuration.GetSection("Configuration"));
+
 // Add services to the container.
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();

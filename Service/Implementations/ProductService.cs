@@ -1,15 +1,25 @@
-﻿namespace Service.Implementations;
+﻿using Microsoft.AspNetCore.Hosting;
+using Shared.ConfigurationModels.Configuration;
+using Shared.Extensions;
+
+namespace Service.Implementations;
 
 internal sealed class ProductService : IProductService
 {
     private readonly IRepositoryManager _repository;
     private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
-    public ProductService(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
+    private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly Configuration _configuration;
+    private readonly string _imagePath;
+    public ProductService(IRepositoryManager repository, ILoggerManager logger, IMapper mapper, IWebHostEnvironment webHostEnvironment, IOptions<Configuration> configuration)
     {
         _repository = repository;
         _logger = logger;
         _mapper = mapper;
+        _webHostEnvironment = webHostEnvironment;
+        _configuration = configuration.Value;
+        _imagePath = webHostEnvironment.WebRootPath + _configuration.FilePathConfiguration.Image;
     }
 
     public async Task<ProductDto> GetProductAsync(int productId)
@@ -19,10 +29,17 @@ internal sealed class ProductService : IProductService
         return _mapper.Map<ProductDto>(product);
     }
 
-    public async Task AddProductAsync(ProductDto product)
+    public async Task AddProductAsync(ProductForCreationDto product)
     {
+        // Switch ImageDataUrl with saved file name
+        foreach (PictureForCreationDto picture in product.Pictures)
+        {
+            picture.ImageDataUrl = picture.ImageDataUrl.SaveDataUrlToFile($"{_imagePath}{Guid.NewGuid()}{picture.FileExtension}");
+        }
+
         Product productToInsert = _mapper.Map<Product>(product);
         _repository.Product.Create(productToInsert);
+
         await _repository.SaveAsync();
     }
 

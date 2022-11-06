@@ -2,10 +2,10 @@
 
 namespace ViewModels;
 
-public class PriceVM
+public class PriceForCreationVM
 {
     [Required]
     public float? Value { get; set; }
     [Required]
-    public CurrencyVM? Currency { get; set; }
+    public int? CurrencyId { get; set; }
 }

@@ -8,6 +8,7 @@
         case "CPU Specifications":
             <EditForm Model="_cpuAtrributes" @ref="_editForm">
                 <DataAnnotationsValidator />
+                <MudTextField @bind-Value="_cpuAtrributes.Manufacturer" For="@(() => _cpuAtrributes.Manufacturer)" Label="Manufacturer" Variant="Variant.Outlined"></MudTextField>
                 <MudTextField @bind-Value="_cpuAtrributes.Model" For="@(() => _cpuAtrributes.Model)" Label="Model" Variant="Variant.Outlined"></MudTextField>
                 <MudTextField @bind-Value="_cpuAtrributes.Socket" For="@(() => _cpuAtrributes.Socket)" Label="Socket" Variant="Variant.Outlined"></MudTextField>
                 <MudTextField @bind-Value="_cpuAtrributes.CoreCount" For="@(() => _cpuAtrributes.CoreCount)" Label="Core Count" Variant="Variant.Outlined"></MudTextField>
@@ -28,7 +29,7 @@
     public string Specification { get; set; } = null!;
     public EditForm? _editForm { get; set; }
 
-    AttributesVM _attributes { get; set; }
+    public AttributesVM Attributes { get; set; }
     CpuAtrributesVM _cpuAtrributes { get; set; }
 
     protected override void OnParametersSet()
@@ -37,7 +38,7 @@
         {
             case "CPU Specifications":
                 _cpuAtrributes = new();
-                _attributes = _cpuAtrributes;
+                Attributes = _cpuAtrributes;
                 break;
         }
         base.OnParametersSet();

@@ -3,6 +3,7 @@
 public class Attributes
 {
     public int Id { get; set; }
+    public int AttributesType { get; set; }
     public string Manufacturer { get; set; } = null!;
     public int ProductId { get; set; }
 

@@ -38,7 +38,7 @@
     </RowTemplate>
 </MudTable>
 <div class="d-flex justify-end">
-    <MudButton Disabled="false" OnClick="@(() => OpenDialog(_dialogOptions))" Variant="Variant.Filled" Color="Color.Primary" Class="ma-6">Create</MudButton>
+    <MudButton Disabled="false" OnClick='@(() => _navigationManager.NavigateTo("product/create"))' Variant="Variant.Filled" Color="Color.Primary" Class="ma-6">Create</MudButton>
 </div>
 
 
@@ -49,8 +49,9 @@
     IMapper _mapper { get; set; } = null!;
     [Inject]
     IDialogService _dialogService { get; set; } = null!;
+    [Inject]
+    NavigationManager _navigationManager { get; set; } = null!;
 
-    DialogOptions _dialogOptions = new DialogOptions { DisableBackdropClick = true };
     HashSet<ProductVM> _selectedItems = new HashSet<ProductVM>();
     IEnumerable<ProductVM> _products = new List<ProductVM>();
     ProductVM _selectedItem;
@@ -88,24 +89,5 @@
         }
 
         StateHasChanged();
-    }
-
-    private async Task OpenDialog(DialogOptions options)
-    {
-        var result = await _dialogService.Show<CreateProductDialog>("Create product", options).Result;
-
-        if (!result.Cancelled)
-        {
-            _loader = true;
-
-            var response = await _apiService.AddProduct((ProductForCreationVM)result.Data);
-
-            if (response)
-            {
-                _products = await _apiService.GetProducts();
-            }
-
-            _loader = false;
-        }
     }
 }

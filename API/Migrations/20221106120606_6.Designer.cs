@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,10 @@ using Repository;
 namespace API.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20221106120606_6")]
+    partial class _6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,7 +90,7 @@ namespace API.Migrations
                     b.ToTable("Currencies");
                 });
 
-            modelBuilder.Entity("Domain.Models.Picture", b =>
+            modelBuilder.Entity("Domain.Models.Image", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -110,7 +112,7 @@ namespace API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Pictures");
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("Domain.Models.Price", b =>
@@ -203,21 +205,21 @@ namespace API.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "89642d05-dd3e-4a93-95a4-f27555055863",
+                            ConcurrencyStamp = "f01eed6e-f84a-4c5d-9296-348df7cfc617",
                             Name = "Super Administrator",
                             NormalizedName = "SUPER ADMINISTRATOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "7fb3a5bb-deb2-4acd-b8e0-1cf95731c146",
+                            ConcurrencyStamp = "ffe7c5ad-0ff1-44db-8b81-e2a88c5869de",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "195e83a8-5926-4245-916a-158d7f7e2f7e",
+                            ConcurrencyStamp = "41f87822-cb6e-4999-9762-9088a9c92f95",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -454,10 +456,10 @@ namespace API.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Domain.Models.Picture", b =>
+            modelBuilder.Entity("Domain.Models.Image", b =>
                 {
                     b.HasOne("Domain.Models.Product", null)
-                        .WithMany("Pictures")
+                        .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -552,7 +554,7 @@ namespace API.Migrations
                     b.Navigation("Attributes")
                         .IsRequired();
 
-                    b.Navigation("Pictures");
+                    b.Navigation("Images");
 
                     b.Navigation("Prices");
                 });

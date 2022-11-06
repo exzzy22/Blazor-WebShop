@@ -7,7 +7,10 @@ public class ProductController : ControllerBase
 {
     private readonly IServiceManager _service;
 
-    public ProductController(IServiceManager service) => _service = service;
+    public ProductController(IServiceManager service)
+    {
+        _service = service;
+    }
 
     [HttpGet("{productId}")]
     public async Task<IActionResult> GetProduct(int productId)
@@ -34,7 +37,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddProduct(ProductDto product)
+    public async Task<IActionResult> AddProduct(ProductForCreationDto product)
     {
         await _service.ProductService.AddProductAsync(product);
 

@@ -14,7 +14,8 @@ public class ProductForCreationVM
     [Required]
     public int? CategoryId { get; set; }
     public AttributesVM Attributes { get; set; } = null!;
-    public List<PriceVM> Prices { get; set; } = new();
+    public List<PriceForCreationVM> Prices { get; set; } = new();
+    public ICollection<PictureForCreationVM> Pictures { get; set; } = null!;
     public ImmutableList<string> Specifications { get; } = new List<string>() { "CPU Specifications" }.ToImmutableList();
     [Required]
     public string? SelectedSpecification { get; set; }

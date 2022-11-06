@@ -40,7 +40,7 @@ public sealed class ApiService : IApiService
 
     public async Task<bool> AddProduct(ProductForCreationVM product)
     {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/add", _mapper.Map<ProductDto>(product));
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/add", _mapper.Map<ProductForCreationDto>(product));
 
         return response.IsSuccessStatusCode;
     }
