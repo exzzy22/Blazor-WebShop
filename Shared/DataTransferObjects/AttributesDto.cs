@@ -6,4 +6,5 @@ namespace Shared.DataTransferObjects;
 public abstract record AttributesDto
 {
     public string Manufacturer { get; init; } = null!;
+    public string Model { get; init; } = null!;
 }

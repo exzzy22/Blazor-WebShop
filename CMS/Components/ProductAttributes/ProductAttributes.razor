@@ -6,19 +6,47 @@
     @switch (Specification)
     {
         case "CPU Specifications":
-            <EditForm Model="_cpuAtrributes" @ref="_editForm">
-                <DataAnnotationsValidator />
-                <MudTextField @bind-Value="_cpuAtrributes.Manufacturer" For="@(() => _cpuAtrributes.Manufacturer)" Label="Manufacturer" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField @bind-Value="_cpuAtrributes.Model" For="@(() => _cpuAtrributes.Model)" Label="Model" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField @bind-Value="_cpuAtrributes.Socket" For="@(() => _cpuAtrributes.Socket)" Label="Socket" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField @bind-Value="_cpuAtrributes.CoreCount" For="@(() => _cpuAtrributes.CoreCount)" Label="Core Count" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField @bind-Value="_cpuAtrributes.ThreadCount" For="@(() => _cpuAtrributes.ThreadCount)" Label="Thread Count" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField @bind-Value="_cpuAtrributes.CacheL3" For="@(() => _cpuAtrributes.CacheL3)" Label="Cache L3" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField @bind-Value="_cpuAtrributes.BaseClock" For="@(() => _cpuAtrributes.BaseClock)" Label="BaseClock" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField @bind-Value="_cpuAtrributes.BoostClock" For="@(() => _cpuAtrributes.BoostClock)" Label="BoostClock" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField @bind-Value="_cpuAtrributes.TDP" For="@(() => _cpuAtrributes.TDP)" Label="TDP" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField @bind-Value="_cpuAtrributes.Graphics" For="@(() => _cpuAtrributes.Graphics)" Label="Graphics" Variant="Variant.Outlined"></MudTextField>
-            </EditForm>
+            if (_cpuAtrributes is not null)
+            {
+                <EditForm Model="_cpuAtrributes" @ref="_editForm">
+                    <DataAnnotationsValidator />
+                    <MudTextField @bind-Value="_cpuAtrributes.Manufacturer" For="@(() => _cpuAtrributes.Manufacturer)" Label="Manufacturer" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_cpuAtrributes.Model" For="@(() => _cpuAtrributes.Model)" Label="Model" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_cpuAtrributes.Socket" For="@(() => _cpuAtrributes.Socket)" Label="Socket" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_cpuAtrributes.CoreCount" For="@(() => _cpuAtrributes.CoreCount)" Label="Core Count" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_cpuAtrributes.ThreadCount" For="@(() => _cpuAtrributes.ThreadCount)" Label="Thread Count" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_cpuAtrributes.CacheL3" For="@(() => _cpuAtrributes.CacheL3)" Label="Cache L3" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_cpuAtrributes.BaseClockCpu" For="@(() => _cpuAtrributes.BaseClockCpu)" Label="BaseClock" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_cpuAtrributes.BoostClockCpu" For="@(() => _cpuAtrributes.BoostClockCpu)" Label="BoostClock" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_cpuAtrributes.TDP" For="@(() => _cpuAtrributes.TDP)" Label="TDP" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_cpuAtrributes.Graphics" For="@(() => _cpuAtrributes.Graphics)" Label="Graphics" Variant="Variant.Outlined"></MudTextField>
+                </EditForm>
+            }
+            break;
+        case "GPU Specifications":
+            if (_gpuAtrributes is not null)
+            {
+                <EditForm Model="_gpuAtrributes" @ref="_editForm">
+                    <DataAnnotationsValidator />
+                    <MudTextField @bind-Value="_gpuAtrributes.Manufacturer" For="@(() => _gpuAtrributes.Manufacturer)" Label="Manufacturer" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.Model" For="@(() => _gpuAtrributes.Model)" Label="Model" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.Brand" For="@(() => _gpuAtrributes.Brand)" Label="Brand" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.Interface" For="@(() => _gpuAtrributes.Interface)" Label="Interface" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.CoreClockGpu" For="@(() => _gpuAtrributes.CoreClockGpu)" Label="Core Clock" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.BoostClockGpu" For="@(() => _gpuAtrributes.BoostClockGpu)" Label="Boost Clock" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.StreamProcessors" For="@(() => _gpuAtrributes.StreamProcessors)" Label="Stream Processors" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.Memory" For="@(() => _gpuAtrributes.Memory)" Label="Memory" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.MemoryInterface" For="@(() => _gpuAtrributes.MemoryInterface)" Label="Memory Interface" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.MemoryType" For="@(() => _gpuAtrributes.MemoryType)" Label="Memory Type" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.HDMI" For="@(() => _gpuAtrributes.HDMI)" Label="HDMI" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.DisplayPort" For="@(() => _gpuAtrributes.DisplayPort)" Label="DisplayPort" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.Cooler" For="@(() => _gpuAtrributes.Cooler)" Label="Cooler" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.RecommendedPSU" For="@(() => _gpuAtrributes.RecommendedPSU)" Label="Recommended PSU" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.PowerConnector" For="@(() => _gpuAtrributes.PowerConnector)" Label="Power Connector" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.MaxGPULength" For="@(() => _gpuAtrributes.MaxGPULength)" Label="Max GPU Length" Variant="Variant.Outlined"></MudTextField>
+                    <MudTextField @bind-Value="_gpuAtrributes.SlotWidth" For="@(() => _gpuAtrributes.SlotWidth)" Label="Slot Width" Variant="Variant.Outlined"></MudTextField>
+                </EditForm>
+            }
             break;
     }
 </div>
@@ -30,7 +58,8 @@
     public EditForm? _editForm { get; set; }
 
     public AttributesVM Attributes { get; set; }
-    CpuAtrributesVM _cpuAtrributes { get; set; }
+    CpuAtrributesVM? _cpuAtrributes { get; set; }
+    GpuAtrributesVM? _gpuAtrributes { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -39,6 +68,10 @@
             case "CPU Specifications":
                 _cpuAtrributes = new();
                 Attributes = _cpuAtrributes;
+                break;
+            case "GPU Specifications":
+                _gpuAtrributes = new();
+                Attributes = _gpuAtrributes;
                 break;
         }
         base.OnParametersSet();

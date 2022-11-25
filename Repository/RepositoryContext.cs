@@ -30,7 +30,8 @@ namespace Repository
                         .ToTable("Attributes")
                         .HasDiscriminator<int>("AttributesType")
                         .HasValue<Attributes>(0)
-                        .HasValue<CpuAtrributes>(1);
+                        .HasValue<CpuAtrributes>(1)
+                        .HasValue<GpuAtrributes>(2);
 
             base.OnModelCreating(modelBuilder);
         }

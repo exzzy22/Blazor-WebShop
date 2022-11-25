@@ -1,4 +1,4 @@
-﻿@page "/products"
+﻿@page "/product"
 
 <MudTable Items="@_products" FixedHeader="true" Hover="true" CanCancelEdit="true" CommitEditTooltip="Commit Edit" Class="d-flex flex-grow-1 gap-4"
           OnCommitEditClick="@(async () => await UpdateAdmin())" IsEditRowSwitchingBlocked="true" ApplyButtonPosition="TableApplyButtonPosition.End" Loading="@_loader" @bind-SelectedItem="_selectedItem">
@@ -7,6 +7,7 @@
         <MudTh>Name</MudTh>
         <MudTh>Prices</MudTh>
         <MudTh>Sold</MudTh>
+        <MudTh></MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
@@ -32,8 +33,11 @@
             </MudSimpleTable>
         </MudTd>
         <MudTd DataLabel="Sold">@context.Sold</MudTd>
-        <MudTd DataLabel="Action">
+        <MudTd DataLabel="Delete">
             <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="async () => await ShowDeleteMessageBox(context)" Class="ma-2">Delete</MudButton>
+        </MudTd>
+        <MudTd DataLabel="Edit">
+            <MudButton Variant="Variant.Filled" Color="Color.Tertiary" OnClick="async () => await ShowDeleteMessageBox(context)" Class="ma-2">Edit</MudButton>
         </MudTd>
     </RowTemplate>
 </MudTable>
