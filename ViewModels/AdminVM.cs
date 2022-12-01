@@ -1,4 +1,6 @@
-﻿namespace ViewModels;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ViewModels;
 
 public class AdminVM
 {

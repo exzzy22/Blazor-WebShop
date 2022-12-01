@@ -39,10 +39,8 @@ public sealed class Password : ValidationAttribute
             sb = AddToMessage(sb, TooShortErrorMessage);
         }
 
-        Console.WriteLine(sb.ToString());
-
         if (sb.Length != 0)
-            return new ValidationResult(sb.ToString());
+            return new ValidationResult(sb.ToString(), new List<string> { validationContext.MemberName ?? "" }) ;
         else
             return ValidationResult.Success;
     }

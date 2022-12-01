@@ -17,7 +17,7 @@
                 }
             </MudSelect>
             <MudDivider Class="ma-4" DividerType="DividerType.Inset" />
-            <MudSimpleTable Style="@(_priceError ? "overflow-x: auto;border: 1px solid var(--mud-palette-error-darken);" : "overflow-x: auto;" )" Outlined="true" @ref="_element">
+            <MudSimpleTable Style="overflow-x: auto;" Outlined="true">
                 <thead>
                     <tr>
                         <th>Price</th>
@@ -60,16 +60,9 @@
                     </tr>
                 </tbody>
             </MudSimpleTable>
-            @if (_priceError)
-            {
-                <div class="mud-input-control-helper-container px-2" style="color:var(--mud-palette-error)">
-                    <p class="mud-input-helper-text mud-input-error">
-                        <div class="d-flex">
-                            <div class="me-auto">@_priceErrorMessage</div>
-                        </div>
-                    </p>
-                </div>
-            }
+                <MudText Color="@Color.Error" Typo="Typo.caption" Style="px-2">
+                    <ValidationMessage For="@(() => _model.Prices)"/>
+                </MudText>
         </MudItem>
         <MudItem xs="6">
             <MudSelect @bind-Value="@_model.SelectedSpecification" T="string" For="@(() => _model.SelectedSpecification)" Label="Specifications Type" Variant="Variant.Text" AnchorOrigin="Origin.BottomCenter" Required="true">
@@ -144,8 +137,6 @@
     IEnumerable<CurrencyVM> _currencies = new List<CurrencyVM>();
     PriceForCreationVM _price = new();
     ProductAttributes.ProductAttributes? _productAttributes;
-    MudSimpleTable? _element;
-    bool _priceError = false;
     string _priceErrorMessage = "";
     bool _pictureError = false;
     string _pictureErrorMessage = "";
@@ -169,14 +160,12 @@
         if (_price.Value is null || _price.CurrencyId is null || (_price.Value is null && _price.CurrencyId is null))
         {
             _priceErrorMessage = "Please fill up the fields";
-            _priceError = true;
 
             return;
         }
 
         _model.Prices.Add(_price);
         _price = new();
-        _priceError = false;
     }
 
     void RemovePriceFromProduct(PriceForCreationVM price)
@@ -186,7 +175,7 @@
 
     async Task Submit()
     {
-        if (!ValidatePrices() || !ValidateAttributes() || !ValidateImages())
+        if (!ValidateAttributes() || !ValidateImages())
             return;
 
         await _apiService.AddProduct(_model);
@@ -194,7 +183,6 @@
 
     void Invalid()
     {
-        ValidatePrices();
         ValidateAttributes();
         ValidateImages();
     }
@@ -209,20 +197,6 @@
         image.MainImage = true;
     }
 
-    bool ValidatePrices()
-    { 
-        if (_model.Prices.Count <= 0)
-        {
-            _priceErrorMessage = "Product must contain at least one price";
-            _priceError = true;
-
-            return false;
-        }
-
-        _priceError = false;
-
-        return true;
-    }
 
     bool ValidateAttributes()
     { 
