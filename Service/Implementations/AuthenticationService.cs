@@ -30,7 +30,7 @@
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, RoleConfiguration.User.Name);
+                await _userManager.AddToRoleAsync(user, DatabaseConstants.RoleConstants.User.Name);
             }
 
             return result;
@@ -119,7 +119,7 @@
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, RoleConfiguration.Administrator.Name);
+                await _userManager.AddToRoleAsync(user, DatabaseConstants.RoleConstants.Administrator.Name);
             }
 
             return result;

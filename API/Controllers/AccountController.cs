@@ -44,7 +44,7 @@
         [HttpGet("admin")]
         public async Task<IActionResult> GetAdmins()
         {
-            var admins = await _service.AuthenticationService.GetUsersInRoleAsync(RoleConfiguration.Administrator.Name);
+            var admins = await _service.AuthenticationService.GetUsersInRoleAsync(DatabaseConstants.RoleConstants.Administrator.Name);
 
             return Ok(admins);
         }
@@ -52,7 +52,7 @@
         [HttpGet("user")]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _service.AuthenticationService.GetUsersInRoleAsync(RoleConfiguration.User.Name);
+            var users = await _service.AuthenticationService.GetUsersInRoleAsync( DatabaseConstants.RoleConstants.User.Name);
 
             return Ok(users);
         }

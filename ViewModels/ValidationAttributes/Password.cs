@@ -20,7 +20,7 @@ public sealed class Password : ValidationAttribute
 
         string password = (string)value;
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new ();
 
         if (!password.Any(char.IsLower))
         {
@@ -47,7 +47,7 @@ public sealed class Password : ValidationAttribute
             return ValidationResult.Success;
     }
 
-    private StringBuilder AddToMessage(StringBuilder builder, string message)
+    private static StringBuilder AddToMessage(StringBuilder builder, string message)
     {
         if (builder.Length == 0)
         {
