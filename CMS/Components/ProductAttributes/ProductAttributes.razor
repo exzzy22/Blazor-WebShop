@@ -8,7 +8,7 @@
         case "CPU Specifications":
             if (_cpuAtrributes is not null)
             {
-                <EditForm Model="_cpuAtrributes" @ref="_editForm">
+                <EditForm EditContext="EditContext">
                     <DataAnnotationsValidator />
                     <MudTextField @bind-Value="_cpuAtrributes.Manufacturer" For="@(() => _cpuAtrributes.Manufacturer)" Label="Manufacturer" Variant="Variant.Outlined"></MudTextField>
                     <MudTextField @bind-Value="_cpuAtrributes.Model" For="@(() => _cpuAtrributes.Model)" Label="Model" Variant="Variant.Outlined"></MudTextField>
@@ -26,7 +26,7 @@
         case "GPU Specifications":
             if (_gpuAtrributes is not null)
             {
-                <EditForm Model="_gpuAtrributes" @ref="_editForm">
+                <EditForm EditContext="EditContext">
                     <DataAnnotationsValidator />
                     <MudTextField @bind-Value="_gpuAtrributes.Manufacturer" For="@(() => _gpuAtrributes.Manufacturer)" Label="Manufacturer" Variant="Variant.Outlined"></MudTextField>
                     <MudTextField @bind-Value="_gpuAtrributes.Model" For="@(() => _gpuAtrributes.Model)" Label="Model" Variant="Variant.Outlined"></MudTextField>
@@ -55,11 +55,10 @@
 @code{
     [Parameter]
     public string Specification { get; set; } = null!;
-    public EditForm? _editForm { get; set; }
-
-    public AttributesVM Attributes { get; set; }
+    public AttributesVM? Attributes { get; set; }
     CpuAtrributesVM? _cpuAtrributes { get; set; }
     GpuAtrributesVM? _gpuAtrributes { get; set; }
+    EditContext? EditContext;
 
     protected override void OnParametersSet()
     {
@@ -68,12 +67,17 @@
             case "CPU Specifications":
                 _cpuAtrributes = new();
                 Attributes = _cpuAtrributes;
+                EditContext = new(_cpuAtrributes);
                 break;
             case "GPU Specifications":
                 _gpuAtrributes = new();
                 Attributes = _gpuAtrributes;
+                EditContext = new(_gpuAtrributes);
                 break;
         }
         base.OnParametersSet();
     }
+
+    public bool Validate() => EditContext?.Validate() ?? false;
+
 }
