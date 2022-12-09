@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Shared.ConfigurationModels.Configuration;
 using Shared.Extensions;
 
@@ -10,9 +11,10 @@ internal sealed class ProductService : IProductService
     private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly IHttpContextAccessor _accessor;
     private readonly Configuration _configuration;
     private readonly string _imagePath;
-    public ProductService(IRepositoryManager repository, ILoggerManager logger, IMapper mapper, IWebHostEnvironment webHostEnvironment, IOptions<Configuration> configuration)
+    public ProductService(IRepositoryManager repository, ILoggerManager logger, IMapper mapper, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor accessor, IOptions<Configuration> configuration)
     {
         _repository = repository;
         _logger = logger;
@@ -20,6 +22,7 @@ internal sealed class ProductService : IProductService
         _webHostEnvironment = webHostEnvironment;
         _configuration = configuration.Value;
         _imagePath = webHostEnvironment.WebRootPath + _configuration.FilePathConfiguration.Image;
+        _accessor = accessor;
     }
 
     public async Task<ProductDto> GetProductAsync(int productId)
@@ -49,6 +52,17 @@ internal sealed class ProductService : IProductService
         _repository.Product.Delete(product);
         await _repository.SaveAsync();
     }
+    public async Task UpdateProductAsync(ProductForCreationDto product)
+    {
+        if (product.Id is null)
+            throw new ProductNotFound();
+
+        Product dBproduct = await _repository.Product.GetProductAsync((int)product.Id, false) ?? throw new ProductNotFound((int)product.Id);
+        Product updated = _mapper.Map(product, dBproduct);
+        _repository.Product.Update(updated);
+        await _repository.SaveAsync();
+    }
+
     public async Task UpdateProductAsync(ProductDto product)
     {
         Product dBproduct = await _repository.Product.GetProductAsync(product.Id, false) ?? throw new ProductNotFound(product.Id);
@@ -81,5 +95,19 @@ internal sealed class ProductService : IProductService
         IEnumerable<Product> products = await _repository.Product.GetProductsAsync();
 
         return _mapper.Map<IEnumerable<ProductDto>>(products);
+    }
+
+    public async Task<ProductForCreationDto> GetProductForUpdateAsync(int productId)
+    {
+        Product product = await _repository.Product.GetProductAsync(productId, false) ?? throw new ProductNotFound(productId);
+
+        ProductForCreationDto productForCreation = _mapper.Map<ProductForCreationDto>(product);
+
+        foreach (var picture in productForCreation.Pictures)
+        {
+            picture.ImageDataUrl = $"{_accessor?.HttpContext?.Request.Scheme}://{_accessor?.HttpContext?.Request.Host}{_accessor?.HttpContext?.Request.PathBase}/image/{picture.ImageDataUrl}";
+        }
+
+        return productForCreation;
     }
 }

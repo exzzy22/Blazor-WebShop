@@ -20,6 +20,14 @@ public class ProductController : ControllerBase
         return Ok(product);
     }
 
+    [HttpGet("update/{productId}")]
+    public async Task<IActionResult> GetProductForUpdate(int productId)
+    {
+        ProductForCreationDto product = await _service.ProductService.GetProductForUpdateAsync(productId);
+
+        return Ok(product);
+    }
+
     [HttpGet("all")]
     public async Task<IActionResult> GetProducts()
     {
@@ -50,6 +58,13 @@ public class ProductController : ControllerBase
         await _service.ProductService.DeleteProductAsync(productId);
 
         return NoContent();
+    }
+    [HttpPost("update/detailed")]
+    public async Task<IActionResult> UpdateProduct(ProductForCreationDto product)
+    {
+        await _service.ProductService.UpdateProductAsync(product);
+
+        return Ok();
     }
 
     [HttpPost("update")]

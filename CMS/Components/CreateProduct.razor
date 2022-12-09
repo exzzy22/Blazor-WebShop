@@ -1,5 +1,8 @@
 ﻿@page "/product/create"
+@page "/product/update/{ProductId:int}"
+
 @using System.Globalization;
+@using ViewModels.Static;
 
 <EditForm Model="_model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
@@ -126,7 +129,10 @@
     ProductAttributes.ProductAttributes? _productAttributes;
     ProductForCreationVM _model = new();
     IDictionary<IBrowserFile, PictureForCreationVM> _files = new Dictionary<IBrowserFile, PictureForCreationVM>();
+    bool _isAttributesSet = false;
 
+    [Parameter]
+    public int? ProductId { get; set; }
     [Inject]
     IApiService ApiService { get; set; } = null!;
     [Inject]
@@ -137,8 +143,24 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (ProductId is not null)
+        {
+            _model = await ApiService.GetProductForUpdate((int)ProductId);
+        }
+
         Categories = await ApiService.GetCategories();
         Currencies = await ApiService.GetCurrencies();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_productAttributes is not null && !_isAttributesSet && _model.SelectedSpecification is not null && _model.Attributes is not null)
+        {
+            _productAttributes.SetAttributes(_model.SelectedSpecification, _model.Attributes);
+            _isAttributesSet = true;
+            StateHasChanged();
+        }
+
     }
 
     async Task UploadFiles(InputFileChangeEventArgs e)
@@ -164,7 +186,11 @@
 
     async Task OnValidSubmit()
     {
-        await ApiService.AddProduct(_model);
+        if (ProductId is null)
+            await ApiService.AddProduct(_model);
+
+        else
+            await ApiService.UpdateProduct(_model);
     }
 
 

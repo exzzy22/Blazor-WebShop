@@ -1,4 +1,6 @@
-﻿namespace Service;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Service;
 
 public class Mapper : Profile
 {
@@ -19,9 +21,11 @@ public class Mapper : Profile
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<PictureForCreationDto, Picture>()
             .ForMember(dest => dest.File, opt => opt.MapFrom(soruce => soruce.ImageDataUrl));
+        CreateMap<Picture, PictureForCreationDto>()
+            .ForMember(dest => dest.ImageDataUrl, opt => opt.MapFrom(soruce => soruce.File));
         CreateMap<PictureDto, Picture>().ReverseMap();
         CreateMap<CurrencyForCreationDto, Currency>();
-        CreateMap<PriceForCreationDto, Price>();
-        CreateMap<ProductForCreationDto, Product>();
+        CreateMap<PriceForCreationDto, Price>().ReverseMap();
+        CreateMap<ProductForCreationDto, Product>().ReverseMap();
     }
 }

@@ -19,7 +19,7 @@ public class Mapper : Profile
         CreateMap<AdminForCreationVM, AdminForCreationDto>().ReverseMap();
         CreateMap<UserDto, UserVM>();
         CreateMap<CurrencyVM, CurrencyForCreationDto>();
-        CreateMap<PriceForCreationVM, PriceForCreationDto>();
-        CreateMap<ProductForCreationVM, ProductForCreationDto>();
+        CreateMap<PriceForCreationVM, PriceForCreationDto>().ReverseMap();
+        CreateMap<ProductForCreationVM, ProductForCreationDto>().ReverseMap();
     }
 }

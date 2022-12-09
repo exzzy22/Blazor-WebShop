@@ -38,6 +38,15 @@ public sealed class ApiService : IApiService
         return _mapper.Map<ProductVM>(product);
     }
 
+    public async Task<ProductForCreationVM> GetProductForUpdate(int productId)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/product/update/{productId}");
+
+        ProductForCreationDto product = await response.Content.ReadFromJsonAsync<ProductForCreationDto>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+
+        return _mapper.Map<ProductForCreationVM>(product);
+    }
+
     public async Task<bool> AddProduct(ProductForCreationVM product)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/add", _mapper.Map<ProductForCreationDto>(product));
@@ -55,6 +64,13 @@ public sealed class ApiService : IApiService
     public async Task<bool> UpdateProduct(ProductVM product)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/update", _mapper.Map<ProductVM>(product));
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> UpdateProduct(ProductForCreationVM product)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/update/detailed", _mapper.Map<ProductForCreationDto>(product));
 
         return response.IsSuccessStatusCode;
     }

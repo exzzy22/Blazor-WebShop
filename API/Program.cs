@@ -1,3 +1,4 @@
+using AutoMapper;
 using Shared.ConfigurationModels.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,8 @@ builder.Services.AddJwtConfiguration(builder.Configuration);
 
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureSwagger();
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

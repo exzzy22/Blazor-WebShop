@@ -80,4 +80,22 @@
 
     public bool Validate() => EditContext?.Validate() ?? false;
 
+    public void SetAttributes(string specification, AttributesVM attributes)
+    {
+        switch (specification)
+        {
+            case "CPU Specifications":
+                _cpuAtrributes = (CpuAtrributesVM)attributes;
+                Attributes = _cpuAtrributes;
+                EditContext = new(_cpuAtrributes);
+                break;
+            case "GPU Specifications":
+                _gpuAtrributes = (GpuAtrributesVM)attributes;
+                Attributes = _gpuAtrributes;
+                EditContext = new(_gpuAtrributes);
+                break;
+        }
+        StateHasChanged();
+    }
+
 }

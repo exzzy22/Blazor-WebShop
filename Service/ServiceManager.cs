@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Service.Implementations;
 using Shared.ConfigurationModels.Configuration;
 
@@ -12,7 +13,8 @@ namespace Service
         private readonly Lazy<ICurrencyService> _currencyService;
         public ServiceManager(IRepositoryManager repositoryManager, 
             ILoggerManager logger, 
-            IMapper mapper, 
+            IMapper mapper,
+            IHttpContextAccessor accessor,
             UserManager<User> userManager, 
             RoleManager<Role> roleManager, 
             IOptions<JwtConfiguration> jwtConfiguration,
@@ -20,7 +22,7 @@ namespace Service
             IWebHostEnvironment webHostEnvironment)
         {
             _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(logger, mapper, roleManager, userManager, jwtConfiguration));
-            _productService = new Lazy<IProductService>(()=> new ProductService(repositoryManager,logger,mapper,webHostEnvironment, configuration));
+            _productService = new Lazy<IProductService>(()=> new ProductService(repositoryManager,logger,mapper,webHostEnvironment,accessor, configuration));
             _categoryService = new Lazy<ICategoryService>(() => new CategoryService(repositoryManager, logger, mapper));
             _currencyService = new Lazy<ICurrencyService>(() => new CurrencyService(repositoryManager, logger, mapper));
         }
