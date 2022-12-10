@@ -88,6 +88,7 @@
         <MudItem xs="12">
             <InputFile id="fileInput" OnChange="UploadFiles" hidden multiple accept=".jpg,.jpeg,.png,.tiff,.tif,.bmp" />
 
+            <div class="d-flex align-center flex-grow-1 gap-2">
             <MudButton HtmlTag="label"
                        Variant="Variant.Filled"
                        Color="Color.Primary"
@@ -96,6 +97,8 @@
                        for="fileInput">
                 Upload Files
             </MudButton>
+            <MudText>(Max 5MB)</MudText>
+            </div>
             @if (_files is not null)
             {
             <MudGrid>
@@ -158,7 +161,7 @@
         Currencies = await ApiService.GetCurrencies();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnAfterRender(bool firstRender)
     {
         if (_productAttributes is not null && !_isAttributesSet && _model.SelectedSpecification is not null && _model.Attributes is not null)
         {
@@ -175,7 +178,7 @@
         {
             _files.Add(new UploadedFIleVM 
                 {
-                    File = file, 
+                    File = await file.RequestImageFileAsync(file.ContentType,600,600), 
                     PictureForCreationVM = new PictureForCreationVM { ImageDataUrl = await file.ToImageDataURL(), FileExtension = Path.GetExtension(file.Name) } 
                 });
         }
