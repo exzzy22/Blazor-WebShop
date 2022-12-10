@@ -9,6 +9,6 @@ public class ProductVM
     public int Sold { get; set; }
     public int CategoryId { get; set; }
     public AttributesVM Attributes { get; set; } = null!;
-    public virtual ICollection<PictureVM> Pictures { get; set; } = null!;
+    //public virtual ICollection<PictureVM> Pictures { get; set; } = null!;
     public virtual ICollection<PriceVM> Prices { get; set; } = null!;
 }

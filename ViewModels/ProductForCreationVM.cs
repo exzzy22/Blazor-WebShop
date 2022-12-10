@@ -21,8 +21,10 @@ public class ProductForCreationVM
 
     [Required]
     public int? CategoryId { get; set; }
+	[Required]
+	public int Sold { get; set; } = 0;
 
-    [Required]
+	[Required]
     public AttributesVM? Attributes { get; set; } = null!;
 
     [CollectionCount<PriceForCreationVM>("Product must contain at least one price", 1)]

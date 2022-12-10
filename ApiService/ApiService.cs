@@ -72,6 +72,8 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/update/detailed", _mapper.Map<ProductForCreationDto>(product));
 
+        var lol = await response.Content.ReadAsStringAsync();
+
         return response.IsSuccessStatusCode;
     }
 

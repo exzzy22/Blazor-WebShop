@@ -7,6 +7,7 @@ internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepo
     public async Task<Product?> GetProductAsync(int id, bool trackChanges) => await FindByCondition(p => p.Id.Equals(id), trackChanges)
         .Include(p => p.Category)
         .Include(p => p.Attributes)
+        .Include(p => p.Pictures)
         .FirstOrDefaultAsync();
 
     public async Task<IEnumerable<Product>> GetProductsAsync() => await FindAll(false)

@@ -11,6 +11,7 @@
             <MudTextField @bind-Value="_model.Name" For="@(() => _model.Name)" Label="Name" Variant="Variant.Outlined"></MudTextField>
             <MudTextField @bind-Value="_model.Discount" For="@(() => _model.Discount)" Label="Discount" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentText="%"></MudTextField>
             <MudTextField @bind-Value="_model.InStock" For="@(() => _model.InStock)" Label="In Stock" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="_model.Sold" For="@(() => _model.Sold)" Label="Sold" Variant="Variant.Outlined"></MudTextField>
             <MudSelect @bind-Value="_model.CategoryId" For="() => _model.CategoryId" T="int?" Label="Category" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Required="true">
                 @if (Categories is not null)
                 {
@@ -103,11 +104,11 @@
                     <MudItem xs="3" Style="display:flex;">
                         <MudStack Justify="Justify.SpaceBetween">
                             <MudTooltip Placement="Placement.Top" Inline="true" Text="Set as main image">
-                                <MudBadge Overlap="true" Class="mx-6 my-4" Color="@(file.Value.MainImage ? Color.Success : Color.Transparent)" Icon="@(file.Value.MainImage ? Icons.Filled.CheckBox : Icons.Filled.CheckBoxOutlineBlank)">
-                                        <MudImage Src="@file.Value.ImageDataUrl" Alt="@file.Key.Name" ObjectFit="ObjectFit.ScaleDown" Fluid="true" @onclick="() => SetAsMain(file.Value)" Style="cursor:pointer" />
+                                    <MudBadge Overlap="true" Class="mx-6 my-4" Color="@(file.PictureForCreationVM.MainImage ? Color.Success : Color.Transparent)" Icon="@(file.PictureForCreationVM.MainImage ? Icons.Filled.CheckBox : Icons.Filled.CheckBoxOutlineBlank)">
+                                        <MudImage Src="@file.PictureForCreationVM.ImageDataUrl" Alt="@(file.File == null ? "" : file.File.Name)" ObjectFit="ObjectFit.ScaleDown" Fluid="true" @onclick="() => SetAsMain(file.PictureForCreationVM)" Style="cursor:pointer" />
                                 </MudBadge>
                             </MudTooltip>
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" OnClick="() => _files.Remove(file)" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" OnClick="() => RemovePicture(file)" />
                         </MudStack>
                     </MudItem>
                 }
@@ -128,7 +129,7 @@
     PriceForCreationVM _price = new();
     ProductAttributes.ProductAttributes? _productAttributes;
     ProductForCreationVM _model = new();
-    IDictionary<IBrowserFile, PictureForCreationVM> _files = new Dictionary<IBrowserFile, PictureForCreationVM>();
+    List<UploadedFIleVM> _files = new ();
     bool _isAttributesSet = false;
 
     [Parameter]
@@ -146,6 +147,11 @@
         if (ProductId is not null)
         {
             _model = await ApiService.GetProductForUpdate((int)ProductId);
+
+            foreach (var picture in _model.Pictures)
+            {
+                _files.Add(new UploadedFIleVM { File = null, PictureForCreationVM = picture });
+            }
         }
 
         Categories = await ApiService.GetCategories();
@@ -167,10 +173,14 @@
     {
         foreach (var file in e.GetMultipleFiles())
         {
-            _files.Add(file, new PictureForCreationVM { ImageDataUrl = await file.ToImageDataURL(), FileExtension = Path.GetExtension(file.Name) });
+            _files.Add(new UploadedFIleVM 
+                {
+                    File = file, 
+                    PictureForCreationVM = new PictureForCreationVM { ImageDataUrl = await file.ToImageDataURL(), FileExtension = Path.GetExtension(file.Name) } 
+                });
         }
 
-        _model.Pictures = _files.Values.ToList();
+        _model.Pictures = _files.Select(f => f.PictureForCreationVM).ToList();
     }
 
     void AddPriceToProduct()
@@ -182,6 +192,12 @@
     void RemovePriceFromProduct(PriceForCreationVM price)
     {
         _model.Prices.Remove(price);
+    }
+
+    void RemovePicture(UploadedFIleVM file)
+    {
+        _model.Pictures.Remove(file.PictureForCreationVM);
+        _files.Remove(file);
     }
 
     async Task OnValidSubmit()
@@ -198,7 +214,7 @@
     { 
         foreach (var file in _files)
         {
-            file.Value.MainImage = false;
+            file.PictureForCreationVM.MainImage = false;
         }
 
         image.MainImage = true;

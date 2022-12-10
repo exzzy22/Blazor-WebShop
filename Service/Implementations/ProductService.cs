@@ -57,10 +57,21 @@ internal sealed class ProductService : IProductService
         if (product.Id is null)
             throw new ProductNotFound();
 
-        Product dBproduct = await _repository.Product.GetProductAsync((int)product.Id, false) ?? throw new ProductNotFound((int)product.Id);
+        // Switch ImageDataUrl with saved file name
+        foreach (PictureForCreationDto picture in product.Pictures)
+        {
+            if (!picture.ImageDataUrl.StartsWith("http"))
+                picture.ImageDataUrl = picture.ImageDataUrl.SaveDataUrlToFile($"{_imagePath}{Guid.NewGuid()}{picture.FileExtension}");
+
+            else
+                picture.ImageDataUrl = picture.ImageDataUrl.Split("image/")[1];
+        }
+
+        Product dBproduct = await _repository.Product.GetProductAsync((int)product.Id, true) ?? throw new ProductNotFound((int)product.Id);
         Product updated = _mapper.Map(product, dBproduct);
         _repository.Product.Update(updated);
         await _repository.SaveAsync();
+
     }
 
     public async Task UpdateProductAsync(ProductDto product)

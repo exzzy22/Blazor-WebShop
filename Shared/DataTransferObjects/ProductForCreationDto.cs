@@ -1,15 +1,15 @@
 ﻿namespace Shared.DataTransferObjects;
 
-public record ProductForCreationDto
+public class ProductForCreationDto
 {
     public int? Id { get; set; } = null;
-    public string Name { get; init; } = null!;
-    public int Discount { get; init; }
-    public int InStock { get; init; }
-    public int Sold { get; init; }
-    public int CategoryId { get; init; }
-    public string SelectedSpecification { get; set; } = null!;
-    public AttributesDto Attributes { get; init; } = null!;
-    public ICollection<PictureForCreationDto> Pictures { get; set; } = null!;
-    public ICollection<PriceForCreationDto> Prices { get; init; } = null!;
+    public string Name { get; set; } = null!;
+    public int Discount { get; set; }
+    public int InStock { get; set; }
+    public int Sold { get; set; }
+    public int CategoryId { get; set; }
+	public string SelectedSpecification { get; set; } = null!;
+    public AttributesDto Attributes { get; set; } = null!;
+    public List<PictureForCreationDto> Pictures { get; set; } = null!;
+    public List<PriceForCreationDto> Prices { get; set; } = null!;
 }
