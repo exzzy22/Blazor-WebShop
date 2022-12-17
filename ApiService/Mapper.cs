@@ -8,8 +8,8 @@ public class Mapper : Profile
         CreateMap<CarouselDto, CarouselVM>().ReverseMap();
         CreateMap<CategoryDto, CategoryVM>().ReverseMap();
         CreateMap<ProductDto, ProductVM>().ReverseMap();
-        CreateMap<PictureForCreationDto, PictureForCreationVM>().ReverseMap();
-        CreateMap<PictureDto, PictureVM>().ReverseMap();
+        CreateMap<ImageForCreationDto, ImageForCreationVM>().ReverseMap();
+        CreateMap<ImageDto, ImageVM>().ReverseMap();
         CreateMap<AttributesDto, AttributesVM>().IncludeAllDerived();
         CreateMap<AttributesVM, AttributesDto>().IncludeAllDerived();
         CreateMap<CpuAtrributesDto, CpuAtrributesVM>().ReverseMap();
@@ -21,5 +21,6 @@ public class Mapper : Profile
         CreateMap<CurrencyVM, CurrencyForCreationDto>();
         CreateMap<PriceForCreationVM, PriceForCreationDto>().ReverseMap();
         CreateMap<ProductForCreationVM, ProductForCreationDto>().ReverseMap();
+        CreateMap<ImageForTableDto, ImageForTableVM>().ReverseMap();
     }
 }

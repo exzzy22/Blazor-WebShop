@@ -31,7 +31,7 @@ public class ProductForCreationVM
     public List<PriceForCreationVM> Prices { get; set; } = new();
 
     [ProductImages]
-    public ICollection<PictureForCreationVM> Pictures { get; set; } = null!;
+    public ICollection<ImageForCreationVM> Pictures { get; set; } = null!;
 
     public ImmutableList<string> Specifications { get; } = AttributesDictionary.Attributes.ToImmutableList();
 

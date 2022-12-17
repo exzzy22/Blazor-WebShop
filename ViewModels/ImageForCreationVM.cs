@@ -1,6 +1,6 @@
 ﻿namespace ViewModels;
 
-public class PictureForCreationVM
+public class ImageForCreationVM
 {
     public int? Id { get; set; } = null;
     public string ImageDataUrl { get; set; } = null!;

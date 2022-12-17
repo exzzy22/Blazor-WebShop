@@ -8,7 +8,7 @@ public class ProductImages : ValidationAttribute
     string errorMessage = "";
     protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
     {
-        IEnumerable<PictureForCreationVM> list = value as IEnumerable<PictureForCreationVM>;
+        IEnumerable<ImageForCreationVM> list = value as IEnumerable<ImageForCreationVM>;
 
         if (list is null || list.Count() < 1 || !list.Any(i => i.MainImage))
         {

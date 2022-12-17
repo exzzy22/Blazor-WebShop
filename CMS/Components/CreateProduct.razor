@@ -176,10 +176,15 @@
     {
         foreach (var file in e.GetMultipleFiles())
         {
+            IBrowserFile convertedFile = await file.RequestImageFileAsync(file.ContentType, 600, 600);
+
             _files.Add(new UploadedFIleVM 
                 {
-                    File = await file.RequestImageFileAsync(file.ContentType,600,600), 
-                    PictureForCreationVM = new PictureForCreationVM { ImageDataUrl = await file.ToImageDataURL(), FileExtension = Path.GetExtension(file.Name) } 
+                    File = convertedFile, 
+                    PictureForCreationVM = new ImageForCreationVM 
+                    { 
+                        ImageDataUrl = await convertedFile.ToImageDataURL(), FileExtension = Path.GetExtension(convertedFile.Name) 
+                    }
                 });
         }
 
@@ -213,7 +218,7 @@
     }
 
 
-    void SetAsMain(PictureForCreationVM image)
+    void SetAsMain(ImageForCreationVM image)
     { 
         foreach (var file in _files)
         {

@@ -15,5 +15,5 @@ public class Product
     public virtual Category Category { get; set; } = null!;
     public virtual Attributes Attributes { get; set; } = null!;
     public virtual ICollection<Price> Prices { get; set; } = null!;
-    public virtual ICollection<Picture> Pictures { get; set; } = null!;
+    public virtual ICollection<Image> Pictures { get; set; } = null!;
 }

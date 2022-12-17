@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Exceptions.ModelSpecific;
+using Domain.Models;
 using ViewModels;
 
 namespace ApiServices;
@@ -33,7 +34,7 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/{productId}");
 
-        ProductDto product = await response.Content.ReadFromJsonAsync<ProductDto>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+        ProductDto product = await response.Content.ReadFromJsonAsync<ProductDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<ProductVM>(product);
     }
@@ -42,7 +43,7 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/update/{productId}");
 
-        ProductForCreationDto product = await response.Content.ReadFromJsonAsync<ProductForCreationDto>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+        ProductForCreationDto product = await response.Content.ReadFromJsonAsync<ProductForCreationDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<ProductForCreationVM>(product);
     }
@@ -72,8 +73,6 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/update/detailed", _mapper.Map<ProductForCreationDto>(product));
 
-        var lol = await response.Content.ReadAsStringAsync();
-
         return response.IsSuccessStatusCode;
     }
 
@@ -81,7 +80,7 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync("api/product/all");
 
-        List<ProductDto> products = await response.Content.ReadFromJsonAsync<List<ProductDto>>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+        List<ProductDto> products = await response.Content.ReadFromJsonAsync<List<ProductDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<ProductVM>>(products);
     }
@@ -90,10 +89,34 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/carousel/topSelling/{numberOfCategories}/{numberOfProducts}");
 
-        CarouselDto carousel = await response.Content.ReadFromJsonAsync<CarouselDto>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+        CarouselDto carousel = await response.Content.ReadFromJsonAsync<CarouselDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<CarouselVM>(carousel);
     }
+
+    public async Task<bool> DeleteImage(string image)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"api/product/image/delete",image);
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteImage(List<string> images)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"api/product/image/delete/multiple",images);
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<List<ImageForTableVM>> GetUnusedImages()
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/product/image/unused");
+
+        List<ImageForTableDto> imageForTable = await response.Content.ReadFromJsonAsync<List<ImageForTableDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+        return _mapper.Map<List<ImageForTableVM>>(imageForTable);
+    }
+
     #endregion
 
     #region Accounts
@@ -101,7 +124,7 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync("api/account/admin");
 
-        List<AdminDto> admins = await response.Content.ReadFromJsonAsync<List<AdminDto>>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+        List<AdminDto> admins = await response.Content.ReadFromJsonAsync<List<AdminDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<AdminVM>>(admins);
     }
@@ -131,7 +154,7 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync("api/account/user");
 
-        List<UserDto> admins = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+        List<UserDto> admins = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<UserVM>>(admins);
     }
@@ -149,7 +172,7 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/category/all");
 
-        List<CategoryDto> categories = await response.Content.ReadFromJsonAsync<List<CategoryDto>>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+        List<CategoryDto> categories = await response.Content.ReadFromJsonAsync<List<CategoryDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<CategoryVM>>(categories);
     }
@@ -182,7 +205,7 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/currency/all");
 
-        List<CurrencyDto> currencies = await response.Content.ReadFromJsonAsync<List<CurrencyDto>>() ?? throw new NullReferenceException(await response.Content.ReadAsStringAsync());
+        List<CurrencyDto> currencies = await response.Content.ReadFromJsonAsync<List<CurrencyDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<CurrencyVM>>(currencies);
     }

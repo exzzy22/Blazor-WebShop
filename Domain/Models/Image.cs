@@ -1,6 +1,6 @@
 ﻿namespace Domain.Models;
 
-public class Picture
+public class Image
 {
     public int Id { get; set; }
     public string File { get; set; } = null!;

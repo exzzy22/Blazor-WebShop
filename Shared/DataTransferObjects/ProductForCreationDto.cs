@@ -10,6 +10,6 @@ public class ProductForCreationDto
     public int CategoryId { get; set; }
 	public string SelectedSpecification { get; set; } = null!;
     public AttributesDto Attributes { get; set; } = null!;
-    public List<PictureForCreationDto> Pictures { get; set; } = null!;
+    public List<ImageForCreationDto> Images { get; set; } = null!;
     public List<PriceForCreationDto> Prices { get; set; } = null!;
 }

@@ -5,5 +5,5 @@ namespace ViewModels;
 public class UploadedFIleVM
 {
     public IBrowserFile? File { get; set; }
-    public PictureForCreationVM PictureForCreationVM { get; set; } = null!;
+    public ImageForCreationVM PictureForCreationVM { get; set; } = null!;
 }

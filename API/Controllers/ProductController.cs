@@ -5,17 +5,17 @@
 [AllowAnonymous]
 public class ProductController : ControllerBase
 {
-    private readonly IServiceManager _service;
+    private readonly IServiceManager _serviceManager;
 
     public ProductController(IServiceManager service)
     {
-        _service = service;
+        _serviceManager = service;
     }
 
     [HttpGet("{productId}")]
     public async Task<IActionResult> GetProduct(int productId)
     {
-        ProductDto product = await _service.ProductService.GetProductAsync(productId);
+        ProductDto product = await _serviceManager.ProductService.GetProductAsync(productId);
 
         return Ok(product);
     }
@@ -23,7 +23,7 @@ public class ProductController : ControllerBase
     [HttpGet("update/{productId}")]
     public async Task<IActionResult> GetProductForUpdate(int productId)
     {
-        ProductForCreationDto product = await _service.ProductService.GetProductForUpdateAsync(productId);
+        ProductForCreationDto product = await _serviceManager.ProductService.GetProductForUpdateAsync(productId);
 
         return Ok(product);
     }
@@ -31,7 +31,7 @@ public class ProductController : ControllerBase
     [HttpGet("all")]
     public async Task<IActionResult> GetProducts()
     {
-        IEnumerable<ProductDto>? products = await _service.ProductService.GetProductsAsync();
+        IEnumerable<ProductDto>? products = await _serviceManager.ProductService.GetProductsAsync();
 
         return Ok(products);
     }
@@ -39,7 +39,7 @@ public class ProductController : ControllerBase
     [HttpGet("carousel/topSelling/{numberOfCategories}/{numberOfProducts}")]
     public async Task<IActionResult> GetCarouselTopSelling(int numberOfCategories, int numberOfProducts)
     {
-        var carousel = await _service.ProductService.GetCarouselProductsAsync(p => (p.Sold), numberOfCategories, numberOfProducts);
+        var carousel = await _serviceManager.ProductService.GetCarouselProductsAsync(p => (p.Sold), numberOfCategories, numberOfProducts);
 
         return Ok(carousel);
     }
@@ -47,7 +47,7 @@ public class ProductController : ControllerBase
     [HttpPost("add")]
     public async Task<IActionResult> AddProduct(ProductForCreationDto product)
     {
-        await _service.ProductService.AddProductAsync(product);
+        await _serviceManager.ProductService.AddProductAsync(product);
 
         return StatusCode(201);
     }
@@ -55,14 +55,14 @@ public class ProductController : ControllerBase
     [HttpDelete("delete/{productId}")]
     public async Task<IActionResult> DeleteProduct(int productId)
     {
-        await _service.ProductService.DeleteProductAsync(productId);
+        await _serviceManager.ProductService.DeleteProductAsync(productId);
 
         return NoContent();
     }
     [HttpPost("update/detailed")]
     public async Task<IActionResult> UpdateProduct(ProductForCreationDto product)
     {
-        await _service.ProductService.UpdateProductAsync(product);
+        await _serviceManager.ProductService.UpdateProductAsync(product);
 
         return Ok();
     }
@@ -70,7 +70,7 @@ public class ProductController : ControllerBase
     [HttpPost("update")]
     public async Task<IActionResult> UpdateProduct(ProductDto product)
     {
-        await _service.ProductService.UpdateProductAsync(product);
+        await _serviceManager.ProductService.UpdateProductAsync(product);
 
         return Ok();
     }
@@ -78,7 +78,7 @@ public class ProductController : ControllerBase
     [HttpPost("category/add")]
     public async Task<IActionResult> AddCategory(CategoryDto category)
     {
-        await _service.CategoryService.AddCategory(category);
+        await _serviceManager.CategoryService.AddCategory(category);
 
         return StatusCode(201);
     }
@@ -86,7 +86,7 @@ public class ProductController : ControllerBase
     [HttpPost("category/delete/{categoryId}")]
     public async Task<IActionResult> DeleteCategory(int categoryId)
     {
-        await _service.CategoryService.DeleteCategory(categoryId);
+        await _serviceManager.CategoryService.DeleteCategory(categoryId);
 
         return NoContent();
     }
@@ -94,31 +94,21 @@ public class ProductController : ControllerBase
     [HttpPost("category/update")]
     public async Task<IActionResult> UpdateCategory(CategoryDto category)
     {
-        await _service.CategoryService.UpdateCategory(category);
+        await _serviceManager.CategoryService.UpdateCategory(category);
 
         return Ok();
     }
 
     [HttpGet("category/all")]
-    public async Task<IActionResult> GetCategories()
-    {
-        IEnumerable<CategoryDto> categories = await _service.CategoryService.GetCategoriesAsync();
-
-        return Ok(categories);
-    }
+    public async Task<IActionResult> GetCategories() => Ok(await _serviceManager.CategoryService.GetCategoriesAsync());
 
     [HttpGet("currency/all")]
-    public async Task<IActionResult> Getcurrencies()
-    {
-        IEnumerable<CurrencyDto> currencies = await _service.CurrencyService.GetCurrenciesAsync();
-
-        return Ok(currencies);
-    }
+    public async Task<IActionResult> Getcurrencies() => Ok(await _serviceManager.CurrencyService.GetCurrenciesAsync());
 
     [HttpPost("currency/add")]
     public async Task<IActionResult> Addcurrency(CurrencyDto currency)
     {
-        await _service.CurrencyService.AddCurrencyAsync(currency);
+        await _serviceManager.CurrencyService.AddCurrencyAsync(currency);
 
         return StatusCode(201);
     }
@@ -126,7 +116,7 @@ public class ProductController : ControllerBase
     [HttpPost("currency/delete/{currencyId}")]
     public async Task<IActionResult> Deletecurrency(int currencyId)
     {
-        await _service.CurrencyService.DeleteCurrencyAsync(currencyId);
+        await _serviceManager.CurrencyService.DeleteCurrencyAsync(currencyId);
 
         return NoContent();
     }
@@ -134,9 +124,28 @@ public class ProductController : ControllerBase
     [HttpPost("currency/update")]
     public async Task<IActionResult> Updatecurrency(CurrencyDto currency)
     {
-        await _service.CurrencyService.UpdateCurrencyAsync(currency);
+        await _serviceManager.CurrencyService.UpdateCurrencyAsync(currency);
 
         return Ok();
+    }
+
+    [HttpGet("image/unused")]
+    public async Task<IActionResult> GetUnusedImages() => Ok(await _serviceManager.ProductService.GetListOfUnusedImages());
+
+    [HttpPost("image/delete")]
+    public async Task<IActionResult> DeleteImage(string image)
+    {
+        _serviceManager.ProductService.DeleteImage(image);
+
+        return NoContent();
+    }
+
+    [HttpPost("image/delete/multiple")]
+    public async Task<IActionResult> DeleteImage(List<string> images)
+    {
+        _serviceManager.ProductService.DeleteImage(images);
+
+        return NoContent();
     }
 
 }

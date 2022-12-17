@@ -8,6 +8,7 @@ namespace Repository
         ICategoryRepository Category { get; }
         IAttributesRepository Attributes { get; }
         ICurrencyRepository Currency { get; }
+        IImageRepository Image { get; }
 
 
         Task SaveAsync();

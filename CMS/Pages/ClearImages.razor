@@ -1,0 +1,87 @@
+﻿@page "/unusedimages"
+
+<MudTable Items="@_images" MultiSelection="true" FixedHeader="true" Hover="true" CanCancelEdit="true" CommitEditTooltip="Commit Edit" Class="d-flex flex-grow-1 gap-4" Loading="@_loader" @bind-SelectedItem="_selectedItem" @bind-SelectedItems="_selectedItems">
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh></MudTh>
+        <MudTh>
+            @if (_selectedItems is not null && _selectedItems.Count > 1)
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="async () => await ShowDeleteMessageBox(_selectedItems.Select(i => i.Filename).ToList())" Class="ma-2">Delete All</MudButton>
+            }
+        </MudTh>
+
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Filename</MudTd>
+        <MudTd DataLabel="Image">
+            <MudImage Src="@context.Link" Alt="Image" Elevation="25" Class="rounded-lg" Height="80" />
+        </MudTd>
+        <MudTd DataLabel="Action">
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="async () => await ShowDeleteMessageBox(context.Filename)" Class="ma-2">Delete</MudButton>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    DialogOptions _dialogOptions = new DialogOptions { DisableBackdropClick = true };
+    HashSet<ImageForTableVM> _selectedItems = new HashSet<ImageForTableVM>();
+    IEnumerable<ImageForTableVM> _images = new List<ImageForTableVM>();
+    ImageForTableVM _selectedItem;
+    bool _loader = true;
+
+    [Inject]
+    IApiService ApiService { get; set; } = null!;
+    [Inject]
+    IMapper Mapper { get; set; } = null!;
+    [Inject]
+    IDialogService DialogService { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _images = await ApiService.GetUnusedImages();
+        _loader = false;
+    }
+
+    private async Task ShowDeleteMessageBox(string image)
+    {
+        bool? result = await DialogService.ShowMessageBox(title: "Warning", message: $"Are you sure?", cancelText: "No", yesText: "Yes");
+
+        if (result is not null && (bool)result)
+        {
+            _loader = true;
+
+            var isRemoved = await ApiService.DeleteImage(image);
+
+            if (isRemoved)
+            {
+                _images = await ApiService.GetUnusedImages();
+            }
+
+            _loader = false;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task ShowDeleteMessageBox(List<string> images)
+    {
+        bool? result = await DialogService.ShowMessageBox(title: "Warning", message: $"Are you sure?", cancelText: "No", yesText: "Yes");
+
+        if (result is not null && (bool)result)
+        {
+            _loader = true;
+
+            var isRemoved = await ApiService.DeleteImage(images);
+
+            if (isRemoved)
+            {
+                _images = await ApiService.GetUnusedImages();
+            }
+
+            _loader = false;
+        }
+
+        StateHasChanged();
+    }
+}

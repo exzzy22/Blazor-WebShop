@@ -1,6 +1,6 @@
 ﻿namespace Shared.DataTransferObjects;
 
-public class PictureForCreationDto
+public class ImageForCreationDto
 {
     public int? Id { get; set; } = null;
     public string ImageDataUrl { get; set; } = null!;

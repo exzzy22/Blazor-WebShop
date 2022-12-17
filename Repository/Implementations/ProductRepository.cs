@@ -2,7 +2,8 @@
 
 internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepository
 {
-    public ProductRepository(RepositoryContext repositoryContext) : base(repositoryContext) {}
+    private readonly RepositoryContext _repositoryContext;
+    public ProductRepository(RepositoryContext repositoryContext) : base(repositoryContext) => _repositoryContext = repositoryContext;
 
     public async Task<Product?> GetProductAsync(int id, bool trackChanges) => await FindByCondition(p => p.Id.Equals(id), trackChanges)
         .Include(p => p.Category)

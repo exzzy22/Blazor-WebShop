@@ -35,9 +35,9 @@ internal sealed class ProductService : IProductService
     public async Task AddProductAsync(ProductForCreationDto product)
     {
         // Switch ImageDataUrl with saved file name
-        foreach (PictureForCreationDto picture in product.Pictures)
+        foreach (ImageForCreationDto image in product.Images)
         {
-            picture.ImageDataUrl = picture.ImageDataUrl.SaveDataUrlToFile($"{_imagePath}{Guid.NewGuid()}{picture.FileExtension}");
+            image.ImageDataUrl = image.ImageDataUrl.SaveDataUrlToFile($"{_imagePath}{Guid.NewGuid()}{image.FileExtension}");
         }
 
         Product productToInsert = _mapper.Map<Product>(product);
@@ -58,13 +58,13 @@ internal sealed class ProductService : IProductService
             throw new ProductNotFound();
 
         // Switch ImageDataUrl with saved file name
-        foreach (PictureForCreationDto picture in product.Pictures)
+        foreach (ImageForCreationDto image in product.Images)
         {
-            if (!picture.ImageDataUrl.StartsWith("http"))
-                picture.ImageDataUrl = picture.ImageDataUrl.SaveDataUrlToFile($"{_imagePath}{Guid.NewGuid()}{picture.FileExtension}");
+            if (!image.ImageDataUrl.StartsWith("http"))
+                image.ImageDataUrl = image.ImageDataUrl.SaveDataUrlToFile($"{_imagePath}{Guid.NewGuid()}{image.FileExtension}");
 
             else
-                picture.ImageDataUrl = picture.ImageDataUrl.Split("image/")[1];
+                image.ImageDataUrl = image.ImageDataUrl.Split("image/")[1];
         }
 
         Product dBproduct = await _repository.Product.GetProductAsync((int)product.Id, true) ?? throw new ProductNotFound((int)product.Id);
@@ -114,11 +114,46 @@ internal sealed class ProductService : IProductService
 
         ProductForCreationDto productForCreation = _mapper.Map<ProductForCreationDto>(product);
 
-        foreach (var picture in productForCreation.Pictures)
+        foreach (var image in productForCreation.Images)
         {
-            picture.ImageDataUrl = $"{_accessor?.HttpContext?.Request.Scheme}://{_accessor?.HttpContext?.Request.Host}{_accessor?.HttpContext?.Request.PathBase}/image/{picture.ImageDataUrl}";
+            image.ImageDataUrl = $"{_accessor?.HttpContext?.Request.Scheme}://{_accessor?.HttpContext?.Request.Host}{_accessor?.HttpContext?.Request.PathBase}/image/{image.ImageDataUrl}";
         }
 
         return productForCreation;
+    }
+
+    public void DeleteImage(string name)
+    {
+        if ((File.Exists(_imagePath + name)))
+        {
+            File.Delete(_imagePath + name);
+        }
+    }
+
+    public void DeleteImage(List<string> names)
+    {
+        foreach (var name in names)
+        {
+            if ((File.Exists(_imagePath + name)))
+            {
+                File.Delete(_imagePath + name);
+            }
+        }
+    }
+
+    public async Task<IEnumerable<ImageForTableDto>> GetListOfUnusedImages()
+    {
+        string[] images = Directory.GetFiles(_imagePath).Select(filePath => Path.GetFileName(filePath)).ToArray();
+
+        List<Image> dbImages = await _repository.Image.GetAllImages(false);
+
+        List<ImageForTableDto> imageForTables= new();
+
+        foreach (var image in images.Except(dbImages.Select(i => i.File)))       
+        {
+            imageForTables.Add(new ImageForTableDto(image, $"{_accessor?.HttpContext?.Request.Scheme}://{_accessor?.HttpContext?.Request.Host}{_accessor?.HttpContext?.Request.PathBase}/image/{image}"));
+        }
+
+        return imageForTables;
     }
 }
