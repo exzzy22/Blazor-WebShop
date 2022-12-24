@@ -1,26 +1,7 @@
 ﻿@page "/"
 
-<TopCategories/>
-<Carousel CarouselModel="Carousel" Title="NEW PRODUCTS" />
-<HotDeal/>
-<Carousel CarouselModel="Carousel" Title="BEST SELLER" />
-<WidgetSlick/>
+<PageTitle>Index</PageTitle>
 
-@code
-{
-    [Inject]
-    public IJSRuntime JS { get; set; } = null!;
-    [Inject]
-    public IApiService ApiService { get; set; } = null!;
-    public CarouselVM Carousel { get; set; } = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        Carousel = await ApiService.GetCarouselTopSelling(2, 8);
-    }
-
-    //protected override async Task OnAfterRenderAsync(bool firstRender)
-    //{
-    //    Carousels = await ApiService.GetCarouselTopSelling(4, 8);
-    //}
-}
+<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
+<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor!</MudText>
+<MudAlert Severity="Severity.Normal">You can find documentation and examples on our website here: <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>
