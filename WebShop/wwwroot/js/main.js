@@ -14,59 +14,64 @@ document.querySelector('.cart-dropdown').addEventListener('click', function(e) {
 
 	/////////////////////////////////////////
 
-// Products Slick
-const productsSlick = document.querySelectorAll('.products-slick');
+function ProductsSlick() {
+    // Products Slick
+    const productsSlick = document.querySelectorAll('.products-slick');
 
-productsSlick.forEach(function(slider) {
-  const nav = slider.getAttribute('data-nav');
-  const options = {
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: true,
-    infinite: true,
-    speed: 300,
-    dots: false,
-    arrows: true,
-    appendArrows: nav ? nav : false,
-    responsive: [{
-      breakpoint: 991,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 1,
-      }
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-      }
-    },
-  ]
-  };
-  
-  // Initialize the Slick Slider plugin
-  $(slider).slick(options);
-});
+    productsSlick.forEach(function (slider) {
+        const nav = slider.getAttribute('data-nav');
+        const options = {
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            autoplay: true,
+            infinite: true,
+            speed: 300,
+            dots: false,
+            arrows: true,
+            appendArrows: nav ? nav : false,
+            responsive: [{
+                breakpoint: 991,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                }
+            },
+            ]
+        };
 
+        // Initialize the Slick Slider plugin
+        $(slider).slick(options);
+    });
+}
 
-// Products Widget Slick
-const productsWidgetSlick = document.querySelectorAll('.products-widget-slick');
+function ProductsWidgetSlick() {
 
-productsWidgetSlick.forEach(function(slider) {
-  const nav = slider.getAttribute('data-nav');
-  const options = {
-    infinite: true,
-    autoplay: true,
-    speed: 300,
-    dots: false,
-    arrows: true,
-    appendArrows: nav ? nav : false,
-  };
-  
-  // Initialize the Slick Slider plugin
-  $(slider).slick(options);
-});
+    // Products Widget Slick
+    const productsWidgetSlick = document.querySelectorAll('.products-widget-slick');
+
+    productsWidgetSlick.forEach(function (slider) {
+        const nav = slider.getAttribute('data-nav');
+        const options = {
+            infinite: true,
+            autoplay: true,
+            speed: 300,
+            dots: false,
+            arrows: true,
+            appendArrows: nav ? nav : false,
+        };
+
+        // Initialize the Slick Slider plugin
+        $(slider).slick(options);
+    });
+}
+
 
 
 	/////////////////////////////////////////
