@@ -36,10 +36,10 @@ public class ProductController : ControllerBase
         return Ok(products);
     }
 
-    [HttpGet("carousel/topSelling/{numberOfCategories}/{numberOfProducts}")]
-    public async Task<IActionResult> GetCarouselTopSelling(int numberOfCategories, int numberOfProducts)
+    [HttpGet("carousel/topSelling/{numberOfProducts}")]
+    public async Task<IActionResult> GetCarouselTopSelling(int numberOfProducts)
     {
-        var carousel = await _serviceManager.ProductService.GetCarouselProductsAsync(p => (p.Sold), numberOfCategories, numberOfProducts);
+        IEnumerable<ProductCarouselDto> carousel = await _serviceManager.ProductService.GetCarouselProductsAsync(p => (p.Sold), numberOfProducts);
 
         return Ok(carousel);
     }

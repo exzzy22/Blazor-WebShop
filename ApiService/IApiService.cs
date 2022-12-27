@@ -12,7 +12,7 @@ public interface IApiService
     Task<bool> UpdateProduct(ProductVM product);
     Task<bool> UpdateProduct(ProductForCreationVM product);
     Task<List<ProductVM>> GetProducts();
-    Task<CarouselVM> GetCarouselTopSelling(int numberOfCategories, int numberOfProducts);
+    Task<IEnumerable<ProductCarouselVM>> GetCarouselTopSelling(int numberOfProducts);
     Task<bool> DeleteImage(string image);
     Task<bool> DeleteImage(List<string> images);
     Task<List<ImageForTableVM>> GetUnusedImages();

@@ -79,7 +79,10 @@
 	<!-- /container -->
 </div>
 <!-- /SECTION -->
-<ProductsSlick Products="Products" />
+@if (Products is not null)
+{
+	<ProductsSlick Products="Products" />
+}
 <!-- HOT DEAL SECTION -->
 <div id="hot-deal" class="section">
 	<!-- container -->
@@ -125,39 +128,29 @@
 	<!-- /container -->
 </div>
 <!-- /HOT DEAL SECTION -->
-<ProductsSlick Products="Products" />
-<!-- SECTION -->
-<div class="section">
-	<!-- container -->
-	<div class="container">
-		<!-- row -->
-		<div class="row">
-			<ProductsWidgetSlick />
-
-			<ProductsWidgetSlick />
-
-			<div class="clearfix visible-sm visible-xs"></div>
-
-			<ProductsWidgetSlick />
-
-		</div>
-		<!-- /row -->
-	</div>
-	<!-- /container -->
-</div>
-<!-- /SECTION -->
+@if (Products is not null)
+{
+	<ProductsSlick Products="Products" />
+}
 <Newsletter/>
 <Footer/>
 
 @code{
 	[Inject]
 	IApiService ApiService { get; set; } = null!;
-	CarouselVM Products { get; set; } = null!;
+	[Inject]
+	IJSRuntime JS { get; set; } = null!;
+	IEnumerable<ProductCarouselVM> Products { get; set; } = null!;
 
 
 	protected override async Task OnInitializedAsync()
 	{
-		Products = await ApiService.GetCarouselTopSelling(2, 8);
+		Products = await ApiService.GetCarouselTopSelling(8);
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+			await JS.InvokeVoidAsync("ProductsSlick");
 	}
 
 }

@@ -1,11 +1,18 @@
-using ApiServices;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using WebShop;
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
+
+Console.WriteLine(builder.HostEnvironment.Environment);
+
+var config = builder.Configuration;
+
+IConfigurationRoot configurationRoot = config.Build();
+
+WebShopConfiguration configuration = new();
+configurationRoot.GetSection("WebShopConfiguration")
+                 .Bind(configuration);
+
+builder.Services.AddSingleton(configuration);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHttpClient();

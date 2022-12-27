@@ -9,7 +9,7 @@ public interface IProductService
     Task UpdateProductAsync(ProductForCreationDto product);
     Task UpdateProductAsync(ProductDto product);
     Task<IEnumerable<ProductDto>> GetProductsAsync();
-    Task<CarouselDto> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfCategories, int numberOfProducts);
+    Task<IEnumerable<ProductCarouselDto>> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfProducts);
     void DeleteImage(string name);
     void DeleteImage(List<string> names);
     Task<IEnumerable<ImageForTableDto>> GetListOfUnusedImages();

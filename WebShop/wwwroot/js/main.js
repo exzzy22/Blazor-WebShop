@@ -1,18 +1,20 @@
 
-// Mobile Nav toggle
-document.querySelector('.menu-toggle > a').addEventListener('click', function(e) {
-	e.preventDefault();
-	document.getElementById('responsive-nav').classList.toggle('active');
-  });
-  
-
-// Fix cart dropdown from closing
-document.querySelector('.cart-dropdown').addEventListener('click', function(e) {
-	e.stopPropagation();
-  });
+ 
+function HeaderListeners() {
+    // Mobile Nav toggle
+    document.querySelector('.menu-toggle > a').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.getElementById('responsive-nav').classList.toggle('active');
+    });
+    // Fix cart dropdown from closing
+    document.querySelector('.cart-dropdown').addEventListener('click', function (e) {
+        e.stopPropagation();
+    });
+}
   
 
 	/////////////////////////////////////////
+
 
 function ProductsSlick() {
     // Products Slick

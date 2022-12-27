@@ -13,6 +13,7 @@ public class Mapper : Profile
         CreateMap<AttributesDto, AttributesVM>().IncludeAllDerived();
         CreateMap<AttributesVM, AttributesDto>().IncludeAllDerived();
         CreateMap<CpuAtrributesDto, CpuAtrributesVM>().ReverseMap();
+        CreateMap<GpuAtrributesDto, GpuAtrributesVM>().ReverseMap();
         CreateMap<PriceDto, PriceVM>().ReverseMap();
         CreateMap<CurrencyDto, CurrencyVM>().ReverseMap();
         CreateMap<AdminVM, AdminDto>().ReverseMap();

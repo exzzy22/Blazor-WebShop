@@ -81,24 +81,11 @@ internal sealed class ProductService : IProductService
         _repository.Product.Update(updated);
         await _repository.SaveAsync();
     }
-    public async Task<CarouselDto> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfCategories, int numberOfProducts)
+    public async Task<IEnumerable<ProductCarouselDto>> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfProducts)
     {
-        IEnumerable<Product> products = await _repository.Product.GetProductsAsync();
+        IEnumerable<Product> products = await _repository.Product.GetProductsAsync(orderBy, numberOfProducts);
 
-        IEnumerable<Category> categories = _repository.Category.GetTopCategoriesAsync(orderBy,numberOfCategories);
-
-        List<Product> filteredProducts = new();
-
-        foreach (Category category in categories)
-        {
-            var categoryProducts = products.Where(p => p.Category.Id.Equals(category.Id)).Take(numberOfProducts);
-            if (categoryProducts.Count() != numberOfProducts)
-                throw new ProductCountNotFound(category.Name, numberOfProducts);
-
-            filteredProducts.AddRange(categoryProducts);
-        }
-
-        return new CarouselDto(_mapper.Map<IEnumerable<CategoryDto>>(categories),_mapper.Map<IEnumerable<ProductCarouselDto>>(filteredProducts));
+        return _mapper.Map<IEnumerable<ProductCarouselDto>>(products);
     }
 
     public async Task<IEnumerable<ProductDto>> GetProductsAsync()
@@ -124,7 +111,7 @@ internal sealed class ProductService : IProductService
 
     public void DeleteImage(string name)
     {
-        if ((File.Exists(_imagePath + name)))
+        if (File.Exists(_imagePath + name))
         {
             File.Delete(_imagePath + name);
         }
@@ -132,9 +119,9 @@ internal sealed class ProductService : IProductService
 
     public void DeleteImage(List<string> names)
     {
-        foreach (var name in names)
+        foreach (string name in names)
         {
-            if ((File.Exists(_imagePath + name)))
+            if (File.Exists(_imagePath + name))
             {
                 File.Delete(_imagePath + name);
             }

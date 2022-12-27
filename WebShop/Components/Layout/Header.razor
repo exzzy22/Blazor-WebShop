@@ -120,5 +120,11 @@
 <!-- /HEADER -->
 
 @code {
+	[Inject]
+	IJSRuntime JS { get; set; } = null!;
 
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		await JS.InvokeVoidAsync("HeaderListeners");
+	}
 }

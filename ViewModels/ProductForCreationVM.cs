@@ -12,18 +12,16 @@ public class ProductForCreationVM
 
     [Required]
     public string Name { get; set; } = null!;
-
     [Required]
+	public string ShortName { get; set; } = null!;
+	[Required]
     public int? Discount { get; set; }
-
     [Required]
     public int? InStock { get; set; }
-
     [Required]
     public int? CategoryId { get; set; }
 	[Required]
 	public int Sold { get; set; } = 0;
-
 	[Required]
     public AttributesVM? Attributes { get; set; } = null!;
 
@@ -31,7 +29,7 @@ public class ProductForCreationVM
     public List<PriceForCreationVM> Prices { get; set; } = new();
 
     [ProductImages]
-    public ICollection<ImageForCreationVM> Pictures { get; set; } = null!;
+    public ICollection<ImageForCreationVM> Images { get; set; } = null!;
 
     public ImmutableList<string> Specifications { get; } = AttributesDictionary.Attributes.ToImmutableList();
 

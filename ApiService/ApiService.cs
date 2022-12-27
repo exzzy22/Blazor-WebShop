@@ -85,13 +85,13 @@ public sealed class ApiService : IApiService
         return _mapper.Map<List<ProductVM>>(products);
     }
 
-    public async Task<CarouselVM> GetCarouselTopSelling(int numberOfCategories, int numberOfProducts)
+    public async Task<IEnumerable<ProductCarouselVM>> GetCarouselTopSelling(int numberOfProducts)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync($"api/product/carousel/topSelling/{numberOfCategories}/{numberOfProducts}");
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/product/carousel/topSelling/{numberOfProducts}");
 
-        CarouselDto carousel = await response.Content.ReadFromJsonAsync<CarouselDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		IEnumerable<ProductCarouselDto> carousel = await response.Content.ReadFromJsonAsync<IEnumerable<ProductCarouselDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
-        return _mapper.Map<CarouselVM>(carousel);
+        return _mapper.Map<IEnumerable<ProductCarouselVM>>(carousel);
     }
 
     public async Task<bool> DeleteImage(string image)

@@ -2,7 +2,7 @@
 
 namespace Shared.DataTransferObjects;
 
-public class GpuAtrributesDto : Attributes
+public record GpuAtrributesDto : AttributesDto
 {
     public string Brand { get; set; } = null!;
     public string Interface { get; set; } = null!;

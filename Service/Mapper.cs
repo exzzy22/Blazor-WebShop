@@ -7,8 +7,9 @@ public class Mapper : Profile
 	public Mapper()
 	{
         CreateMap<AdminForCreationDto, User>();
-        CreateMap<Product, ProductCarouselDto>();
-        CreateMap<Product, ProductDto>().ReverseMap();
+        CreateMap<Product, ProductCarouselDto>()
+						.ForMember(dest => dest.Image, opt => opt.MapFrom(soruce => soruce.Images.First(i => i.MainImage).File));
+		CreateMap<Product, ProductDto>().ReverseMap();
         CreateMap<Category, CategoryDto>().ReverseMap();
         CreateMap<Attributes, AttributesDto>().IncludeAllDerived();
         CreateMap<AttributesDto, Attributes>().IncludeAllDerived();

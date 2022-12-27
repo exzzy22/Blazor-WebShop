@@ -4,7 +4,8 @@ public class ProductForCreationDto
 {
     public int? Id { get; set; } = null;
     public string Name { get; set; } = null!;
-    public int Discount { get; set; }
+	public string ShortName { get; set; } = null!;
+	public int Discount { get; set; }
     public int InStock { get; set; }
     public int Sold { get; set; }
     public int CategoryId { get; set; }
