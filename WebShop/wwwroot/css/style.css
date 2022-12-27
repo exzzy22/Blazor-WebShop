@@ -868,6 +868,9 @@ textarea.input {
 
 .product .product-img {
   position: relative;
+  min-height: 300px;
+  align-content: center;
+  display: inline-grid;
 }
 
 .product .product-img>img {
@@ -915,6 +918,9 @@ textarea.input {
 .product .product-body .product-name {
   text-transform: uppercase;
   font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 35px;
 }
 
 .product .product-body .product-name>a {

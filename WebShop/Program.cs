@@ -2,8 +2,6 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-Console.WriteLine(builder.HostEnvironment.Environment);
-
 var config = builder.Configuration;
 
 IConfigurationRoot configurationRoot = config.Build();
