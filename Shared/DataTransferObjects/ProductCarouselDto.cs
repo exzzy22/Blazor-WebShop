@@ -10,5 +10,6 @@ public record ProductCarouselDto
     public int CategoryId { get; init; }
 	public string Image { get; set; } = null!;
 
+	public CategoryDto Category { get; set; } = null!;
 	public ICollection<PriceDto> Prices { get; init; } = null!;
 }

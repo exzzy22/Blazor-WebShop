@@ -887,6 +887,7 @@ textarea.input {
   border: 2px solid;
   padding: 2px 10px;
   font-size: 12px;
+  margin: 2px;
 }
 
 .product .product-img .product-label>span.sale {

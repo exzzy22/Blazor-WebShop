@@ -5,14 +5,17 @@
 	<div class="product-img">
 		<img src="@(Configuration.ApiImageAddress + Product.Image)" alt="@Product.ShortName">
 		<div class="product-label">
-			<span class="sale">-30%</span>
+			@if (Product.IsDiscounted)
+			{
+				<span class="sale">-@Product.Discount%</span>
+			}
 			<span class="new">NEW</span>
 		</div>
 	</div>
 	<div class="product-body">
-		<p class="product-category">GPUs / Video Graphics Cards</p>
+		<p class="product-category">@Product.Category.Name</p>
 		<h3 class="product-name"><a href="#">@Product.ShortName</a></h3>
-		<h4 class="product-price">$@Product.Prices.First().Value<del class="product-old-price">$</del></h4>
+		<h4 class="product-price">$@(Product.IsDiscounted ? (Product.CalculateDiscountedPrice(Product.Prices.First().Value)) : Product.Prices.First().Value)<del class="product-old-price">@(Product.IsDiscounted ? " $" + Product.Prices.First().Value : "")</del></h4>
 		<div class="product-rating">
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star"></i>
