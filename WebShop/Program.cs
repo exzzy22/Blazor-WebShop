@@ -11,9 +11,10 @@ configurationRoot.GetSection("WebShopConfiguration")
                  .Bind(configuration);
 
 builder.Services.AddSingleton(configuration);
-
+builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHttpClient();
-builder.Services.AddScoped<IApiService, ApiService>();
+builder.Services.AddSingleton<IApiService, ApiService>();
+builder.Services.AddSingleton<UserState>();
 
 await builder.Build().RunAsync();

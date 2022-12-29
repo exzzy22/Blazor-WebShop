@@ -10,6 +10,6 @@ public record ProductDto
     public int Sold { get; init; }
     public int CategoryId { get; init; }
     public AttributesDto Attributes { get; init; } = null!;
-    public ICollection<ImageForCreationDto> Images { get; set; } = null!;
+    public ICollection<ImageDto> Images { get; set; } = null!;
     public ICollection<PriceDto> Prices { get; init; } = null!;
 }

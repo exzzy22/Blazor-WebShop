@@ -62,34 +62,26 @@
 							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 								<i class="fa fa-shopping-cart"></i>
 								<span>Your Cart</span>
-								<div class="qty">3</div>
+								<div class="@(Cart.Products.Count > 0 ? "qty" : "qty hide")">@(Cart.Products.Sum(p => p.Quantity))</div>
 							</a>
-							<div class="cart-dropdown">
+							<div class="cart-dropdown" @onclick:preventDefault="true" @onclick:stopPropagation="true">
 								<div class="cart-list">
-									<div class="product-widget">
-										<div class="product-img">
-											<img src="./img/product01.png" alt="">
+									@foreach (var product in Cart.Products)
+									{
+										<div class="product-widget">
+											<div class="product-img">
+												<img src="@(Configuration.ApiImageAddress + product.Product.Images.First(i => i.MainImage).File)" alt="Product Image">
+											</div>
+											<div class="product-body">
+												<h3 class="product-name"><a href="#">@product.Product.ShortName</a></h3>
+												<h4 class="product-price"><span class="qty">@(product.Quantity)x</span>$@product.Product.Prices.First().Value</h4>
+											</div>
+											<button class="delete" @onclick="async () => await UserState.RemoveFromCart(product.ProductId)"><i class="fa fa-close"></i></button>
 										</div>
-										<div class="product-body">
-											<h3 class="product-name"><a href="#">product name goes here</a></h3>
-											<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-										</div>
-										<button class="delete"><i class="fa fa-close"></i></button>
-									</div>
-
-									<div class="product-widget">
-										<div class="product-img">
-											<img src="./img/product02.png" alt="">
-										</div>
-										<div class="product-body">
-											<h3 class="product-name"><a href="#">product name goes here</a></h3>
-											<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-										</div>
-										<button class="delete"><i class="fa fa-close"></i></button>
-									</div>
+									}
 								</div>
 								<div class="cart-summary">
-									<small>3 Item(s) selected</small>
+									<small>@(Cart.Products.Sum(p => p.Quantity)) Item(s) selected</small>
 									<h5>SUBTOTAL: $2940.00</h5>
 								</div>
 								<div class="cart-btns">
@@ -120,11 +112,29 @@
 <!-- /HEADER -->
 
 @code {
+	CartVM Cart { get; set; } = null!;
 	[Inject]
 	IJSRuntime JS { get; set; } = null!;
+	[Inject]
+	UserState UserState { get; set; } = null!;
+	[Inject]
+	WebShopConfiguration Configuration { get; set; } = null!;
+
+
+	protected override void OnInitialized()
+	{
+		Cart = UserState.Cart;
+		UserState.PropertyChanged += PropertyChanged;
+	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		await JS.InvokeVoidAsync("HeaderListeners");
+		//await JS.InvokeVoidAsync("HeaderListeners");
+	}
+
+	private void PropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		Cart = UserState.Cart;
+		InvokeAsync(StateHasChanged);
 	}
 }

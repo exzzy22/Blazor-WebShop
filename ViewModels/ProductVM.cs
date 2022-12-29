@@ -11,4 +11,5 @@ public class ProductVM
     public int CategoryId { get; set; }
     public AttributesVM Attributes { get; set; } = null!;
     public virtual ICollection<PriceVM> Prices { get; set; } = null!;
+	public ICollection<ImageVM> Images { get; set; } = null!;
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Domain.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Shared.ConfigurationModels.Configuration;
+using Shared.DataTransferObjects;
 using Shared.Extensions;
 
 namespace Service.Implementations;
@@ -143,4 +145,50 @@ internal sealed class ProductService : IProductService
 
         return imageForTables;
     }
+
+    public async Task<CartDto> GetCart(int cartId) => _mapper.Map<CartDto>(await _repository.Cart.GetCartAsync(cartId, false));
+
+	public async Task<CartDto> AddProductToCart(int productId, int cartId, int quantity)
+	{
+        if (cartId == default)
+        {
+            Cart cartToCreate = new Cart { Products = new List<ProductCart> { new ProductCart { ProductId = productId, Quantity = 1 }}};
+			_repository.Cart.Create(cartToCreate);
+
+			await _repository.SaveAsync();
+
+			return _mapper.Map<CartDto>(cartToCreate);
+		}
+
+		Cart dbCart = await _repository.Cart.GetCartAsync(cartId, true) ?? throw new CartNotFound(cartId);
+
+        if (dbCart.Products.Any(p => p.ProductId == productId))
+        {
+            dbCart.Products.First(p => p.ProductId == productId).Quantity += quantity;
+        }
+        else
+        {
+            dbCart.Products.Add(new ProductCart { ProductId = productId, Quantity = quantity });
+		}
+
+		await _repository.SaveAsync();
+
+		return _mapper.Map<CartDto>(_mapper.Map<CartDto>(await _repository.Cart.GetCartAsync(dbCart.Id, false)));
+	}
+
+	public async Task<CartDto> RemoveProductFromCart(int productId, int cartId)
+	{
+		Cart dbCart = await _repository.Cart.GetCartAsync(cartId, true) ?? throw new CartNotFound(cartId);
+
+        dbCart.Products.Remove(dbCart.Products.First(p => p.ProductId == productId));
+
+		await _repository.SaveAsync();
+
+		return _mapper.Map<CartDto>(dbCart);
+	}
+
+	public Task<WishlistDto> AddRemoveFromWishlist(int productId)
+	{
+		throw new NotImplementedException();
+	}
 }

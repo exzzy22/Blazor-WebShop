@@ -3,3 +3,7 @@ global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 global using Shared.ConfigurationModels.Configuration;
 global using WebShop;
+global using Blazored.LocalStorage;
+global using System.ComponentModel;
+global using System.Runtime.CompilerServices;
+global using ViewModels;

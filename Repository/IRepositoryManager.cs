@@ -9,6 +9,7 @@ namespace Repository
         IAttributesRepository Attributes { get; }
         ICurrencyRepository Currency { get; }
         IImageRepository Image { get; }
+        ICartRepository Cart { get; }
 
 
         Task SaveAsync();

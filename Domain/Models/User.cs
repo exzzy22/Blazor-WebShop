@@ -7,6 +7,9 @@ namespace Domain.Models
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? RefreshToken { get; set; }
-        public DateTime RefreshTokenExpiryTime { get; set; }
+
+        public virtual Wishlist Wishlist { get; set; } = new();
+        public virtual Cart Cart { get; set; } = new();
+		public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

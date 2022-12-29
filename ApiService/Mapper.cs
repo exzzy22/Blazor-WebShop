@@ -1,4 +1,6 @@
-﻿namespace ApiServices;
+﻿using Domain.Models;
+
+namespace ApiServices;
 
 public class Mapper : Profile
 {
@@ -22,5 +24,7 @@ public class Mapper : Profile
         CreateMap<PriceForCreationVM, PriceForCreationDto>().ReverseMap();
         CreateMap<ProductForCreationVM, ProductForCreationDto>().ReverseMap();
         CreateMap<ImageForTableDto, ImageForTableVM>().ReverseMap();
-    }
+        CreateMap<CartDto, CartVM>().ReverseMap();
+		CreateMap<ProductCartDto, ProductCartVM>().ReverseMap();
+	}
 }

@@ -42,5 +42,7 @@ namespace Repository
         public DbSet<Attributes> Attributes { get; set; } = null!;
         public DbSet<Currency> Currencies { get; set; } = null!;
         public DbSet<Image> Images { get; set; } = null!;
+        public DbSet<Cart> Carts { get; set; } = null!;
+        public DbSet<Wishlist> Wishlists { get; set; } = null!;
     }
 }

@@ -40,6 +40,11 @@ public interface IApiService
     Task<bool> UpdateCurrency(CurrencyVM currency);
     #endregion
 
-    bool AuthenticationHeaderExits();
+    #region Cart
+    Task<CartVM> AddProductToCart(int productId, int cartId, int quantity);
+	Task<CartVM> RemoveProductFromCart(int productId, int cartId);
+    Task<CartVM> GetCart(int cartId);
+	#endregion
+	bool AuthenticationHeaderExits();
     void SetAuthenticationHeader(string jwtToken);
 }

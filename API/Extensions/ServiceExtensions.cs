@@ -6,9 +6,10 @@ namespace API.Extensions
     {
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
         services.AddDbContext<RepositoryContext>(opts =>
-            opts.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+	        opts.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+		        .EnableSensitiveDataLogging());
 
-        public static void ConfigureSwagger(this IServiceCollection services)
+		public static void ConfigureSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {

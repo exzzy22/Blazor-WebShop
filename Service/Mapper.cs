@@ -28,5 +28,7 @@ public class Mapper : Profile
         CreateMap<CurrencyForCreationDto, Currency>();
         CreateMap<PriceForCreationDto, Price>().ReverseMap();
         CreateMap<ProductForCreationDto, Product>().ReverseMap();
-    }
+		CreateMap<CartDto, Cart>().ReverseMap();
+        CreateMap<ProductCartDto,ProductCart>().ReverseMap();
+	}
 }

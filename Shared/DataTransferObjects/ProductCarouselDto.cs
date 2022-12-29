@@ -2,7 +2,8 @@
 
 public record ProductCarouselDto
 {
-    public string Name { get; init; } = null!;
+	public int Id { get; init; }
+	public string Name { get; init; } = null!;
     public string ShortName { get; set; } = null!;
     public int Discount { get; init; } = 0;
     public int InStock { get; init; } = 0;

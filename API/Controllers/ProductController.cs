@@ -1,4 +1,8 @@
-﻿namespace API.Controllers;
+﻿using Domain.Models;
+using Service.Contracts;
+using System.Reflection.Metadata.Ecma335;
+
+namespace API.Controllers;
 
 [Route("api/product")]
 [ApiController]
@@ -147,5 +151,13 @@ public class ProductController : ControllerBase
 
         return NoContent();
     }
+
+	[HttpGet("cart/add/{productId}/{cartId}/{quantity}")]
+	public async Task<IActionResult> AddProductToCart(int productId, int cartId, int quantity) => Ok(await _serviceManager.ProductService.AddProductToCart(productId,cartId,quantity));
+	[HttpGet("cart/remove/{productId}/{cartId}")]
+	public async Task<IActionResult> RemoveProductFromCart(int productId, int cartId) => Ok(await _serviceManager.ProductService.RemoveProductFromCart(productId, cartId));
+
+	[HttpGet("cart/{cartId}")]
+	public async Task<IActionResult> GetCart(int cartId) => Ok(await _serviceManager.ProductService.GetCart(cartId));
 
 }

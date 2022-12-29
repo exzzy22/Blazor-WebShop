@@ -1,5 +1,6 @@
 ﻿using Domain.Exceptions.ModelSpecific;
 using Domain.Models;
+using Shared.DataTransferObjects;
 using ViewModels;
 
 namespace ApiServices;
@@ -224,5 +225,34 @@ public sealed class ApiService : IApiService
         return response.IsSuccessStatusCode;
     }
 
-    #endregion
+	#endregion
+
+	#region Cart
+
+	public async Task<CartVM> AddProductToCart(int productId, int cartId, int quantity)
+    {
+		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/add/{productId}/{cartId}/{quantity}");
+
+		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return _mapper.Map<CartVM>(cartResponse);
+	}
+	public async Task<CartVM> RemoveProductFromCart(int productId, int cartId)
+    {
+		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/remove/{productId}/{cartId}");
+
+		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return _mapper.Map<CartVM>(cartResponse);
+	}
+
+	public async Task<CartVM> GetCart(int cartId)
+	{
+		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/{cartId}");
+
+		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return _mapper.Map<CartVM>(cartResponse);
+	}
+	#endregion
 }
