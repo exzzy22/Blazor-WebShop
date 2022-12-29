@@ -123,6 +123,24 @@ ul, ol {
   width: 100%;
 }
 
+.invalid {
+    background-color: #ffdddd;
+    border: 1px solid #d9534f;
+}
+
+.validation-message {
+    color: #d9534f;
+}
+
+.modified {
+}
+
+.modified.valid {
+    border: 1px solid #5cb85c;
+}
+
+
+
 textarea.input {
   padding: 15px;
   min-height: 90px;
@@ -1852,6 +1870,15 @@ textarea.input {
   margin-bottom: 30px;
 }
 
+.login {
+    margin-bottom: 20%;
+    margin-top: 20%;
+}
+
+.register {
+    margin-bottom: 30px;
+}
+
 .shiping-details {
   margin-bottom: 30px;
 }
@@ -2194,4 +2221,38 @@ textarea.input {
     float: none;
     margin-top: 10px;
   }
+}
+
+.mail-seccess {
+    text-align: center;
+    background: #fff;
+    border-top: 1px solid #eee;
+}
+
+.mail-seccess .success-inner {
+    display: inline-block;
+}
+
+.mail-seccess .success-inner h1 {
+    font-size: 100px;
+    text-shadow: 3px 5px 2px #3333;
+    color: #D10024;
+    font-weight: 700;
+}
+
+.mail-seccess .success-inner h1 span {
+    display: block;
+    font-size: 25px;
+    color: #D10024;
+    font-weight: 600;
+    text-shadow: none;
+    margin-top: 20px;
+}
+
+.mail-seccess .success-inner p {
+    padding: 20px 15px;
+}
+
+.mail-seccess .success-inner .btn {
+    color: #fff;
 }

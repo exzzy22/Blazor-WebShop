@@ -38,7 +38,7 @@
 
         public async Task<bool> ValidateUserAsync(UserForAuthenticationDto userForAuth)
         {
-            _user = await _userManager.FindByNameAsync(userForAuth.UserName);
+            _user = await _userManager.FindByEmailAsync(userForAuth.UserName);
 
             bool result = (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
 
@@ -92,16 +92,16 @@
 
         public async Task<IdentityResult> UpdateAdminAsync(AdminDto admin)
         {
-            User adminDb = await _userManager.FindByIdAsync(admin.Id.ToString());
+            User adminDb = await _userManager.FindByIdAsync(admin.Id.ToString()) ?? throw new UserNotFound();
 
             return await _userManager.UpdateAsync(_mapper.Map(admin, adminDb));
         }
 
         public async Task<IdentityResult> DeleteAdminAsync(int adminId)
         {
-            User admin = await _userManager.FindByIdAsync(adminId.ToString());
+            User admin = await _userManager.FindByIdAsync(adminId.ToString()) ?? throw new UserNotFound();
 
-            return await _userManager.DeleteAsync(admin);
+			return await _userManager.DeleteAsync(admin);
         }
 
         public async Task<IList<User>> GetUsersInRoleAsync(string roleName)

@@ -24,6 +24,7 @@ public interface IApiService
     Task<bool> CreateAdmin(AdminForCreationVM admin);
     Task<bool> DeleteAdmin(int adminId);
     Task<bool> UpdateAdmin(AdminVM admin);
+    Task<bool> Register(UserForRegistrationVM userForRegistration);
     #endregion
 
     #region Categories

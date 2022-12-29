@@ -159,10 +159,18 @@ public sealed class ApiService : IApiService
 
         return _mapper.Map<List<UserVM>>(admins);
     }
-    #endregion
 
-    #region Category
-    public async Task<bool> AddCategory(CategoryVM category)
+	public async Task<bool> Register(UserForRegistrationVM userForRegistration)
+    {
+		HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/account/user/new", _mapper.Map<UserForRegistrationDto>(userForRegistration));
+
+		return response.IsSuccessStatusCode;
+	}
+
+	#endregion
+
+	#region Category
+	public async Task<bool> AddCategory(CategoryVM category)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/category/add", _mapper.Map<CategoryDto>(category));
 

@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using ViewModels;
 
 namespace ApiServices;
 
@@ -26,5 +27,7 @@ public class Mapper : Profile
         CreateMap<ImageForTableDto, ImageForTableVM>().ReverseMap();
         CreateMap<CartDto, CartVM>().ReverseMap();
 		CreateMap<ProductCartDto, ProductCartVM>().ReverseMap();
+		CreateMap<UserForRegistrationVM, UserForRegistrationDto>().ReverseMap();
+		CreateMap<UserForAuthenticationVM, UserForAuthenticationDto>().ReverseMap();
 	}
 }

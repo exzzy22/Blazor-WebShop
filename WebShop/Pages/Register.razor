@@ -1,0 +1,93 @@
+﻿@page "/register"
+
+
+@if (_showEmailScreen)
+{
+    <WebShop.Components.EmailSent Email="@Model.Email"/>  
+    return;
+}
+
+<EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+                <div class="col-md-6">
+                    <div class="register">
+                        <div class="form-group">
+                            <InputText class="input" @bind-Value="@Model.FirstName" Placeholder="First Name" />
+                            <ValidationMessage For="() => Model.FirstName" />
+                        </div>
+                        <div class="form-group">
+                            <InputText class="input" @bind-Value="@Model.Email" Placeholder="Email" />
+                            <ValidationMessage For="() => Model.Email" />
+                        </div>
+                        <div class="form-group">
+                            <InputText class="input" @bind-Value="@Model.Address" Placeholder="Address" />
+                            <ValidationMessage For="() => Model.Address" />
+                        </div>
+                        <div class="form-group">
+                            <InputText class="input" @bind-Value="@Model.Country" Placeholder="Country" />
+                            <ValidationMessage For="() => Model.Country" />
+                        </div>
+                        <div class="form-group">
+                            <InputText class="input" @bind-Value="@Model.Tel" Placeholder="Telephone" />
+                            <ValidationMessage For="() => Model.Tel" />
+                        </div>
+                        <div class="form-group">
+                            <InputText class="input" @bind-Value="@Model.Password2" type="password" Placeholder="Repeat Password" />
+                            <ValidationMessage For="() => Model.Password2" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="register">
+                        <div class="form-group">
+                            <InputText class="input" @bind-Value="@Model.LastName" Placeholder="Last Name" />
+                            <ValidationMessage For="() => Model.LastName" />
+                        </div>
+                        <div class="form-group">
+                            <InputText class="input" @bind-Value="@Model.Email2" Placeholder="Repeat Email" />
+                            <ValidationMessage For="() => Model.Email2" />
+                        </div>
+                        <div class="form-group">
+                            <InputText class="input" @bind-Value="@Model.City" Placeholder="City" />
+                            <ValidationMessage For="() => Model.City" />
+                        </div>
+                        <div class="form-group">
+                            <InputText class="input" @bind-Value="@Model.ZipCode" Placeholder="ZIP Code" />
+                            <ValidationMessage For="() => Model.ZipCode" />
+                        </div>
+                        <div class="form-group">
+                            <InputText class="input" @bind-Value="@Model.Password" type="password" Placeholder="Password" />
+                        <ValidationMessage For="() => Model.Password" />
+                        </div>
+                    </div>
+                </div>
+            <div class="text-center">
+				<button type="submit" class="primary-btn d-block mx-auto">Register</button>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+</EditForm>
+
+@code {
+    bool _showEmailScreen = false;
+
+    UserForRegistrationVM Model { get; set; } = new();
+    [Inject]
+    IApiService ApiService { get; set; } = null!;
+
+    async Task OnValidSubmit()
+    {
+        _showEmailScreen = await ApiService.Register(Model);
+    }
+
+}
