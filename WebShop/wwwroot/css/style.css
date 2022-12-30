@@ -86,6 +86,20 @@ ul, ol {
   list-style: none
 }
 
+.register-list {
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+.register-list li::before {
+    content: "\2022";
+    color: red;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: 0em;
+}
+
+
 /*----------------------------*\
 	Buttons
 \*----------------------------*/

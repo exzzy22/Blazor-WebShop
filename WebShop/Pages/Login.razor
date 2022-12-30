@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@using Microsoft.AspNetCore.Components.Authorization;
 
 <!-- SECTION -->
 <div class="section">
@@ -6,12 +7,13 @@
 	<div class="container">
 		<!-- row -->
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-1">
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<EditForm Model="Model" OnValidSubmit="OnValidSubmit">
 				<DataAnnotationsValidator />
 				<div class="login">
+						<h3 class="text-center">Registrated user, please login?</h3>
 					<div class="form-group">
 						<InputText class="input" type="email" name="email" placeholder="Email" @bind-Value="Model.Email" />
 						<ValidationMessage For="() => Model.Email" />
@@ -20,27 +22,63 @@
 							<InputText class="input" type="password" name="password" placeholder="Password" @bind-Value="Model.Password" />
 							<ValidationMessage For="() => Model.Password" />
 					</div>
-				<div class="text-center">
+				<div class="text-left">
 					<button type="submit" class="primary-btn d-block mx-auto">Login</button>
 				</div>
 				</div>
 				</EditForm>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-2">
 			</div>
-		</div>
-		<!-- /row -->
+			<div class="col-md-4">
+				<div class="login">
+				<h3 class="text-justify-left">Still dont have account?</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam iaculis aliquam felis non lobortis.</p>
+					<ul class="register-list ">
+							<li>Lorem ipsum</li>
+							<li>Lorem ipsum</li>
+							<li>Lorem ipsum</li>
+						</ul>
+						<div class="text-left">
+							<a class="primary-btn d-block mx-auto" href="register">Register</a>
+						</div>
+					</div>
+			</div>
+			</div>
+			<div class="col-md-1">
+			</div>
 	</div>
-	<!-- /container -->
 </div>
-<!-- /SECTION -->
 @code {
+	bool _validationResult = true;
 	UserForAuthenticationVM Model { get; set; } = new();
+
+	[Inject]
+	IJSRuntime JSRuntime { get; set; } = null!;
+	[Inject]
+	IApiService ApiService { get; set; } = null!;
+	[Inject]
+	AuthenticationStateProvider AuthenticationState { get; set; } = null!;
+	[Inject]
+	NavigationManager NavigationManager { get; set; } = null!;
 
 	async Task OnValidSubmit()
 	{
+		(bool result,TokenVM? token) = await ApiService.Login(Model);
 
+		if (result)
+		{
+			await CreateCookie(token.AccessToken, 7);
+			var authState = await AuthenticationState.GetAuthenticationStateAsync();
+			_validationResult = true;
+			NavigationManager.NavigateTo("/");
+		}
 
+		_validationResult = false;
 	}
 
+	async Task CreateCookie(string value, int durationDays)
+	{
+		await JSRuntime.InvokeAsync<object>("createCookie", "jwtToken", value, durationDays);
+	}
 }

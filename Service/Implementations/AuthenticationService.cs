@@ -38,7 +38,7 @@
 
         public async Task<bool> ValidateUserAsync(UserForAuthenticationDto userForAuth)
         {
-            _user = await _userManager.FindByEmailAsync(userForAuth.UserName);
+            _user = await _userManager.FindByEmailAsync(userForAuth.Email);
 
             bool result = (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
 
@@ -175,7 +175,7 @@
 
             List<Claim> claims = new()
             {
-                new Claim(ClaimTypes.Name, _user.UserName)
+                new Claim(ClaimTypes.Name, _user.Email)
             };
 
             IList<string> roles = await _userManager.GetRolesAsync(_user);

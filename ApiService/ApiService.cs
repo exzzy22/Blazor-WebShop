@@ -167,6 +167,18 @@ public sealed class ApiService : IApiService
 		return response.IsSuccessStatusCode;
 	}
 
+	public async Task<(bool, TokenVM?)> Login(UserForAuthenticationVM userForAuthentication)
+    {
+		HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/account/login", _mapper.Map<UserForAuthenticationDto>(userForAuthentication));
+
+        if (!response.IsSuccessStatusCode)
+            return (false, null);
+
+		TokenDto token = await response.Content.ReadFromJsonAsync<TokenDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return (true,_mapper.Map<TokenVM>(token));
+	}
+
 	#endregion
 
 	#region Category

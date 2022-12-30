@@ -1,19 +1,35 @@
-﻿@using WebShop.Components.Layout
+﻿@using System.Security.Claims;
+@using WebShop.Components.Layout
 @inherits LayoutComponentBase
 
+<CascadingValue Value="User">
 <Header/>
 <main>
     @Body
 </main>
 <Newsletter/>
 <Footer/>
+</CascadingValue>
 
 @code{
 	[Inject]
 	UserState UserState { get; set; } = null!;
+	[Inject]
+	AuthenticationStateProvider AuthenticationState { get; set; } = null!;
+	public ClaimsPrincipal User { get; set; } = null!;
+
 
 	protected override async Task OnInitializedAsync()
 	{
 		await UserState.TryLoadData();
+		AuthenticationState.AuthenticationStateChanged += OnAuthenticationStateChanged;
+		var authState = await AuthenticationState.GetAuthenticationStateAsync();
+		User = authState.User;
+	}
+
+
+	private async void OnAuthenticationStateChanged(Task<AuthenticationState> task)
+	{
+		User = (await task).User;
 	}
 }

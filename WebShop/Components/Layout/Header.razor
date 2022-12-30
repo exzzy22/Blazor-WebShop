@@ -1,4 +1,5 @@
-﻿<!-- HEADER -->
+﻿@using System.Security.Claims;
+<!-- HEADER -->
 <header>
 	<!-- TOP HEADER -->
 	<div id="top-header">
@@ -10,7 +11,7 @@
 			</ul>
 			<ul class="header-links pull-right">
 				<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-				<li><a href="register"><i class="fa fa-user-o"></i> My Account</a></li>
+				<li><a href="login"><i class="fa fa-user-o"></i> @(User is not null && User.Identity is not null && User.Identity.IsAuthenticated ? User.Identity.Name : "Login/Register")</a></li>
 			</ul>
 		</div>
 	</div>
@@ -112,6 +113,8 @@
 <!-- /HEADER -->
 
 @code {
+	[CascadingParameter]
+	public ClaimsPrincipal User { get; set; } = null!;
 	CartVM Cart { get; set; } = null!;
 	[Inject]
 	IJSRuntime JS { get; set; } = null!;
@@ -125,11 +128,6 @@
 	{
 		Cart = UserState.Cart;
 		UserState.PropertyChanged += PropertyChanged;
-	}
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		//await JS.InvokeVoidAsync("HeaderListeners");
 	}
 
 	private void PropertyChanged(object? sender, PropertyChangedEventArgs e)

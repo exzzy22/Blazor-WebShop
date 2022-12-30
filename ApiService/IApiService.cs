@@ -25,10 +25,11 @@ public interface IApiService
     Task<bool> DeleteAdmin(int adminId);
     Task<bool> UpdateAdmin(AdminVM admin);
     Task<bool> Register(UserForRegistrationVM userForRegistration);
-    #endregion
+	Task<(bool,TokenVM?)> Login(UserForAuthenticationVM userForAuthentication);
+	#endregion
 
-    #region Categories
-    Task<bool> AddCategory(CategoryVM category);
+	#region Categories
+	Task<bool> AddCategory(CategoryVM category);
     Task<List<CategoryVM>> GetCategories();
     Task<bool> DeleteCategory(int categoryId);
     Task<bool> UpdateCategory(CategoryVM category);

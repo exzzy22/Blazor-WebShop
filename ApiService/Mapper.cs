@@ -29,5 +29,6 @@ public class Mapper : Profile
 		CreateMap<ProductCartDto, ProductCartVM>().ReverseMap();
 		CreateMap<UserForRegistrationVM, UserForRegistrationDto>().ReverseMap();
 		CreateMap<UserForAuthenticationVM, UserForAuthenticationDto>().ReverseMap();
+        CreateMap<TokenVM, TokenDto>().ReverseMap();
 	}
 }
