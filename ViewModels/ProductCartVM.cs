@@ -1,4 +1,6 @@
-﻿namespace ViewModels;
+﻿using System.Globalization;
+
+namespace ViewModels;
 
 public class ProductCartVM
 {

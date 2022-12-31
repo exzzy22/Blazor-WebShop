@@ -1,4 +1,6 @@
-﻿namespace ViewModels;
+﻿using System.Globalization;
+
+namespace ViewModels;
 
 public class ProductCarouselVM
 {
@@ -15,6 +17,6 @@ public class ProductCarouselVM
     public CategoryVM Category { get; set; } = null!;
     public List<PriceVM> Prices { get; set; } = null!;
 
-	public double CalculateDiscountedPrice(float price) => price - (price * (Discount / 100.0));
-
+	public double CalculateDiscountedPrice(CurrencyVM currency) => GetPrice(currency).Value - (GetPrice(currency).Value * (Discount / 100.0));
+    public PriceVM GetPrice(CurrencyVM currency) => Prices.First(p => p.Currency.Id.Equals(currency.Id));
 }

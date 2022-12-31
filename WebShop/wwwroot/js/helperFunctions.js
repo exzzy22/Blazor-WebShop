@@ -18,3 +18,15 @@ function readCookie(name) {
     }
     return null;
 }
+
+function getLanguage() {
+    // Check if the navigator.language property is supported
+    if (navigator.language) {
+        // Return the language if it's supported
+        return navigator.language;
+    } else {
+        // Fall back to the userLanguage property if navigator.language is not supported
+        return navigator.userLanguage;
+    }
+}
+

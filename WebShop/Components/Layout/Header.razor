@@ -1,6 +1,4 @@
-﻿@using System.Security.Claims;
-@using WebShop.Statics;
-<!-- HEADER -->
+﻿<!-- HEADER -->
 <header>
 	<!-- TOP HEADER -->
 	<div id="top-header">
@@ -37,8 +35,8 @@
 				<!-- LOGO -->
 				<div class="col-md-3">
 					<div class="header-logo">
-						<a href="#" class="logo">
-							<img src="./img/logo.png" alt="">
+						<a href="/" class="logo">
+							<img src="./img/logo.png" alt="logo">
 						</a>
 					</div>
 				</div>
@@ -87,7 +85,7 @@
 											</div>
 											<div class="product-body">
 												<h3 class="product-name"><a href="#">@product.Product.ShortName</a></h3>
-												<h4 class="product-price"><span class="qty">@(product.Quantity)x</span>@(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @product.Product.Prices.First().Value</h4>
+												<h4 class="product-price"><span class="qty">@(product.Quantity)x</span>@(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @product.Product.GetPrice(StaticConfig.Currency).ToPriceString()</h4>
 											</div>
 											<button class="delete" @onclick="async () => await UserState.RemoveFromCart(product.ProductId)"><i class="fa fa-close"></i></button>
 										</div>
@@ -95,7 +93,7 @@
 								</div>
 								<div class="cart-summary">
 									<small>@(Cart.Products.Sum(p => p.Quantity)) Item(s) selected</small>
-									<h5>SUBTOTAL: @(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") 2940.00</h5>
+									<h5>SUBTOTAL: @(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @Cart.GetCartTotal(StaticConfig.Currency).ToPriceString()</h5>
 								</div>
 								<div class="cart-btns">
 									<a href="#">View Cart</a>
@@ -166,6 +164,6 @@
 	{
 		StaticConfig.Currency = currency;
 		await LocalStorageService.SetItemAsync<CurrencyVM>("Currency", currency);
-		NavigationManager.NavigateTo("/", true); // Hard reload is needed to update prices because of jquery
+		NavigationManager.NavigateTo(NavigationManager.Uri, true); // Hard reload is needed to update prices because of jquery
 	}
 }

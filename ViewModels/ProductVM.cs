@@ -1,4 +1,6 @@
-﻿namespace ViewModels;
+﻿using System.Globalization;
+
+namespace ViewModels;
 
 public class ProductVM
 {
@@ -12,4 +14,17 @@ public class ProductVM
     public AttributesVM Attributes { get; set; } = null!;
     public virtual ICollection<PriceVM> Prices { get; set; } = null!;
 	public ICollection<ImageVM> Images { get; set; } = null!;
+
+    public double GetPrice(CurrencyVM currency)
+    { 
+        if(Discount > 0)
+            return CalculateDiscountedPrice(currency);
+
+		return Prices.First(p => p.Currency.Id.Equals(currency.Id)).Value;
+	}
+
+	double CalculateDiscountedPrice(CurrencyVM currency) => GetPriceForCurrency(currency).Value - (GetPriceForCurrency(currency).Value * (Discount / 100.0));
+	PriceVM GetPriceForCurrency(CurrencyVM currency) => Prices.First(p => p.Currency.Id.Equals(currency.Id));
+
+
 }
