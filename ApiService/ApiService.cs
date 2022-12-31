@@ -9,12 +9,15 @@ public sealed class ApiService : IApiService
 {
     private readonly HttpClient _httpClient;
     private readonly IMapper _mapper;
+    private string? _jwtToken;
 
     public ApiService(IHttpClientFactory httpClientFactory, IMapper mapper)
     {
         _mapper = mapper;
         _httpClient = httpClientFactory.CreateClient();
         _httpClient.BaseAddress = new Uri("https://localhost:5000/");
+        if(_jwtToken is not null)
+            SetAuthenticationHeader(_jwtToken);
     }
 
     public bool AuthenticationHeaderExits()
@@ -27,6 +30,7 @@ public sealed class ApiService : IApiService
 
     public void SetAuthenticationHeader(string jwtToken)
     {
+        _jwtToken = jwtToken;
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jwtToken);
     }
 
@@ -179,6 +183,14 @@ public sealed class ApiService : IApiService
 		return (true,_mapper.Map<TokenVM>(token));
 	}
 
+	public async Task<UserVM> GetLoggedUser()
+	{
+		HttpResponseMessage response = await _httpClient.GetAsync("api/account/user/logged");
+
+		UserDto user = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return _mapper.Map<UserVM>(user);
+	}
 	#endregion
 
 	#region Category
@@ -249,9 +261,9 @@ public sealed class ApiService : IApiService
 
 	#region Cart
 
-	public async Task<CartVM> AddProductToCart(int productId, int cartId, int quantity)
+	public async Task<CartVM> AddProductToCart(int productId, int cartId, int quantity, int? userId = null)
     {
-		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/add/{productId}/{cartId}/{quantity}");
+		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/add/{productId}/{cartId}/{quantity}/{userId}");
 
 		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -269,6 +281,14 @@ public sealed class ApiService : IApiService
 	public async Task<CartVM> GetCart(int cartId)
 	{
 		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/{cartId}");
+
+		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return _mapper.Map<CartVM>(cartResponse);
+	}
+	public async Task<CartVM> JoinCartToUser(int cartId, int userId)
+	{
+		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/{cartId}/{userId}");
 
 		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 

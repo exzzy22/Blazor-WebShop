@@ -41,7 +41,16 @@
             return Ok(tokenDto);
         }
 
-        [HttpGet("admin")]
+		[HttpGet("user/logged")]
+        [Authorize]
+		public async Task<IActionResult> GeetLoggedUser()
+		{
+            UserDto user = await _service.AuthenticationService.GetUserInfo(User);
+
+			return Ok(user);
+		}
+
+		[HttpGet("admin")]
         public async Task<IActionResult> GetAdmins()
         {
             var admins = await _service.AuthenticationService.GetUsersInRoleAsync(DatabaseConstants.RoleConstants.Administrator.Name);

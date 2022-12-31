@@ -8,9 +8,11 @@ namespace WebShop;
 public class CustomAuthStateProvider : AuthenticationStateProvider
 {
 	private readonly IJSRuntime _jSRuntime;
-	public CustomAuthStateProvider(IJSRuntime jSRuntime)
+	private readonly IApiService _apiService;
+	public CustomAuthStateProvider(IJSRuntime jSRuntime, IApiService apiService)
 	{
 		_jSRuntime = jSRuntime;
+		_apiService = apiService;
 	}
 
 	public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -36,6 +38,11 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
 
 		NotifyAuthenticationStateChanged(Task.FromResult(state));
 
+		if (state.User is not null && state.User.Identity is not null && state.User.Identity.IsAuthenticated)
+		{
+			_apiService.SetAuthenticationHeader(token);
+			await _apiService.GetLoggedUser();
+		}
 		return state;
 	}
 }

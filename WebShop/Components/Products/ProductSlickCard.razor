@@ -1,5 +1,6 @@
 ﻿@using Shared.ConfigurationModels.Configuration;
 @using ViewModels;
+@using WebShop.Statics;
 <!-- product -->
 <div class="product">
 	<div class="product-img">
@@ -15,7 +16,7 @@
 	<div class="product-body">
 		<p class="product-category">@Product.Category.Name</p>
 		<h3 class="product-name"><a href="#">@Product.ShortName</a></h3>
-		<h4 class="product-price">$@(Product.IsDiscounted ? (Product.CalculateDiscountedPrice(Product.Prices.First().Value)) : Product.Prices.First().Value)<del class="product-old-price">@(Product.IsDiscounted ? " $" + Product.Prices.First().Value : "")</del></h4>
+		<h4 class="product-price">@StaticConfig.Currency.Symbol @(Product.IsDiscounted ? (Product.CalculateDiscountedPrice(Product.Prices.First().Value)) : Product.Prices.First().Value)<del class="product-old-price">@(Product.IsDiscounted ? $" {StaticConfig.Currency.Symbol}" + Product.Prices.First().Value : "")</del></h4>
 		<div class="product-rating">
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star"></i>

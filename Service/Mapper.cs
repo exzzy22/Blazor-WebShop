@@ -30,8 +30,6 @@ public class Mapper : Profile
         CreateMap<ProductForCreationDto, Product>().ReverseMap();
 		CreateMap<CartDto, Cart>().ReverseMap();
         CreateMap<ProductCartDto,ProductCart>().ReverseMap();
-        CreateMap<UserForRegistrationDto, User>()
-            .ForMember(dest => dest.UserName, opt => opt.MapFrom(soruce => Guid.NewGuid().ToString()));
-
+        CreateMap<UserForRegistrationDto, User>();
     }
 }

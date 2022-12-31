@@ -26,6 +26,7 @@ public interface IApiService
     Task<bool> UpdateAdmin(AdminVM admin);
     Task<bool> Register(UserForRegistrationVM userForRegistration);
 	Task<(bool,TokenVM?)> Login(UserForAuthenticationVM userForAuthentication);
+    Task<UserVM> GetLoggedUser();
 	#endregion
 
 	#region Categories
@@ -43,9 +44,10 @@ public interface IApiService
     #endregion
 
     #region Cart
-    Task<CartVM> AddProductToCart(int productId, int cartId, int quantity);
+    Task<CartVM> AddProductToCart(int productId, int cartId, int quantity, int? userId = null);
 	Task<CartVM> RemoveProductFromCart(int productId, int cartId);
     Task<CartVM> GetCart(int cartId);
+    Task<CartVM> JoinCartToUser(int cartId, int userId);
 	#endregion
 	bool AuthenticationHeaderExits();
     void SetAuthenticationHeader(string jwtToken);

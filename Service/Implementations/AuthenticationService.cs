@@ -22,9 +22,17 @@
             _jwtConfiguration = _configuration.Value;
         }
 
-        public async Task<IdentityResult> RegisterUserAsync(UserForRegistrationDto userForRegistration)
+        public async Task<UserDto> GetUserInfo(ClaimsPrincipal user)
+        {
+            User dbUser = await _userManager.FindByNameAsync(user.Identity.Name) ?? throw new UserNotFound();
+
+			return _mapper.Map<UserDto>(dbUser);
+		}
+
+		public async Task<IdentityResult> RegisterUserAsync(UserForRegistrationDto userForRegistration)
         {
             User user = _mapper.Map<User>(userForRegistration);
+            user.UserName = Guid.NewGuid().ToString();
 
             IdentityResult result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
@@ -175,15 +183,17 @@
 
             List<Claim> claims = new()
             {
-                new Claim(ClaimTypes.Name, _user.Email)
+                new Claim(ClaimTypes.Name, _user.UserName)
             };
 
             IList<string> roles = await _userManager.GetRolesAsync(_user);
 
-            foreach (var role in roles)
+            foreach (string role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
+
+            claims.Add(new Claim(ClaimTypes.Email,_user.Email));
 
             return claims;
         }
@@ -201,5 +211,5 @@
 
             return tokenOptions;
         }
-    }
+	}
 }

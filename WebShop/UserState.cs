@@ -1,6 +1,4 @@
-﻿using Blazored.LocalStorage;
-
-namespace WebShop;
+﻿namespace WebShop;
 
 public class UserState : INotifyPropertyChanged
 {
@@ -61,9 +59,18 @@ public class UserState : INotifyPropertyChanged
 		}
 	}
 
+	public async Task LoadUserData()
+	{
+		User = await _apiService.GetLoggedUser();
+		if (Cart.Id != default)
+		{
+			Cart = await _apiService.JoinCartToUser(Cart.Id,User.Id);
+		}
+	}
+
 	public async Task AddToCart(int productId, int quantity = 1) 
 	{
-		Cart = await _apiService.AddProductToCart(productId, Cart.Id, quantity);
+		Cart = await _apiService.AddProductToCart(productId, Cart.Id, quantity,User is null ? null : User.Id);
 
 		if (!await _localStorageService.ContainKeyAsync("CartId"))
 		{

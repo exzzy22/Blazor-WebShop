@@ -13,8 +13,8 @@ namespace Domain.Models
 		public string? ZipCode { get; set; }
 		public string? Tel { get; set; }
 
-		public virtual Wishlist Wishlist { get; set; } = new();
-        public virtual Cart Cart { get; set; } = new();
+		public virtual Wishlist Wishlist { get; set; } = null!;
+		public virtual Cart Cart { get; set; } = null!;
 		public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

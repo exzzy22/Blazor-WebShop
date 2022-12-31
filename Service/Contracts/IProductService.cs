@@ -14,8 +14,9 @@ public interface IProductService
     void DeleteImage(List<string> names);
     Task<IEnumerable<ImageForTableDto>> GetListOfUnusedImages();
 
-    Task<CartDto> AddProductToCart(int productId, int cartId, int quantity);
+    Task<CartDto> AddProductToCart(int productId, int cartId, int quantity, int? userId = null);
 	Task<CartDto> RemoveProductFromCart(int productId, int cartId);
 	Task<CartDto> GetCart(int cartId);
+    Task<CartDto> JoinCartToUser(int cartId, int userId);
 	Task<WishlistDto> AddRemoveFromWishlist(int productId);
 }

@@ -68,7 +68,7 @@
 
 		if (result)
 		{
-			await CreateCookie(token.AccessToken, 7);
+			await CreateCookie(token.AccessToken, 3);
 			var authState = await AuthenticationState.GetAuthenticationStateAsync();
 			_validationResult = true;
 			NavigationManager.NavigateTo("/");

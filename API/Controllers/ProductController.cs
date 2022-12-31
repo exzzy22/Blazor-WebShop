@@ -16,7 +16,7 @@ public class ProductController : ControllerBase
         _serviceManager = service;
     }
 
-    [HttpGet("{productId}")]
+	[HttpGet("{productId}")]
     public async Task<IActionResult> GetProduct(int productId)
     {
         ProductDto product = await _serviceManager.ProductService.GetProductAsync(productId);
@@ -152,12 +152,20 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
-	[HttpGet("cart/add/{productId}/{cartId}/{quantity}")]
-	public async Task<IActionResult> AddProductToCart(int productId, int cartId, int quantity) => Ok(await _serviceManager.ProductService.AddProductToCart(productId,cartId,quantity));
+	[HttpGet("cart/add/{productId}/{cartId}/{quantity}/{userId?}")]
+	public async Task<IActionResult> AddProductToCart(int productId, int cartId, int quantity, int? userId = null) => Ok(await _serviceManager.ProductService.AddProductToCart(productId,cartId,quantity,userId));
 	[HttpGet("cart/remove/{productId}/{cartId}")]
 	public async Task<IActionResult> RemoveProductFromCart(int productId, int cartId) => Ok(await _serviceManager.ProductService.RemoveProductFromCart(productId, cartId));
 
 	[HttpGet("cart/{cartId}")]
 	public async Task<IActionResult> GetCart(int cartId) => Ok(await _serviceManager.ProductService.GetCart(cartId));
 
+	[HttpGet("cart/{cartId}/{userId}")]
+    [Authorize]
+	public async Task<IActionResult> JoinCartToUser(int cartId, int userId)
+	{
+		CartDto cart = await _serviceManager.ProductService.JoinCartToUser(cartId, userId);
+
+		return Ok(cart);
+	}
 }

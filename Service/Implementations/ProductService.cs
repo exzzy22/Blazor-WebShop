@@ -148,11 +148,11 @@ internal sealed class ProductService : IProductService
 
     public async Task<CartDto> GetCart(int cartId) => _mapper.Map<CartDto>(await _repository.Cart.GetCartAsync(cartId, false));
 
-	public async Task<CartDto> AddProductToCart(int productId, int cartId, int quantity)
+	public async Task<CartDto> AddProductToCart(int productId, int cartId, int quantity, int? userId = null)
 	{
         if (cartId == default)
         {
-            Cart cartToCreate = new Cart { Products = new List<ProductCart> { new ProductCart { ProductId = productId, Quantity = 1 }}};
+            Cart cartToCreate = new Cart {UserId = userId , Products = new List<ProductCart> { new ProductCart { ProductId = productId, Quantity = 1 }}};
 			_repository.Cart.Create(cartToCreate);
 
 			await _repository.SaveAsync();
@@ -173,7 +173,7 @@ internal sealed class ProductService : IProductService
 
 		await _repository.SaveAsync();
 
-		return _mapper.Map<CartDto>(_mapper.Map<CartDto>(await _repository.Cart.GetCartAsync(dbCart.Id, false)));
+		return _mapper.Map<CartDto>(await _repository.Cart.GetCartAsync(dbCart.Id, false));
 	}
 
 	public async Task<CartDto> RemoveProductFromCart(int productId, int cartId)
@@ -185,6 +185,16 @@ internal sealed class ProductService : IProductService
 		await _repository.SaveAsync();
 
 		return _mapper.Map<CartDto>(dbCart);
+	}
+
+	public async Task<CartDto> JoinCartToUser(int cartId, int userId)
+	{
+        Cart cart = await _repository.Cart.GetCartAsync(cartId,true) ?? throw new CartNotFound(cartId);
+        cart.UserId = userId;
+
+        await _repository.SaveAsync();
+
+		return _mapper.Map<CartDto>(await _repository.Cart.GetCartAsync(cartId, false));
 	}
 
 	public Task<WishlistDto> AddRemoveFromWishlist(int productId)
