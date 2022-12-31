@@ -1,0 +1,179 @@
+﻿@page "/checkout"
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="breadcrumb-header">Checkout</h3>
+				<ul class="breadcrumb-tree">
+					<li><a href="#">Home</a></li>
+					<li class="active">Checkout</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<!-- SECTION -->
+<EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+<ObjectGraphDataAnnotationsValidator   />
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-7">
+				<!-- Billing Details -->
+					<div class="billing-details">
+						<div class="form-group">
+							<InputText id="firstName" class="input" @bind-Value="Model.BillingAdress.FirstName" placeholder="First Name" />
+							<ValidationMessage For="@(() => Model.BillingAdress.FirstName)" />
+						</div>
+						<div class="form-group">
+							<InputText id="lastName" class="input" @bind-Value="Model.BillingAdress.LastName" placeholder="Last Name" />
+							<ValidationMessage For="@(() => Model.BillingAdress.LastName)" />
+						</div>
+						<div class="form-group">
+							<InputText id="email" class="input" @bind-Value="Model.BillingAdress.Email" placeholder="Email" />
+							<ValidationMessage For="@(() => Model.BillingAdress.Email)" />
+						</div>
+						<div class="form-group">
+							<InputText id="address" class="input" @bind-Value="Model.BillingAdress.Address" placeholder="Address" />
+							<ValidationMessage For="@(() => Model.BillingAdress.Address)" />
+						</div>
+						<div class="form-group">
+							<InputText id="city" class="input" @bind-Value="Model.BillingAdress.City" placeholder="City" />
+							<ValidationMessage For="@(() => Model.BillingAdress.City)" />
+						</div>
+						<div class="form-group">
+							<InputText id="country" class="input" @bind-Value="Model.BillingAdress.Country" placeholder="Country" />
+							<ValidationMessage For="@(() => Model.BillingAdress.Country)" />
+						</div>
+						<div class="form-group">
+							<InputText id="zipCode" class="input" @bind-Value="Model.BillingAdress.ZipCode" placeholder="ZIP Code" />
+							<ValidationMessage For="@(() => Model.BillingAdress.ZipCode)" />
+						</div>
+						<div class="form-group">
+							<InputText id="tel" class="input" @bind-Value="Model.BillingAdress.Tel" placeholder="Telephone" />
+							<ValidationMessage For="@(() => Model.BillingAdress.Tel)" />
+						</div>
+					</div>
+				<!-- /Billing Details -->
+				<!-- Shiping Details -->
+				<div class="shiping-details">
+					<div class="section-title">
+						<h3 class="title">Shiping address</h3>
+					</div>
+					<div class="input-checkbox">
+						<input type="checkbox" id="shiping-address">
+						<label for="shiping-address">
+							<span></span>
+							Ship to a diffrent address?
+						</label>
+							<div class="caption">
+								<div class="form-group">
+									<InputText class="input" placeholder="First Name" @bind-Value="Model.ShippingAddress.FirstName" />
+									<ValidationMessage For="@(() => Model.ShippingAddress.FirstName)" />
+								</div>
+								<div class="form-group">
+									<InputText class="input" placeholder="Last Name" @bind-Value="Model.ShippingAddress.LastName" />
+									<ValidationMessage For="@(() => Model.ShippingAddress.LastName)" />
+								</div>
+								<div class="form-group">
+									<InputText class="input" placeholder="Email" @bind-Value="Model.ShippingAddress.Email" />
+									<ValidationMessage For="@(() => Model.ShippingAddress.Email)" />
+								</div>
+								<div class="form-group">
+									<InputText class="input" placeholder="Address" @bind-Value="Model.ShippingAddress.Address" />
+									<ValidationMessage For="@(() => Model.ShippingAddress.Address)" />
+								</div>
+								<div class="form-group">
+									<InputText class="input" placeholder="City" @bind-Value="Model.ShippingAddress.City" />
+									<ValidationMessage For="@(() => Model.ShippingAddress.City)" />
+								</div>
+								<div class="form-group">
+									<InputText class="input" placeholder="Country" @bind-Value="Model.ShippingAddress.Country" />
+									<ValidationMessage For="@(() => Model.ShippingAddress.Country)" />
+								</div>
+								<div class="form-group">
+									<InputText class="input" placeholder="ZIP Code" @bind-Value="Model.ShippingAddress.ZipCode" />
+									<ValidationMessage For="@(() => Model.ShippingAddress.ZipCode)" />
+								</div>
+								<div class="form-group">
+									<InputText class="input" placeholder="Telephone" @bind-Value="Model.ShippingAddress.Tel" />
+									<ValidationMessage For="@(() => Model.ShippingAddress.Tel)" />
+								</div>
+							</div>
+					</div>
+				</div>
+				<!-- /Shiping Details -->
+				<!-- Order notes -->
+				<div class="order-notes">
+						<InputTextArea class="input" placeholder="Order Notes" @bind-Value="Model.Note"></InputTextArea>
+				</div>
+				<!-- /Order notes -->
+			</div>
+
+			<!-- Order Details -->
+			<div class="col-md-5 order-details">
+				<div class="section-title text-center">
+					<h3 class="title">Your Order</h3>
+				</div>
+				<div class="order-summary">
+					<div class="order-col">
+						<div><strong>PRODUCT</strong></div>
+						<div><strong>TOTAL</strong></div>
+					</div>
+					<div class="order-products">
+						<div class="order-col">
+							<div>1x Product Name Goes Here</div>
+							<div>$980.00</div>
+						</div>
+						<div class="order-col">
+							<div>2x Product Name Goes Here</div>
+							<div>$980.00</div>
+						</div>
+					</div>
+					<div class="order-col">
+						<div>Shiping</div>
+						<div><strong>FREE</strong></div>
+					</div>
+					<div class="order-col">
+						<div><strong>TOTAL</strong></div>
+						<div><strong class="order-total">$2940.00</strong></div>
+					</div>
+				</div>
+				<div class="input-checkbox">
+					<InputCheckbox type="checkbox" id="terms" @bind-Value="Model.TosAccepted" />
+					<label for="terms">
+						<span></span>
+						I've read and accept the <a href="#">terms & conditions</a>
+					</label>
+					<ValidationMessage For="@(() => Model.TosAccepted)" />
+				</div>
+					<button type="submit" class="primary-btn order-submit btn-lg btn-block">Place order</button>
+			</div>
+			<!-- /Order Details -->
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+</EditForm>
+
+
+@code {
+	OrderVM Model { get; set; } = new();
+
+	async Task OnValidSubmit()
+	{
+		
+	}
+
+}

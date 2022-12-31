@@ -24,8 +24,6 @@
 		AuthenticationState.AuthenticationStateChanged += OnAuthenticationStateChanged;
 		var authState = await AuthenticationState.GetAuthenticationStateAsync();
 		User = authState.User;
-		CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
-		Console.WriteLine(currentCulture.Name); // Outputs the name of the current
 	}
 
 

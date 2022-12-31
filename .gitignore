@@ -365,3 +365,4 @@ FodyWeavers.xsd
 # User added
 appsettings.Development.json
 appsettings.Production.json
+API/internal_logs/

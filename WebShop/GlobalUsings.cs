@@ -8,3 +8,4 @@ global using System.ComponentModel;
 global using System.Runtime.CompilerServices;
 global using ViewModels;
 global using WebShop.Statics;
+global using System.ComponentModel.DataAnnotations;
