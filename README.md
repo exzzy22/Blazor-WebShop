@@ -1,6 +1,6 @@
 # Blazor WebShop with CMS
 
-This is example project using blazor webassembly and shwoing some of its feuteres. Project includes Blazor WASM WebShop, Blazor WASM CMS and REST API that booth of those connect.
+This is example project using blazor webassembly and shwoing some of its features. Project includes Blazor WASM WebShop, Blazor WASM CMS and REST API that booth of those connect.
 
 ## Blazor WebShop
 
