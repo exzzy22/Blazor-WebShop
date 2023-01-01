@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,11 @@ using Repository;
 namespace API.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20230101200144_AddOrder")]
+    partial class AddOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,61 +24,6 @@ namespace API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Domain.Models.Address", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("BillingOrderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ShippingOrderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Tel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BillingOrderId")
-                        .IsUnique()
-                        .HasFilter("[BillingOrderId] IS NOT NULL");
-
-                    b.HasIndex("ShippingOrderId")
-                        .IsUnique()
-                        .HasFilter("[ShippingOrderId] IS NOT NULL");
-
-                    b.ToTable("Adresses");
-                });
 
             modelBuilder.Entity("Domain.Models.Attributes", b =>
                 {
@@ -192,49 +140,6 @@ namespace API.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("Domain.Models.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<int>("BillingAddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CurrencyISO4217")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ShippingAddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StripeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Domain.Models.Price", b =>
@@ -697,23 +602,6 @@ namespace API.Migrations
                     b.HasDiscriminator().HasValue(2);
                 });
 
-            modelBuilder.Entity("Domain.Models.Address", b =>
-                {
-                    b.HasOne("Domain.Models.Order", "BillingOrder")
-                        .WithOne("BillingAddress")
-                        .HasForeignKey("Domain.Models.Address", "BillingOrderId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.Models.Order", "ShippingOrder")
-                        .WithOne("ShippingAddress")
-                        .HasForeignKey("Domain.Models.Address", "ShippingOrderId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("BillingOrder");
-
-                    b.Navigation("ShippingOrder");
-                });
-
             modelBuilder.Entity("Domain.Models.Attributes", b =>
                 {
                     b.HasOne("Domain.Models.Product", "Product")
@@ -854,15 +742,6 @@ namespace API.Migrations
             modelBuilder.Entity("Domain.Models.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("Domain.Models.Order", b =>
-                {
-                    b.Navigation("BillingAddress")
-                        .IsRequired();
-
-                    b.Navigation("ShippingAddress")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Models.Product", b =>

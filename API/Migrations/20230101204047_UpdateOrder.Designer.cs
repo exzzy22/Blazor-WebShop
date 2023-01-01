@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,11 @@ using Repository;
 namespace API.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20230101204047_UpdateOrder")]
+    partial class UpdateOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Models.Address", b =>
+            modelBuilder.Entity("Domain.Models.Adress", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,7 +33,11 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BillingOrderId")
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BillingOrderId")
                         .HasColumnType("int");
 
                     b.Property<string>("City")
@@ -53,7 +60,7 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ShippingOrderId")
+                    b.Property<int>("ShippingOrderId")
                         .HasColumnType("int");
 
                     b.Property<string>("Tel")
@@ -67,12 +74,10 @@ namespace API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BillingOrderId")
-                        .IsUnique()
-                        .HasFilter("[BillingOrderId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("ShippingOrderId")
-                        .IsUnique()
-                        .HasFilter("[ShippingOrderId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Adresses");
                 });
@@ -697,17 +702,19 @@ namespace API.Migrations
                     b.HasDiscriminator().HasValue(2);
                 });
 
-            modelBuilder.Entity("Domain.Models.Address", b =>
+            modelBuilder.Entity("Domain.Models.Adress", b =>
                 {
                     b.HasOne("Domain.Models.Order", "BillingOrder")
                         .WithOne("BillingAddress")
-                        .HasForeignKey("Domain.Models.Address", "BillingOrderId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("Domain.Models.Adress", "BillingOrderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("Domain.Models.Order", "ShippingOrder")
                         .WithOne("ShippingAddress")
-                        .HasForeignKey("Domain.Models.Address", "ShippingOrderId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("Domain.Models.Adress", "ShippingOrderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("BillingOrder");
 

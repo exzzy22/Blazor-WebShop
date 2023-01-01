@@ -6,6 +6,7 @@
         IProductService ProductService { get; }
         ICategoryService CategoryService { get; }
         ICurrencyService CurrencyService { get; }
+        IPaymentService PaymentService { get; }
 
     }
 }

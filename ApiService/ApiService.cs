@@ -294,5 +294,16 @@ public sealed class ApiService : IApiService
 
 		return _mapper.Map<CartVM>(cartResponse);
 	}
-	#endregion
+    #endregion
+
+    #region Payment
+    public async Task<string> CreatePayment(OrderVM order)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/payment/create", _mapper.Map<OrderDto>(order));
+
+        string paymentUrl = await response.Content.ReadAsStringAsync() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+        return paymentUrl;
+    }
+    #endregion
 }

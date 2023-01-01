@@ -10,6 +10,7 @@ namespace Repository
         ICurrencyRepository Currency { get; }
         IImageRepository Image { get; }
         ICartRepository Cart { get; }
+        IOrderRepository Order { get; }
 
 
         Task SaveAsync();

@@ -9,10 +9,12 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
 {
 	private readonly IJSRuntime _jSRuntime;
 	private readonly IApiService _apiService;
-	public CustomAuthStateProvider(IJSRuntime jSRuntime, IApiService apiService)
+	private readonly UserState _userState;
+	public CustomAuthStateProvider(IJSRuntime jSRuntime, IApiService apiService, UserState userState)
 	{
 		_jSRuntime = jSRuntime;
 		_apiService = apiService;
+		_userState = userState;
 	}
 
 	public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -41,7 +43,7 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
 		if (state.User is not null && state.User.Identity is not null && state.User.Identity.IsAuthenticated)
 		{
 			_apiService.SetAuthenticationHeader(token);
-			await _apiService.GetLoggedUser();
+			_userState.User = await _apiService.GetLoggedUser();
 		}
 		return state;
 	}

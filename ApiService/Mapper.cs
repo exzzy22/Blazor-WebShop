@@ -30,5 +30,7 @@ public class Mapper : Profile
 		CreateMap<UserForRegistrationVM, UserForRegistrationDto>().ReverseMap();
 		CreateMap<UserForAuthenticationVM, UserForAuthenticationDto>().ReverseMap();
         CreateMap<TokenVM, TokenDto>().ReverseMap();
+        CreateMap<OrderVM, OrderDto>().ReverseMap();
+        CreateMap<AdressDto, AdressVM>().ReverseMap();
 	}
 }

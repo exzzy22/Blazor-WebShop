@@ -48,7 +48,11 @@ public interface IApiService
 	Task<CartVM> RemoveProductFromCart(int productId, int cartId);
     Task<CartVM> GetCart(int cartId);
     Task<CartVM> JoinCartToUser(int cartId, int userId);
-	#endregion
-	bool AuthenticationHeaderExits();
+    #endregion
+
+    #region Payment
+    Task<string> CreatePayment(OrderVM order);
+    #endregion
+    bool AuthenticationHeaderExits();
     void SetAuthenticationHeader(string jwtToken);
 }

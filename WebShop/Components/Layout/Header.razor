@@ -96,7 +96,7 @@
 									<h5>SUBTOTAL: @(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @Cart.GetCartTotal(StaticConfig.Currency).ToPriceString()</h5>
 								</div>
 								<div class="cart-btns">
-									<a href="#">View Cart</a>
+									<a @onclick='() => NavigationManager.NavigateTo("cart")'>View Cart</a>
 									<a @onclick='() => NavigationManager.NavigateTo("checkout")'>Checkout  <i class="fa fa-arrow-circle-right"></i></a>
 								</div>
 							</div>

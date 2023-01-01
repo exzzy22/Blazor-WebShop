@@ -9,6 +9,7 @@ public sealed class RepositoryManager : IRepositoryManager
     private readonly Lazy<ICurrencyRepository> _currencyRepository;
     private readonly Lazy<IImageRepository> _imageRepository;
     private readonly Lazy<ICartRepository> _cartRepository;
+    private readonly Lazy<IOrderRepository> _orderRepository;
 
 
     public RepositoryManager(RepositoryContext repositoryContext)
@@ -20,7 +21,9 @@ public sealed class RepositoryManager : IRepositoryManager
         _currencyRepository = new Lazy<ICurrencyRepository>(() => new CurrencyRepository(repositoryContext));
         _imageRepository = new Lazy<IImageRepository>( () => new ImageRepository(repositoryContext));
         _cartRepository = new Lazy<ICartRepository>( () => new CartRepository(repositoryContext));
-    }
+		_orderRepository = new Lazy<IOrderRepository>(() => new OrderRepository(repositoryContext));
+
+	}
 
     public IProductRepository Product => _productRepository.Value;
     public ICategoryRepository Category => _categoryRepository.Value;
@@ -28,6 +31,7 @@ public sealed class RepositoryManager : IRepositoryManager
     public ICurrencyRepository Currency => _currencyRepository.Value;
     public IImageRepository Image => _imageRepository.Value;
     public ICartRepository Cart => _cartRepository.Value;
+    public IOrderRepository Order => _orderRepository.Value;
 
     public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
     public void Save() => _repositoryContext.SaveChanges();

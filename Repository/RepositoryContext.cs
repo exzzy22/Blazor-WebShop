@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Metrics;
+using System.Drawing;
 
 namespace Repository
 {
@@ -33,7 +34,20 @@ namespace Repository
                         .HasValue<CpuAtrributes>(1)
                         .HasValue<GpuAtrributes>(2);
 
-            base.OnModelCreating(modelBuilder);
+			modelBuilder.Entity<Order>()
+				        .HasOne(o => o.BillingAddress)
+				        .WithOne(a => a.BillingOrder)
+				        .HasForeignKey<Address>(a => a.BillingOrderId)
+				        .OnDelete(DeleteBehavior.NoAction);
+
+			modelBuilder.Entity<Order>()
+				        .HasOne(o => o.ShippingAddress)
+				        .WithOne(a => a.ShippingOrder)
+				        .HasForeignKey<Address>(a => a.ShippingOrderId)
+				        .OnDelete(DeleteBehavior.NoAction);
+
+
+			base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Product> Products { get; set; } = null!;
@@ -44,5 +58,7 @@ namespace Repository
         public DbSet<Image> Images { get; set; } = null!;
         public DbSet<Cart> Carts { get; set; } = null!;
         public DbSet<Wishlist> Wishlists { get; set; } = null!;
-    }
+		public DbSet<Order> Orders { get; set; } = null!;
+		public DbSet<Address> Adresses { get; set; } = null!;
+	}
 }

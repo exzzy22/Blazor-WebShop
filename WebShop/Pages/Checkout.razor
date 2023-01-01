@@ -31,36 +31,36 @@
 				<!-- Billing Details -->
 					<div class="billing-details">
 						<div class="form-group">
-							<InputText id="firstName" class="input" @bind-Value="Model.BillingAdress.FirstName" placeholder="First Name" />
-							<ValidationMessage For="@(() => Model.BillingAdress.FirstName)" />
+							<InputText id="firstName" class="input" @bind-Value="Model.BillingAddress.FirstName" placeholder="First Name" />
+							<ValidationMessage For="@(() => Model.BillingAddress.FirstName)" />
 						</div>
 						<div class="form-group">
-							<InputText id="lastName" class="input" @bind-Value="Model.BillingAdress.LastName" placeholder="Last Name" />
-							<ValidationMessage For="@(() => Model.BillingAdress.LastName)" />
+							<InputText id="lastName" class="input" @bind-Value="Model.BillingAddress.LastName" placeholder="Last Name" />
+							<ValidationMessage For="@(() => Model.BillingAddress.LastName)" />
 						</div>
 						<div class="form-group">
-							<InputText id="email" class="input" @bind-Value="Model.BillingAdress.Email" placeholder="Email" />
-							<ValidationMessage For="@(() => Model.BillingAdress.Email)" />
+							<InputText id="email" class="input" @bind-Value="Model.BillingAddress.Email" placeholder="Email" />
+							<ValidationMessage For="@(() => Model.BillingAddress.Email)" />
 						</div>
 						<div class="form-group">
-							<InputText id="address" class="input" @bind-Value="Model.BillingAdress.Address" placeholder="Address" />
-							<ValidationMessage For="@(() => Model.BillingAdress.Address)" />
+							<InputText id="address" class="input" @bind-Value="Model.BillingAddress.Address" placeholder="Address" />
+							<ValidationMessage For="@(() => Model.BillingAddress.Address)" />
 						</div>
 						<div class="form-group">
-							<InputText id="city" class="input" @bind-Value="Model.BillingAdress.City" placeholder="City" />
-							<ValidationMessage For="@(() => Model.BillingAdress.City)" />
+							<InputText id="city" class="input" @bind-Value="Model.BillingAddress.City" placeholder="City" />
+							<ValidationMessage For="@(() => Model.BillingAddress.City)" />
 						</div>
 						<div class="form-group">
-							<InputText id="country" class="input" @bind-Value="Model.BillingAdress.Country" placeholder="Country" />
-							<ValidationMessage For="@(() => Model.BillingAdress.Country)" />
+							<InputText id="country" class="input" @bind-Value="Model.BillingAddress.Country" placeholder="Country" />
+							<ValidationMessage For="@(() => Model.BillingAddress.Country)" />
 						</div>
 						<div class="form-group">
-							<InputText id="zipCode" class="input" @bind-Value="Model.BillingAdress.ZipCode" placeholder="ZIP Code" />
-							<ValidationMessage For="@(() => Model.BillingAdress.ZipCode)" />
+							<InputText id="zipCode" class="input" @bind-Value="Model.BillingAddress.ZipCode" placeholder="ZIP Code" />
+							<ValidationMessage For="@(() => Model.BillingAddress.ZipCode)" />
 						</div>
 						<div class="form-group">
-							<InputText id="tel" class="input" @bind-Value="Model.BillingAdress.Tel" placeholder="Telephone" />
-							<ValidationMessage For="@(() => Model.BillingAdress.Tel)" />
+							<InputText id="tel" class="input" @bind-Value="Model.BillingAddress.Tel" placeholder="Telephone" />
+							<ValidationMessage For="@(() => Model.BillingAddress.Tel)" />
 						</div>
 					</div>
 				<!-- /Billing Details -->
@@ -70,7 +70,7 @@
 						<h3 class="title">Shiping address</h3>
 					</div>
 					<div class="input-checkbox">
-						<input type="checkbox" id="shiping-address">
+						<input type="checkbox" id="shiping-address" @onclick="SetShippingAddress">
 						<label for="shiping-address">
 							<span></span>
 							Ship to a diffrent address?
@@ -130,14 +130,14 @@
 						<div><strong>TOTAL</strong></div>
 					</div>
 					<div class="order-products">
-						<div class="order-col">
-							<div>1x Product Name Goes Here</div>
-							<div>$980.00</div>
-						</div>
-						<div class="order-col">
-							<div>2x Product Name Goes Here</div>
-							<div>$980.00</div>
-						</div>
+					@foreach (var product in Cart.Products)
+						{
+							<div class="order-col">
+										<input class="form-control input-sm" type="number" value="@product.Quantity" step="1" style="max-width:3em" @onchange="async () => await ChangeQuantity(product.Quantity, product.Id)" />
+									<div>x @product.Product.ShortName</div>
+									<div>@StaticConfig.Currency.Symbol @product.Product.GetPrice(StaticConfig.Currency).ToPriceString()</div>
+							</div>
+						}
 					</div>
 					<div class="order-col">
 						<div>Shiping</div>
@@ -145,16 +145,16 @@
 					</div>
 					<div class="order-col">
 						<div><strong>TOTAL</strong></div>
-						<div><strong class="order-total">$2940.00</strong></div>
+							<div><strong class="order-total">@StaticConfig.Currency.Symbol @Cart.GetCartTotal(StaticConfig.Currency).ToPriceString()</strong></div>
 					</div>
 				</div>
 				<div class="input-checkbox">
 					<InputCheckbox type="checkbox" id="terms" @bind-Value="Model.TosAccepted" />
 					<label for="terms">
 						<span></span>
-						I've read and accept the <a href="#">terms & conditions</a>
+						I've read and accept the <a >terms & conditions</a>
 					</label>
-					<ValidationMessage For="@(() => Model.TosAccepted)" />
+						<ValidationMessage For="@(() => Model.TosAccepted)" />
 				</div>
 					<button type="submit" class="primary-btn order-submit btn-lg btn-block">Place order</button>
 			</div>
@@ -169,11 +169,69 @@
 
 
 @code {
+	bool _shipToDifferentAddress = false;
+
 	OrderVM Model { get; set; } = new();
+	CartVM Cart { get; set; } = new();
+	[Inject]
+	UserState UserState { get; set; } = null!;
+	[Inject]
+	IApiService ApiService { get; set; } = null!;
+	[Inject]
+	NavigationManager NavigationManager { get; set; } = null!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		Cart = UserState.Cart;
+		if (UserState.User is not null)
+			LoadAddress();
+
+	}
 
 	async Task OnValidSubmit()
 	{
-		
+		Model.CartId = Cart.Id;
+		Model.CurrencyISO = StaticConfig.Currency.ISO4217;
+		string payementUrl = await ApiService.CreatePayment(Model);
+		NavigationManager.NavigateTo(payementUrl);
 	}
+
+	async Task ChangeQuantity(int quantity, int productId)
+	{
+		if (quantity <= 0)
+		{
+			await UserState.RemoveFromCart(productId);
+			return;
+		}
+
+		int quantityToAdd = quantity - Cart.Products.First(p => p.ProductId == productId).Quantity;
+
+		await UserState.AddToCart(productId, quantityToAdd);
+	}
+
+	void SetShippingAddress()
+	{
+		_shipToDifferentAddress = !_shipToDifferentAddress;
+
+		if (_shipToDifferentAddress)
+			Model.ShippingAddress = new();
+		else
+			Model.ShippingAddress = Model.BillingAddress;
+	}
+
+	void LoadAddress()
+	{
+		Model.BillingAddress.FirstName = UserState.User.FirstName;
+		Model.BillingAddress.LastName = UserState.User.LastName;
+		Model.BillingAddress.Email = UserState.User.Email;
+		Model.BillingAddress.Address = UserState.User.Address;
+		Model.BillingAddress.City = UserState.User.City;
+		Model.BillingAddress.Country = UserState.User.Country;
+		Model.BillingAddress.ZipCode = UserState.User.ZipCode;
+		Model.BillingAddress.Tel = UserState.User.Tel;
+
+		Model.ShippingAddress = Model.BillingAddress;
+	}
+
 
 }
