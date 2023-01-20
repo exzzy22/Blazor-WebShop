@@ -15,7 +15,7 @@
 	<div class="container">
 		<!-- row -->
 		<div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4 col-md-offset-2">
                     <div class="register">
                         <div class="form-group">
                             <InputText class="input" @bind-Value="@Model.FirstName" Placeholder="First Name" />
@@ -34,8 +34,8 @@
                             <ValidationMessage For="() => Model.Country" />
                         </div>
                         <div class="form-group">
-                            <InputText class="input" @bind-Value="@Model.Tel" Placeholder="Telephone" />
-                            <ValidationMessage For="() => Model.Tel" />
+                            <InputText class="input" @bind-Value="@Model.PhoneNumber" Placeholder="Telephone" />
+                            <ValidationMessage For="() => Model.PhoneNumber" />
                         </div>
                         <div class="form-group">
                             <InputText class="input" @bind-Value="@Model.Password2" type="password" Placeholder="Repeat Password" />
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="register">
                         <div class="form-group">
                             <InputText class="input" @bind-Value="@Model.LastName" Placeholder="Last Name" />
@@ -65,11 +65,12 @@
                             <InputText class="input" @bind-Value="@Model.Password" type="password" Placeholder="Password" />
                         <ValidationMessage For="() => Model.Password" />
                         </div>
+                        <div class="text-center" style="padding-top:2em">
+                            <button type="submit" class="primary-btn d-block mx-auto">Register</button>
+                        </div>
                     </div>
                 </div>
-            <div class="text-center">
-				<button type="submit" class="primary-btn d-block mx-auto">Register</button>
-			</div>
+                <div class="col-md-2"></div>
 		</div>
 		<!-- /row -->
 	</div>

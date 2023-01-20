@@ -105,6 +105,13 @@
             return await _userManager.UpdateAsync(_mapper.Map(admin, adminDb));
         }
 
+        public async Task<IdentityResult> UpdateUserAsync(UserDto user)
+        {
+            User userDb = await _userManager.FindByIdAsync(user.Id.ToString()) ?? throw new UserNotFound();
+
+            return await _userManager.UpdateAsync(_mapper.Map(user, userDb));
+        }
+
         public async Task<IdentityResult> DeleteAdminAsync(int adminId)
         {
             User admin = await _userManager.FindByIdAsync(adminId.ToString()) ?? throw new UserNotFound();
@@ -211,5 +218,5 @@
 
             return tokenOptions;
         }
-	}
+    }
 }

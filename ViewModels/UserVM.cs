@@ -11,5 +11,5 @@ public class UserVM
 	public string City { get; set; } = null!;
 	public string Country { get; set; } = null!;
 	public string ZipCode { get; set; } = null!;
-	public string Tel { get; set; } = null!;
+	public string PhoneNumber { get; set; } = null!;
 }

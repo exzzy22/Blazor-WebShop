@@ -16,5 +16,4 @@ public record UserDto
 	public string City { get; init; } = null!;
 	public string Country { get; init; } = null!;
 	public string ZipCode { get; init; } = null!;
-	public string Tel { get; init; } = null!;
 }

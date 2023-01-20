@@ -148,6 +148,13 @@ public sealed class ApiService : IApiService
         return response.IsSuccessStatusCode;
     }
 
+    public async Task<bool> UpdateUser(UserVM user)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/account/user/edit", _mapper.Map<UserDto>(user));
+
+        return response.IsSuccessStatusCode;
+    }
+
     public async Task<bool> UpdateAdmin(AdminVM admin)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/account/admin/edit", _mapper.Map<AdminDto>(admin));

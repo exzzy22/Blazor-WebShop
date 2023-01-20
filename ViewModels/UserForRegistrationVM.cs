@@ -21,7 +21,7 @@ public class UserForRegistrationVM
 	public string Country { get; set; } = null!;
 	public string ZipCode { get; set; } = null!;
 	[Phone]
-	public string Tel { get; set; } = null!;
+	public string PhoneNumber { get; set; } = null!;
 	[Required]
 	[Password]
 	public string Password { get; set; } = null!;

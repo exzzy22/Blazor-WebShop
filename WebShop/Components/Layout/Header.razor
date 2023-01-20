@@ -21,7 +21,7 @@
 						}
 					</ul>
 				</li>
-				<li><a href="login"><i class="fa fa-user-o"></i> @(User is not null && User.Identity is not null && User.Identity.IsAuthenticated ? User.Claims.First(c => c.Type.Equals(ClaimTypes.Email)).Value : "Login/Register")</a></li>
+				<li><a href="@(UserState.User is not null ? "profile" : "login")"><i class="fa fa-user-o"></i> @(User is not null && User.Identity is not null && User.Identity.IsAuthenticated ? User.Claims.First(c => c.Type.Equals(ClaimTypes.Email)).Value : "Login/Register")</a></li>
 			</ul>
 		</div>
 	</div>

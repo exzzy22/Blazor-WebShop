@@ -33,6 +33,7 @@ internal sealed class StripeService : IPaymentService
 			UserId = cart.UserId,
             StripeId = "",
 			CurrencyISO4217 = order.CurrencyISO,
+            Amount = GetCartTotal(order.CurrencyISO, cart.Products.ToList()),
 		};
 
 		_repositoryManager.Order.Create(orderToCreate);
@@ -46,7 +47,7 @@ internal sealed class StripeService : IPaymentService
                 new SessionLineItemOptions
                 { 
                     Quantity = 1,
-                    PriceData = new SessionLineItemPriceDataOptions { UnitAmountDecimal = GetCartTotal(order.CurrencyISO,cart.Products.ToList()), Currency = order.CurrencyISO, ProductData = new SessionLineItemPriceDataProductDataOptions { Name = "WebShop" } }
+                    PriceData = new SessionLineItemPriceDataOptions { UnitAmountDecimal = (decimal)GetCartTotal(order.CurrencyISO,cart.Products.ToList())*100, Currency = order.CurrencyISO, ProductData = new SessionLineItemPriceDataProductDataOptions { Name = "WebShop" } }
                 }
             } ,
             Mode = "payment",
@@ -66,7 +67,7 @@ internal sealed class StripeService : IPaymentService
 		return session.Url;
     }
 
-	decimal GetCartTotal(string currencyIsoCode, List<ProductCart> products)
+	double GetCartTotal(string currencyIsoCode, List<ProductCart> products)
 	{
 		double sum = 0;
 
@@ -76,7 +77,7 @@ internal sealed class StripeService : IPaymentService
 			sum += product.Quantity * CalculateDiscountedPrice(price, product.Product.Discount);
 		}
 
-		return (decimal)sum*100;
+		return sum;
 	}
 
 	double CalculateDiscountedPrice(double price, double discount) => price - price * (discount / 100.0);

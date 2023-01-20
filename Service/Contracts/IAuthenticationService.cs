@@ -10,6 +10,7 @@
         Task<IList<User>> GetUsersInRoleAsync(string roleName);
         Task<IdentityResult> CreateAdminAsync(AdminForCreationDto admin);
         Task<IdentityResult> UpdateAdminAsync(AdminDto admin);
+        Task<IdentityResult> UpdateUserAsync(UserDto user);
         Task<IdentityResult> DeleteAdminAsync(int adminId);
     }
 }

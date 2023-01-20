@@ -9,7 +9,7 @@
 		public string? City { get; init; }
 		public string? Country { get; init; }
 		public string? ZipCode { get; init; }
-		public string? Tel { get; init; }
+		public string? PhoneNumber { get; init; }
 		public string Password { get; init; } = null!;
 	}
 }

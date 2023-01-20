@@ -24,6 +24,7 @@ public interface IApiService
     Task<bool> CreateAdmin(AdminForCreationVM admin);
     Task<bool> DeleteAdmin(int adminId);
     Task<bool> UpdateAdmin(AdminVM admin);
+    Task<bool> UpdateUser(UserVM user);
     Task<bool> Register(UserForRegistrationVM userForRegistration);
 	Task<(bool,TokenVM?)> Login(UserForAuthenticationVM userForAuthentication);
     Task<UserVM> GetLoggedUser();

@@ -102,6 +102,24 @@
             return Ok();
         }
 
+        [HttpPost("user/edit")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> UpdateUser(UserDto user)
+        {
+            var result = await _service.AuthenticationService.UpdateUserAsync(user);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.TryAddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
+
+            return Ok();
+        }
+
         [HttpDelete("admin/delete/{adminId}")]
         public async Task<IActionResult> DeleteAdmin(int adminId)
         {
