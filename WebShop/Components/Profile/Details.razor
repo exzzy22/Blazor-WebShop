@@ -1,0 +1,91 @@
+﻿<EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="col-md-4">
+        <div class="register">
+            <div class="form-group">
+                <label for="firstName">Firstname</label>
+                <InputText class="input" name="firstName" @bind-Value="@Model.FirstName" Placeholder="First Name" />
+                <ValidationMessage For="() => Model.FirstName" />
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <InputText class="input" name="email" @bind-Value="@Model.Email" disabled Placeholder="Email" style="background-color:lightgray" />
+                <ValidationMessage For="() => Model.Email" />
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <InputText class="input" name="address" @bind-Value="@Model.Address" Placeholder="Address" />
+                <ValidationMessage For="() => Model.Address" />
+            </div>
+            <div class="form-group">
+                <label for="country">Country</label>
+                <InputText class="input" name="country" @bind-Value="@Model.Country" Placeholder="Country" />
+                <ValidationMessage For="() => Model.Country" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="register">
+            <div class="form-group">
+                <label for="lastName">LastName</label>
+                <InputText class="input" name="lastName" @bind-Value="@Model.LastName" Placeholder="Last Name" />
+                <ValidationMessage For="() => Model.LastName" />
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">PhoneNumber</label>
+                <InputText class="input" name="phoneNumber" @bind-Value="@Model.PhoneNumber" Placeholder="Telephone" />
+                <ValidationMessage For="() => Model.PhoneNumber" />
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <InputText class="input" for="city" @bind-Value="@Model.City" Placeholder="City" />
+                <ValidationMessage For="() => Model.City" />
+            </div>
+            <div class="form-group">
+                <label for="ZipCode">ZipCode</label>
+                <InputText class="input" for="zipCode" @bind-Value="@Model.ZipCode" Placeholder="ZIP Code" />
+                <ValidationMessage For="() => Model.ZipCode" />
+            </div>
+            <div class="text-center" style="padding-top:2em">
+                <button type="submit" class="primary-btn d-block mx-auto" disabled="@_loader">Save
+                    @if (_loader)
+                    {
+                        <span class="loader"></span>
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</EditForm>
+
+
+@code {
+    bool _loader = false;
+
+    UserVM Model { get; set; } = new();
+    [Inject]
+    IApiService ApiService { get; set; } = null!;
+    [Inject]
+    UserState UserState { get; set; } = null!;
+    [Inject]
+    NavigationManager NavigationManager { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (UserState.User is null)
+        {
+            NavigationManager.NavigateTo("/");
+            return;
+        }
+
+        Model = UserState.User;
+    }
+
+    async Task OnValidSubmit()
+    {
+        _loader = true;
+        bool result = await ApiService.UpdateUser(Model);
+        _loader = false;
+    }
+}

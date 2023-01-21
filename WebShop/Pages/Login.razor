@@ -22,9 +22,14 @@
 							<InputText class="input" type="password" name="password" placeholder="Password" @bind-Value="Model.Password" />
 							<ValidationMessage For="() => Model.Password" />
 					</div>
-				<div class="text-left">
-					<button type="submit" class="primary-btn d-block mx-auto">Login</button>
-				</div>
+					<div class="text-left">
+						<button type="submit" class="primary-btn d-block mx-auto" disabled="@_loader">Save
+							@if (_loader)
+							{
+								<span class="loader"></span>
+							}
+						</button>
+					</div>
 				</div>
 				</EditForm>
 			</div>
@@ -50,7 +55,7 @@
 	</div>
 </div>
 @code {
-	bool _validationResult = true;
+	bool _loader = false;
 	UserForAuthenticationVM Model { get; set; } = new();
 
 	[Inject]
@@ -64,17 +69,18 @@
 
 	async Task OnValidSubmit()
 	{
+		_loader = true;
 		(bool result,TokenVM? token) = await ApiService.Login(Model);
 
-		if (result)
+		if (result && token is not null)
 		{
 			await CreateCookie(token.AccessToken, 3);
 			var authState = await AuthenticationState.GetAuthenticationStateAsync();
-			_validationResult = true;
+			_loader = false;
 			NavigationManager.NavigateTo("/");
 		}
 
-		_validationResult = false;
+		_loader = false;
 	}
 
 	async Task CreateCookie(string value, int durationDays)

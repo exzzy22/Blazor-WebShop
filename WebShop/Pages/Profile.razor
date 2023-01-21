@@ -1,8 +1,5 @@
 ﻿@page "/profile"
-@using Microsoft.AspNetCore.Components.Authorization;
 
-<EditForm Model="Model" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator />
 <!-- SECTION -->
 <div class="section">
     <!-- container -->
@@ -11,82 +8,42 @@
         <div class="row">
                 <div class="col-md-4">
                     <div id="profile-menu" class="list-group">
-                        <button class="list-group-item list-group-item-action">Item 1</button>
-                        <button class="list-group-item list-group-item-action active">Item 1</button>
-                        <button class="list-group-item list-group-item-action">Item 1</button>
-                        <button class="list-group-item list-group-item-action">Item 1</button>
+                        <button @onclick="() => Section = ProfileSections.Details" class="list-group-item list-group-item-action @(Section == ProfileSections.Details ? "active" : null)">Details</button>
+                        <button @onclick="() => Section = ProfileSections.ChangePassword" class="list-group-item list-group-item-action @(Section == ProfileSections.ChangePassword ? "active" : null)">Change Password</button>
+                        <button @onclick="() => Section = ProfileSections.Orders" class="list-group-item list-group-item-action">Item 1</button>
+                        <button class="list-group-item list-group-item-action" @onclick="async () => await LogOut()">Logout</button>
                     </div>
                 </div>
-            <div class="col-md-4">
-                <div class="register">
-                    <div class="form-group">
-                        <InputText class="input" @bind-Value="@Model.FirstName" Placeholder="First Name" />
-                        <ValidationMessage For="() => Model.FirstName" />
-                    </div>
-                    <div class="form-group">
-                        <InputText class="input" @bind-Value="@Model.Email" Placeholder="Email" />
-                        <ValidationMessage For="() => Model.Email" />
-                    </div>
-                    <div class="form-group">
-                        <InputText class="input" @bind-Value="@Model.Address" Placeholder="Address" />
-                        <ValidationMessage For="() => Model.Address" />
-                    </div>
-                    <div class="form-group">
-                        <InputText class="input" @bind-Value="@Model.Country" Placeholder="Country" />
-                        <ValidationMessage For="() => Model.Country" />
-                    </div>
-                    <div class="form-group">
-                        <InputText class="input" @bind-Value="@Model.PhoneNumber" Placeholder="Telephone" />
-                        <ValidationMessage For="() => Model.PhoneNumber" />
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="register">
-                    <div class="form-group">
-                        <InputText class="input" @bind-Value="@Model.LastName" Placeholder="Last Name" />
-                        <ValidationMessage For="() => Model.LastName" />
-                    </div>
-                    <div class="form-group">
-                        <InputText class="input" @bind-Value="@Model.City" Placeholder="City" />
-                        <ValidationMessage For="() => Model.City" />
-                    </div>
-                    <div class="form-group">
-                        <InputText class="input" @bind-Value="@Model.ZipCode" Placeholder="ZIP Code" />
-                        <ValidationMessage For="() => Model.ZipCode" />
-                    </div>
-                    <div class="text-center" style="padding-top:2em">
-                        <button type="submit" class="primary-btn d-block mx-auto">Save</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2"></div>
+                @switch (Section)
+                {
+                    case ProfileSections.Details:
+                    <Details/> break;
+                }
         </div>
         <!-- /row -->
     </div>
     <!-- /container -->
 </div>
-</EditForm>
 
 @code {
-    UserVM Model { get; set; } = new();
+    ProfileSections Section = ProfileSections.Details;
+
     [Inject]
-    IApiService ApiService { get; set; } = null!;
+    AuthenticationStateProvider AuthenticationState { get; set; } = null!;
     [Inject]
-    UserState UserState { get; set; } = null!;
+    IJSRuntime JSRuntime { get; set; } = null!;
     [Inject]
     NavigationManager NavigationManager { get; set; } = null!;
 
-    protected override async Task OnInitializedAsync()
+    async Task LogOut()
     {
-        if (UserState.User is null)
-            NavigationManager.NavigateTo("/");
-
-        Model = UserState.User;
+        await DeleteCookie();
+        var authState = await AuthenticationState.GetAuthenticationStateAsync();
+        NavigationManager.NavigateTo("/");
     }
 
-    async Task OnValidSubmit()
+    async Task DeleteCookie()
     {
-        bool result = await ApiService.UpdateUser(Model);
+        await JSRuntime.InvokeVoidAsync("deleteCookie", "jwtToken");
     }
 }

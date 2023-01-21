@@ -56,4 +56,5 @@ public interface IApiService
     #endregion
     bool AuthenticationHeaderExits();
     void SetAuthenticationHeader(string jwtToken);
+    void RemoveAuthenticationHeader();
 }

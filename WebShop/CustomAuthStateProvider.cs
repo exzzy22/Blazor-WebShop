@@ -45,6 +45,16 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
 			_apiService.SetAuthenticationHeader(token);
 			_userState.User = await _apiService.GetLoggedUser();
 		}
+		else
+		{
+			_apiService.RemoveAuthenticationHeader();
+			_userState.User = null;
+		}
 		return state;
+	}
+
+	void LogOut()
+	{ 
+	
 	}
 }

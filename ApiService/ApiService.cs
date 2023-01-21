@@ -34,6 +34,11 @@ public sealed class ApiService : IApiService
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jwtToken);
     }
 
+    public void RemoveAuthenticationHeader()
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = null;
+    }
+
     #region Products
     public async Task<ProductVM> GetProduct(int productId)
     {
