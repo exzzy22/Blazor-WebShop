@@ -1,0 +1,58 @@
+﻿<div class="col-md-8">
+<table class="table">
+	<tbody>
+	@foreach (var product in Cart.Products)
+	{
+		<tr>
+			<td colspan="2">
+				<div class="product-img">
+					<img src="@(ShopConfiguration.ApiImageAddress + product.Product.Images.First(i => i.MainImage).File)" width="70" alt="Product Image">
+				</div>
+			</td>
+			<td>@product.Product.Name</td>
+			<td>
+				<div class="input-number disabled" >
+					<input type="number" step="1" style="max-width:6em" min="1" value="@product.Quantity" disabled>
+				</div>
+			</td>
+			<td>
+				<button @onclick="async () => await RemoveFromCart(product.ProductId)" class="primary-btn d-block mx-auto" disabled="@_loader"><i class="fa fa-close"></i>
+                @if (_loader)
+                {
+                    <span class="loader"></span>
+                }
+            </button>
+			</td>
+		</tr>
+	}
+	</tbody>
+</table>
+</div>
+@code {
+	bool _loader = false;
+
+	CartVM Cart { get; set; } = null!;
+	[Inject]
+	UserState UserState { get; set; } = null!;
+	[Inject]
+	WebShopConfiguration ShopConfiguration { get; set; } = null!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		Cart = UserState.Cart;
+		UserState.PropertyChanged += PropertyChanged;
+	}
+
+	private void PropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		Cart = UserState.Cart;
+		InvokeAsync(StateHasChanged);
+	}
+
+	async Task RemoveFromCart(int productId)
+	{
+		_loader = true;
+		await UserState.RemoveFromCart(productId);
+		_loader = true;
+	}
+}

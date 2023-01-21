@@ -11,4 +11,11 @@ internal sealed class CartRepository : RepositoryBase<Cart>, ICartRepository
 		.ThenInclude(p => p.Product)
 		.ThenInclude( p => p.Images)
 		.FirstOrDefaultAsync();
+
+	public async Task<Cart?> GetUserCartAsync(int userId, bool trackChanges) =>
+		await FindByCondition(c => c.UserId.Equals(userId), trackChanges)
+		.Include(c => c.Products)
+		.ThenInclude(p => p.Product)
+		.ThenInclude(p => p.Images)
+		.FirstOrDefaultAsync();
 }

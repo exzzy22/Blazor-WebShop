@@ -5,4 +5,6 @@ public enum ProfileSections
     Details,
     ChangePassword,
     Orders,
+    Wishlist,
+    Cart
 }

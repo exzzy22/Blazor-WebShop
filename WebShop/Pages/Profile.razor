@@ -10,15 +10,24 @@
                     <div id="profile-menu" class="list-group">
                         <button @onclick="() => Section = ProfileSections.Details" class="list-group-item list-group-item-action @(Section == ProfileSections.Details ? "active" : null)">Details</button>
                         <button @onclick="() => Section = ProfileSections.ChangePassword" class="list-group-item list-group-item-action @(Section == ProfileSections.ChangePassword ? "active" : null)">Change Password</button>
-                        <button @onclick="() => Section = ProfileSections.Orders" class="list-group-item list-group-item-action">Item 1</button>
+                        <button @onclick="() => Section = ProfileSections.Orders" class="list-group-item list-group-item-action @(Section == ProfileSections.Orders ? "active" : null)">Orders</button>
+                        <button @onclick="() => Section = ProfileSections.Wishlist" class="list-group-item list-group-item-action @(Section == ProfileSections.Wishlist ? "active" : null)">Wishlist</button>
+                        <button @onclick="() => Section = ProfileSections.Cart" class="list-group-item list-group-item-action @(Section == ProfileSections.Cart ? "active" : null)">Cart</button>
                         <button class="list-group-item list-group-item-action" @onclick="async () => await LogOut()">Logout</button>
                     </div>
                 </div>
                 @switch (Section)
                 {
                     case ProfileSections.Details:
-                    <Details/> break;
-                }
+                    <Details/> 
+                        break;
+                    case ProfileSections.Wishlist:
+                    <Wishlist />
+                        break;
+                    case ProfileSections.Cart:
+                    <CartPage />
+                    break;
+            }
         </div>
         <!-- /row -->
     </div>

@@ -152,12 +152,26 @@ internal sealed class ProductService : IProductService
 	{
         if (cartId == default)
         {
-            Cart cartToCreate = new Cart {UserId = userId , Products = new List<ProductCart> { new ProductCart { ProductId = productId, Quantity = 1 }}};
-			_repository.Cart.Create(cartToCreate);
+            Cart? dBcart = null;
+
+            if(userId is not null)
+				dBcart = await _repository.Cart.GetUserCartAsync((int)userId,true);
+
+            if (dBcart == null)
+            {
+                Cart cartToCreate = new Cart { UserId = userId, Products = new List<ProductCart> { new ProductCart { ProductId = productId, Quantity = 1 } } };
+                _repository.Cart.Create(cartToCreate);
+
+				await _repository.SaveAsync();
+
+				return _mapper.Map<CartDto>(cartToCreate);
+			}
+
+			dBcart.Products = new List<ProductCart> { new ProductCart { ProductId = productId, Quantity = 1 } };
 
 			await _repository.SaveAsync();
 
-			return _mapper.Map<CartDto>(cartToCreate);
+			return _mapper.Map<CartDto>(dBcart);
 		}
 
 		Cart dbCart = await _repository.Cart.GetCartAsync(cartId, true) ?? throw new CartNotFound(cartId);
