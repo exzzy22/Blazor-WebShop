@@ -17,6 +17,11 @@
 							<span class="qty-down" @onclick="async () => {if(product.Quantity > 1) await ChangeQuantity(-1,product.ProductId);}">-</span>
 						</div>
 					</td>
+					<td style="white-space:nowrap;">
+						<div>
+							@(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @product.Product.GetPrice(StaticConfig.Currency).ToPriceString()
+						</div>
+					</td>
 					<td>
 						<button @onclick="async () => await RemoveFromCart(product.ProductId)" class="primary-btn d-block mx-auto" disabled="@_loader">
 							<i class="fa fa-close"></i>
@@ -28,6 +33,14 @@
 					</td>
 				</tr>
 			}
+			<tr>
+				<td style="position: absolute; right: 0;">
+					<div class="cart-summary">
+						<small>@(Cart.Products.Sum(p => p.Quantity)) Item(s) selected</small>
+						<h5>SUBTOTAL: @(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @Cart.GetCartTotal(StaticConfig.Currency).ToPriceString()</h5>
+					</div>					
+				</td>
+			</tr>
 		</tbody>
 	</table>
 </div>

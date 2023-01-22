@@ -46,7 +46,7 @@
                 <InputText class="input" for="zipCode" @bind-Value="@Model.ZipCode" Placeholder="ZIP Code" />
                 <ValidationMessage For="() => Model.ZipCode" />
             </div>
-            <div class="text-center" style="padding-top:2em">
+            <div class="text-center" style="padding-top:2em;justify-content:end;display:flex">
                 <button type="submit" class="primary-btn d-block mx-auto" disabled="@_loader">Save
                     @if (_loader)
                     {

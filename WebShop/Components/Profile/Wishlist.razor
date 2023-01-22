@@ -15,6 +15,11 @@
 					<input type="number" step="1" style="max-width:6em" min="1" value="@product.Quantity" disabled>
 				</div>
 			</td>
+			<td style="white-space:nowrap;">
+				<div>
+					@(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @product.Product.GetPrice(StaticConfig.Currency).ToPriceString()
+				</div>
+			</td>
 			<td>
 				<button @onclick="async () => await RemoveFromCart(product.ProductId)" class="primary-btn d-block mx-auto" disabled="@_loader"><i class="fa fa-close"></i>
                 @if (_loader)

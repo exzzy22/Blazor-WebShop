@@ -164,6 +164,5 @@
 	{
 		StaticConfig.Currency = currency;
 		await LocalStorageService.SetItemAsync<CurrencyVM>("Currency", currency);
-		NavigationManager.NavigateTo(NavigationManager.Uri, true); // Hard reload is needed to update prices because of jquery
 	}
 }

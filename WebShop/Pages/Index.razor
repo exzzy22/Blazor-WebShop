@@ -133,21 +133,32 @@
 }
 
 @code{
+
 	[Inject]
 	IApiService ApiService { get; set; } = null!;
 	[Inject]
 	IJSRuntime JS { get; set; } = null!;
-	IEnumerable<ProductCarouselVM> Products { get; set; } = null!;
+	IEnumerable<ProductCarouselVM>? Products { get; set; }
 
 
 	protected override async Task OnInitializedAsync()
 	{
 		Products = await ApiService.GetCarouselTopSelling(8);
+		StaticConfig.PropertyChanged += OnCurrencyChanged;
 	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		await JS.InvokeVoidAsync("ProductsSlick");
+		if(Products is not null)
+			await JS.InvokeVoidAsync("ProductsSlick");
+	}
+
+	private async void OnCurrencyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		Products = null;
+		await InvokeAsync(StateHasChanged);
+		Products = await ApiService.GetCarouselTopSelling(8);
+		await InvokeAsync(StateHasChanged);
 	}
 
 }

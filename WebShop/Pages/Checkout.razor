@@ -133,8 +133,7 @@
 					@foreach (var product in Cart.Products)
 						{
 							<div class="order-col">
-										<input class="form-control input-sm" type="number" value="@product.Quantity" step="1" style="max-width:3em" @onchange="async () => await ChangeQuantity(product.Quantity, product.Id)" />
-									<div>x @product.Product.ShortName</div>
+									<div>@product.Quantity x @product.Product.ShortName</div>
 									<div>@StaticConfig.Currency.Symbol @product.Product.GetPrice(StaticConfig.Currency).ToPriceString()</div>
 							</div>
 						}
@@ -156,7 +155,12 @@
 					</label>
 						<ValidationMessage For="@(() => Model.TosAccepted)" />
 				</div>
-					<button type="submit" class="primary-btn order-submit btn-lg btn-block">Place order</button>
+					<button type="submit" class="primary-btn order-submit btn-lg btn-block" disabled="@_loader">Place order
+						@if (_loader)
+						{
+							<span class="loader"></span>
+						}
+					</button>
 			</div>
 			<!-- /Order Details -->
 		</div>
@@ -170,6 +174,7 @@
 
 @code {
 	bool _shipToDifferentAddress = false;
+	bool _loader = false;
 
 	OrderVM Model { get; set; } = new();
 	CartVM Cart { get; set; } = new();
@@ -190,10 +195,12 @@
 
 	async Task OnValidSubmit()
 	{
+		_loader = true;
 		Model.CartId = Cart.Id;
 		Model.CurrencyISO = StaticConfig.Currency.ISO4217;
 		string payementUrl = await ApiService.CreatePayment(Model);
 		NavigationManager.NavigateTo(payementUrl);
+		_loader = false;
 	}
 
 	async Task ChangeQuantity(int quantity, int productId)

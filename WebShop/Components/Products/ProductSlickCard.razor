@@ -39,4 +39,9 @@
 	[Inject]
 	UserState UserState { get; set; } = null!;
 
+	protected override async Task OnInitializedAsync()
+	{
+		await UserState.TryLoadData();
+	}
+
 }
