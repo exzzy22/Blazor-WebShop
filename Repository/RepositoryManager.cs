@@ -10,6 +10,7 @@ public sealed class RepositoryManager : IRepositoryManager
     private readonly Lazy<IImageRepository> _imageRepository;
     private readonly Lazy<ICartRepository> _cartRepository;
     private readonly Lazy<IOrderRepository> _orderRepository;
+    private readonly Lazy<IWishlistRepository> _wishlistRepository;
 
 
     public RepositoryManager(RepositoryContext repositoryContext)
@@ -22,6 +23,7 @@ public sealed class RepositoryManager : IRepositoryManager
         _imageRepository = new Lazy<IImageRepository>( () => new ImageRepository(repositoryContext));
         _cartRepository = new Lazy<ICartRepository>( () => new CartRepository(repositoryContext));
 		_orderRepository = new Lazy<IOrderRepository>(() => new OrderRepository(repositoryContext));
+        _wishlistRepository = new Lazy<IWishlistRepository>( () => new WishlistRepository(repositoryContext));
 
 	}
 
@@ -32,6 +34,7 @@ public sealed class RepositoryManager : IRepositoryManager
     public IImageRepository Image => _imageRepository.Value;
     public ICartRepository Cart => _cartRepository.Value;
     public IOrderRepository Order => _orderRepository.Value;
+    public IWishlistRepository Wishlist => _wishlistRepository.Value;
 
     public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
     public void Save() => _repositoryContext.SaveChanges();

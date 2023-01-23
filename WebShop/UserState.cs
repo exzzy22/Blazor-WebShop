@@ -4,6 +4,7 @@ public class UserState : INotifyPropertyChanged
 {
 	private UserVM? _user;
 	private CartVM _cart = new();
+	private WishlistVM _wishlist = new();
 	private readonly IApiService _apiService;
 	private readonly ILocalStorageService _localStorageService;
 
@@ -47,6 +48,23 @@ public class UserState : INotifyPropertyChanged
 		}
 	}
 
+	public WishlistVM Wishlist
+	{
+		get
+		{
+			return _wishlist;
+		}
+
+		set
+		{
+			if (value != _wishlist)
+			{
+				_wishlist = value;
+				NotifyPropertyChanged();
+			}
+		}
+	}
+
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -57,6 +75,12 @@ public class UserState : INotifyPropertyChanged
 			string cartID = await _localStorageService.GetItemAsStringAsync("CartId");
 			Cart = await _apiService.GetCart(Convert.ToInt32(cartID));
 		}
+
+		if (await _localStorageService.ContainKeyAsync("WishlistId"))
+		{
+			string wishlistID = await _localStorageService.GetItemAsStringAsync("WishlistId");
+			Wishlist = await _apiService.GetWishlist(Convert.ToInt32(wishlistID));
+		}
 	}
 
 	public async Task LoadUserData()
@@ -65,6 +89,11 @@ public class UserState : INotifyPropertyChanged
 		if (Cart.Id != default)
 		{
 			Cart = await _apiService.JoinCartToUser(Cart.Id,User.Id);
+		}
+
+		if (Wishlist.Id != default)
+		{
+			Wishlist = await _apiService.JoinWishlistToUser(Wishlist.Id, User.Id);
 		}
 	}
 
@@ -78,13 +107,17 @@ public class UserState : INotifyPropertyChanged
 		}
 	}
 
-	public async Task RemoveFromCart(int productId) 
+	public async Task RemoveFromCart(int productId) => Cart = await _apiService.RemoveProductFromCart(productId, Cart.Id);
+
+	public async Task AddRemoveFromWishlist(int productId)
 	{
-		Cart = await _apiService.RemoveProductFromCart(productId, Cart.Id);
+		Wishlist = await _apiService.AddRemoveFromWishlist(Wishlist.Id,productId,User is null ? null : User.Id);
+
+		if (!await _localStorageService.ContainKeyAsync("WishlistId"))
+		{
+			await _localStorageService.SetItemAsStringAsync("WishlistId", Cart.Id.ToString());
+		}
 	}
 
-	private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
+	private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }

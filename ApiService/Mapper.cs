@@ -32,5 +32,6 @@ public class Mapper : Profile
         CreateMap<TokenVM, TokenDto>().ReverseMap();
         CreateMap<OrderVM, OrderDto>().ReverseMap();
         CreateMap<AdressDto, AdressVM>().ReverseMap();
+		CreateMap<WishlistVM, WishlistDto>().ReverseMap();
 	}
 }

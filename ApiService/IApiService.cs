@@ -51,8 +51,14 @@ public interface IApiService
     Task<CartVM> JoinCartToUser(int cartId, int userId);
     #endregion
 
-    #region Payment
-    Task<string> CreatePayment(OrderVM order);
+    #region Wishlist
+    Task<WishlistVM> AddRemoveFromWishlist(int wishlistId, int productId, int? userId = null);
+	Task<WishlistVM> GetWishlist(int id);
+	Task<WishlistVM> JoinWishlistToUser(int wishlistId, int userId);
+	#endregion
+
+	#region Payment
+	Task<string> CreatePayment(OrderVM order);
     #endregion
     bool AuthenticationHeaderExits();
     void SetAuthenticationHeader(string jwtToken);

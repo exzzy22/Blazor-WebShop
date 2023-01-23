@@ -32,5 +32,6 @@ public class Mapper : Profile
         CreateMap<ProductCartDto,ProductCart>().ReverseMap();
         CreateMap<UserForRegistrationDto, User>();
         CreateMap<Address, AdressDto>().ReverseMap();
-    }
+		CreateMap<Wishlist, WishlistDto>().ReverseMap();
+	}
 }

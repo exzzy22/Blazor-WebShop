@@ -18,5 +18,9 @@ public interface IProductService
 	Task<CartDto> RemoveProductFromCart(int productId, int cartId);
 	Task<CartDto> GetCart(int cartId);
     Task<CartDto> JoinCartToUser(int cartId, int userId);
-	Task<WishlistDto> AddRemoveFromWishlist(int productId);
+
+	Task<WishlistDto> AddRemoveFromWishlist(int wishlistId, int productId, int? userId = null);
+    Task<WishlistDto> GetWishlist(int id);
+	Task<WishlistDto> JoinWishlistToUser(int wishlistId, int userId);
+
 }

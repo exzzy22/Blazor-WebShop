@@ -11,6 +11,7 @@ namespace Repository
         IImageRepository Image { get; }
         ICartRepository Cart { get; }
         IOrderRepository Order { get; }
+        IWishlistRepository Wishlist { get; }
 
 
         Task SaveAsync();

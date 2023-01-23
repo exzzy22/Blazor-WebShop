@@ -208,11 +208,46 @@ internal sealed class ProductService : IProductService
 
         await _repository.SaveAsync();
 
-		return _mapper.Map<CartDto>(await _repository.Cart.GetCartAsync(cartId, false));
+		return _mapper.Map<CartDto>(cart);
 	}
 
-	public Task<WishlistDto> AddRemoveFromWishlist(int productId)
+	public async Task<WishlistDto> AddRemoveFromWishlist(int wishlistId, int productId, int? userId = null)
 	{
-		throw new NotImplementedException();
+        if(wishlistId == default)
+        {
+            Product product = await _repository.Product.GetProductAsync(productId, true) ?? throw new ProductNotFound(productId);
+
+			Wishlist wishlist = new Wishlist { UserId = userId };
+
+			product.Wishlists.Add(wishlist);
+
+			await _repository.SaveAsync();
+
+            return _mapper.Map<WishlistDto>(wishlist);
+		}
+
+		Wishlist wishlistDb = await _repository.Wishlist.GetById(wishlistId, true);
+
+		if (wishlistDb.Products.Any(w => w.Id == productId))
+			wishlistDb.Products.Remove(wishlistDb.Products.First(w => w.Id == productId));
+
+        else
+			wishlistDb.Products.Add(await _repository.Product.GetProductAsync(productId, false) ?? throw new ProductNotFound(productId));
+
+        await _repository.SaveAsync();
+
+        return _mapper.Map<WishlistDto>(wishlistDb);
+	}
+
+	public async Task<WishlistDto> GetWishlist(int id) => _mapper.Map<WishlistDto>(await _repository.Wishlist.GetById(id, false));
+
+	public async Task<WishlistDto> JoinWishlistToUser(int wishlistId, int userId)
+	{
+		Wishlist wishlist = await _repository.Wishlist.GetById(wishlistId, true);
+		wishlist.UserId = userId;
+
+		await _repository.SaveAsync();
+
+		return _mapper.Map<WishlistDto>(wishlist);
 	}
 }

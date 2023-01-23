@@ -306,10 +306,39 @@ public sealed class ApiService : IApiService
 
 		return _mapper.Map<CartVM>(cartResponse);
 	}
-    #endregion
+	#endregion
 
-    #region Payment
-    public async Task<string> CreatePayment(OrderVM order)
+	#region Wishlist
+	public async Task<WishlistVM> AddRemoveFromWishlist(int wishlistId, int productId, int? userId = null)
+	{
+		HttpResponseMessage response = await _httpClient.PostAsync($"api/product/wishlist/{wishlistId}/{productId}/{userId}", null);
+
+		WishlistDto wishlist = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return _mapper.Map<WishlistVM>(wishlist);
+	}
+
+	public async Task<WishlistVM> GetWishlist(int id)
+	{
+		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/wishlist/{id}");
+
+		WishlistDto wishlist = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return _mapper.Map<WishlistVM>(wishlist);
+	}
+
+	public async Task<WishlistVM> JoinWishlistToUser(int wishlistId, int userId)
+	{
+		HttpResponseMessage response = await _httpClient.PostAsync($"api/product/wishlist/join/{wishlistId}/{userId}",null);
+
+		WishlistDto wishlist = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return _mapper.Map<WishlistVM>(wishlist);
+	}
+	#endregion
+
+	#region Payment
+	public async Task<string> CreatePayment(OrderVM order)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/payment/create", _mapper.Map<OrderDto>(order));
 
@@ -317,5 +346,5 @@ public sealed class ApiService : IApiService
 
         return paymentUrl;
     }
-    #endregion
+	#endregion
 }

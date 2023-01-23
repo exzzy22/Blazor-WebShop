@@ -17,36 +17,16 @@ public class ProductController : ControllerBase
     }
 
 	[HttpGet("{productId}")]
-    public async Task<IActionResult> GetProduct(int productId)
-    {
-        ProductDto product = await _serviceManager.ProductService.GetProductAsync(productId);
-
-        return Ok(product);
-    }
+    public async Task<IActionResult> GetProduct(int productId) => Ok(await _serviceManager.ProductService.GetProductAsync(productId));
 
     [HttpGet("update/{productId}")]
-    public async Task<IActionResult> GetProductForUpdate(int productId)
-    {
-        ProductForCreationDto product = await _serviceManager.ProductService.GetProductForUpdateAsync(productId);
-
-        return Ok(product);
-    }
+    public async Task<IActionResult> GetProductForUpdate(int productId) => Ok(await _serviceManager.ProductService.GetProductForUpdateAsync(productId));
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetProducts()
-    {
-        IEnumerable<ProductDto>? products = await _serviceManager.ProductService.GetProductsAsync();
-
-        return Ok(products);
-    }
+    public async Task<IActionResult> GetProducts() => Ok(await _serviceManager.ProductService.GetProductsAsync());
 
     [HttpGet("carousel/topSelling/{numberOfProducts}")]
-    public async Task<IActionResult> GetCarouselTopSelling(int numberOfProducts)
-    {
-        IEnumerable<ProductCarouselDto> carousel = await _serviceManager.ProductService.GetCarouselProductsAsync(p => (p.Sold), numberOfProducts);
-
-        return Ok(carousel);
-    }
+    public async Task<IActionResult> GetCarouselTopSelling(int numberOfProducts) => Ok(await _serviceManager.ProductService.GetCarouselProductsAsync(p => (p.Sold), numberOfProducts));
 
     [HttpPost("add")]
     public async Task<IActionResult> AddProduct(ProductForCreationDto product)
@@ -154,18 +134,25 @@ public class ProductController : ControllerBase
 
 	[HttpGet("cart/add/{productId}/{cartId}/{quantity}/{userId?}")]
 	public async Task<IActionResult> AddProductToCart(int productId, int cartId, int quantity, int? userId = null) => Ok(await _serviceManager.ProductService.AddProductToCart(productId,cartId,quantity,userId));
+
 	[HttpGet("cart/remove/{productId}/{cartId}")]
 	public async Task<IActionResult> RemoveProductFromCart(int productId, int cartId) => Ok(await _serviceManager.ProductService.RemoveProductFromCart(productId, cartId));
 
 	[HttpGet("cart/{cartId}")]
 	public async Task<IActionResult> GetCart(int cartId) => Ok(await _serviceManager.ProductService.GetCart(cartId));
 
-	[HttpGet("cart/{cartId}/{userId}")]
+    [HttpGet("cart/{cartId}/{userId}")]
     [Authorize]
-	public async Task<IActionResult> JoinCartToUser(int cartId, int userId)
-	{
-		CartDto cart = await _serviceManager.ProductService.JoinCartToUser(cartId, userId);
+    public async Task<IActionResult> JoinCartToUser(int cartId, int userId) => Ok(await _serviceManager.ProductService.JoinCartToUser(cartId, userId));
 
-		return Ok(cart);
-	}
+	[HttpGet("wishlist/{id}")]
+	public async Task<IActionResult> GetWishlist(int id) => Ok(await _serviceManager.ProductService.GetWishlist(id));
+
+	[HttpPost("wishlist/{wishlistId}/{productId}/{userId?}")]
+	public async Task<IActionResult> AddRemoveFromWishlist(int wishlistId, int productId, int? userId = null) => Ok(await _serviceManager.ProductService.AddRemoveFromWishlist(wishlistId, productId,userId));
+
+	[HttpPost("wishlist/join/{wishlistId}/{userId}")]
+	public async Task<IActionResult> JoinWishlistToUser(int wishlistId, int userId) => Ok(await _serviceManager.ProductService.JoinWishlistToUser(wishlistId,userId));
+
+
 }
