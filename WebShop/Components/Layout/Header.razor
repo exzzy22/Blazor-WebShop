@@ -61,7 +61,7 @@
 					<div class="header-ctn">
 						<!-- Wishlist -->
 						<div>
-							<a href="#">
+							<a href="@($"profile/{(int)ProfileSections.Wishlist}")">
 								<i class="fa fa-heart-o"></i>
 								<span>Your Wishlist</span>
 								<div class="@(Wishlist.Products.Count > 0 ? "qty" : "qty hide")">@Wishlist.Products.Count</div>
@@ -70,7 +70,7 @@
 						<!-- /Wishlist -->
 						<!-- Cart -->
 						<div class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" style="cursor: pointer;">
 								<i class="fa fa-shopping-cart"></i>
 								<span>Your Cart</span>
 								<div class="@(Cart.Products.Count > 0 ? "qty" : "qty hide")">@(Cart.Products.Sum(p => p.Quantity))</div>
@@ -95,8 +95,8 @@
 									<small>@(Cart.Products.Sum(p => p.Quantity)) Item(s) selected</small>
 									<h5>SUBTOTAL: @(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @Cart.GetCartTotal(StaticConfig.Currency).ToPriceString()</h5>
 								</div>
-								<div class="cart-btns">
-									<a @onclick='() => NavigationManager.NavigateTo("cart")'>View Cart</a>
+								<div class="cart-btns" style="cursor: pointer;">
+									<a @onclick='() => NavigationManager.NavigateTo($"profile/{(int)ProfileSections.Wishlist}")'>View Cart</a>
 									<a @onclick='() => NavigationManager.NavigateTo("checkout")'>Checkout  <i class="fa fa-arrow-circle-right"></i></a>
 								</div>
 							</div>

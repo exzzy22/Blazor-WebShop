@@ -3,7 +3,7 @@
 public interface IProductRepository
 {
     void Create(Product product);
-    Task<Product?> GetProductAsync(int id, bool trackChanges);
+    Task<Product?> GetProductAsync(int id, bool trackChanges, bool ignoreAutoIncludes = false);
     void Update(Product product);
     void Delete(Product product);
     Task<IEnumerable<Product>> GetProductsAsync();

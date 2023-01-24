@@ -5,13 +5,23 @@ internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepo
     private readonly RepositoryContext _repositoryContext;
     public ProductRepository(RepositoryContext repositoryContext) : base(repositoryContext) => _repositoryContext = repositoryContext;
 
-    public async Task<Product?> GetProductAsync(int id, bool trackChanges) => await FindByCondition(p => p.Id.Equals(id), trackChanges)
+    public async Task<Product?> GetProductAsync(int id, bool trackChanges, bool ignoreAutoIncludes = false) =>
+        !ignoreAutoIncludes ?
+        await FindByCondition(p => p.Id.Equals(id), trackChanges)
         .Include(p => p.Category)
         .Include(p => p.Attributes)
         .Include(p => p.Images)
-        .FirstOrDefaultAsync();
+        .FirstOrDefaultAsync()
+        :
+        await FindByCondition(p => p.Id.Equals(id), trackChanges)
+        .Include(p => p.Category)
+        .Include(p => p.Attributes)
+        .Include(p => p.Images)
+		.IgnoreAutoIncludes()
+		.FirstOrDefaultAsync();
 
-    public async Task<IEnumerable<Product>> GetProductsAsync() => await FindAll(false)
+
+	public async Task<IEnumerable<Product>> GetProductsAsync() => await FindAll(false)
         .Include(p => p.Category)
         .Include(p => p.Attributes)
         .Include(p => p.Images)

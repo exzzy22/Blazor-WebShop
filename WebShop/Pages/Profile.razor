@@ -1,4 +1,5 @@
 ﻿@page "/profile"
+@page "/profile/{SectionId:int?}"
 
 <!-- SECTION -->
 <div class="section">
@@ -8,15 +9,15 @@
         <div class="row">
                 <div class="col-md-4">
                     <div id="profile-menu" class="list-group">
-                        <button @onclick="() => Section = ProfileSections.Details" class="list-group-item list-group-item-action @(Section == ProfileSections.Details ? "active" : null)">Details</button>
-                        <button @onclick="() => Section = ProfileSections.ChangePassword" class="list-group-item list-group-item-action @(Section == ProfileSections.ChangePassword ? "active" : null)">Change Password</button>
-                        <button @onclick="() => Section = ProfileSections.Orders" class="list-group-item list-group-item-action @(Section == ProfileSections.Orders ? "active" : null)">Orders</button>
-                        <button @onclick="() => Section = ProfileSections.Wishlist" class="list-group-item list-group-item-action @(Section == ProfileSections.Wishlist ? "active" : null)">Wishlist</button>
-                        <button @onclick="() => Section = ProfileSections.Cart" class="list-group-item list-group-item-action @(Section == ProfileSections.Cart ? "active" : null)">Cart</button>
+                        <button @onclick="() => _section = ProfileSections.Details" class="list-group-item list-group-item-action @(_section == ProfileSections.Details ? "active" : null)">Details</button>
+                        <button @onclick="() => _section = ProfileSections.ChangePassword" class="list-group-item list-group-item-action @(_section == ProfileSections.ChangePassword ? "active" : null)">Change Password</button>
+                        <button @onclick="() => _section = ProfileSections.Orders" class="list-group-item list-group-item-action @(_section == ProfileSections.Orders ? "active" : null)">Orders</button>
+                        <button @onclick="() => _section = ProfileSections.Wishlist" class="list-group-item list-group-item-action @(_section == ProfileSections.Wishlist ? "active" : null)">Wishlist</button>
+                        <button @onclick="() => _section = ProfileSections.Cart" class="list-group-item list-group-item-action @(_section == ProfileSections.Cart ? "active" : null)">Cart</button>
                         <button class="list-group-item list-group-item-action" @onclick="async () => await LogOut()">Logout</button>
                     </div>
                 </div>
-                @switch (Section)
+                @switch (_section)
                 {
                     case ProfileSections.Details:
                     <Details/> 
@@ -35,14 +36,22 @@
 </div>
 
 @code {
-    ProfileSections Section = ProfileSections.Details;
+    ProfileSections _section = ProfileSections.Details;
 
+    [Parameter]
+    public int? SectionId { get; set; }
     [Inject]
     AuthenticationStateProvider AuthenticationState { get; set; } = null!;
     [Inject]
     IJSRuntime JSRuntime { get; set; } = null!;
     [Inject]
     NavigationManager NavigationManager { get; set; } = null!;
+
+    protected override void OnParametersSet()
+    {
+        if (SectionId is not null)
+            _section = (ProfileSections)SectionId;
+    }
 
     async Task LogOut()
     {

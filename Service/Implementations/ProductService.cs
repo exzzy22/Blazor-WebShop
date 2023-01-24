@@ -215,7 +215,7 @@ internal sealed class ProductService : IProductService
 	{
         if(wishlistId == default)
         {
-            Product product = await _repository.Product.GetProductAsync(productId, true) ?? throw new ProductNotFound(productId);
+            Product product = await _repository.Product.GetProductAsync(productId, true,true) ?? throw new ProductNotFound(productId);
 
 			Wishlist wishlist = new Wishlist { UserId = userId };
 
@@ -232,7 +232,7 @@ internal sealed class ProductService : IProductService
 			wishlistDb.Products.Remove(wishlistDb.Products.First(w => w.Id == productId));
 
         else
-			wishlistDb.Products.Add(await _repository.Product.GetProductAsync(productId, false) ?? throw new ProductNotFound(productId));
+			wishlistDb.Products.Add(await _repository.Product.GetProductAsync(productId, false, true) ?? throw new ProductNotFound(productId));
 
         await _repository.SaveAsync();
 

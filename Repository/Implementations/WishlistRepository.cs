@@ -8,5 +8,6 @@ public class WishlistRepository : RepositoryBase<Wishlist>, IWishlistRepository
 	public async Task<Wishlist> GetById(int id, bool trackChanges) => 
 		await FindByCondition(w => w.Id == id, trackChanges)
 		.Include(w => w.Products)
+		.ThenInclude(p => p.Images)
 		.FirstAsync();
 }

@@ -115,7 +115,7 @@ public class UserState : INotifyPropertyChanged
 
 		if (!await _localStorageService.ContainKeyAsync("WishlistId"))
 		{
-			await _localStorageService.SetItemAsStringAsync("WishlistId", Cart.Id.ToString());
+			await _localStorageService.SetItemAsStringAsync("WishlistId", Wishlist.Id.ToString());
 		}
 	}
 
