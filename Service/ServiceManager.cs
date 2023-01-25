@@ -26,7 +26,7 @@ namespace Service
             _productService = new Lazy<IProductService>(()=> new ProductService(repositoryManager,logger,mapper,webHostEnvironment,accessor, configuration));
             _categoryService = new Lazy<ICategoryService>(() => new CategoryService(repositoryManager, logger, mapper));
             _currencyService = new Lazy<ICurrencyService>(() => new CurrencyService(repositoryManager, logger, mapper));
-            _paymentService = new Lazy<IPaymentService>( () => new StripeService(configuration,repositoryManager,mapper));
+            _paymentService = new Lazy<IPaymentService>( () => new PaymentService(configuration,repositoryManager,mapper));
         }
         public IAuthenticationService AuthenticationService => _authenticationService.Value;
         public IProductService ProductService => _productService.Value;

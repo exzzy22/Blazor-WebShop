@@ -2309,3 +2309,78 @@ input[type=number] {
     }
 } 
 
+/*Payment page*/
+
+.payment {
+    border: 1px solid #f2f2f2;
+    height: 280px;
+    border-radius: 20px;
+    background: #fff;
+    margin:2em;
+}
+
+.payment_header {
+    background: #D10024;
+    padding: 20px;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.payment_header.success {
+    background: #2ecc71;
+}
+
+.payment_header.error {
+    background: #D10024;
+}
+
+.check {
+    margin: 0px auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    background: #fff;
+    text-align: center;
+}
+
+    .check i {
+        vertical-align: middle;
+        line-height: 50px;
+        font-size: 30px;
+    }
+
+.content {
+    text-align: center;
+}
+
+    .content h1 {
+        font-size: 25px;
+        padding-top: 25px;
+    }
+
+    .content p {
+        margin:2em;
+    }
+
+    .content a {
+        width: 200px;
+        height: 35px;
+        color: #fff;
+        border-radius: 30px;
+        padding: 5px 10px;
+        transition: all ease-in-out 0.3s;
+    }
+
+        .content a.success {
+            background: #2ecc71;
+        }
+
+        .content a.error {
+            background: #D10024;
+        }
+
+
+        .content a:hover {
+            text-decoration: none;
+            background: #000;
+        }
+

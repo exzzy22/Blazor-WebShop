@@ -148,7 +148,9 @@ internal sealed class ProductService : IProductService
 
     public async Task<CartDto> GetCart(int cartId) => _mapper.Map<CartDto>(await _repository.Cart.GetCartAsync(cartId, false));
 
-	public async Task<CartDto> AddProductToCart(int productId, int cartId, int quantity, int? userId = null)
+    public async Task<CartDto> GetUserCart(int userId) => _mapper.Map<CartDto>(await _repository.Cart.GetUserCartAsync(userId, false) ?? throw new CartNotFound(userId));
+
+    public async Task<CartDto> AddProductToCart(int productId, int cartId, int quantity, int? userId = null)
 	{
         if (cartId == default)
         {
@@ -201,7 +203,18 @@ internal sealed class ProductService : IProductService
 		return _mapper.Map<CartDto>(dbCart);
 	}
 
-	public async Task<CartDto> JoinCartToUser(int cartId, int userId)
+    public async Task<CartDto> ClearCart(int cartId)
+    {
+        Cart dbCart = await _repository.Cart.GetCartAsync(cartId, true) ?? throw new CartNotFound(cartId);
+
+        dbCart.Products.Clear();
+
+        await _repository.SaveAsync();
+
+        return _mapper.Map<CartDto>(dbCart);
+    }
+
+    public async Task<CartDto> JoinCartToUser(int cartId, int userId)
 	{
         Cart cart = await _repository.Cart.GetCartAsync(cartId,true) ?? throw new CartNotFound(cartId);
         cart.UserId = userId;
@@ -241,7 +254,8 @@ internal sealed class ProductService : IProductService
 
 	public async Task<WishlistDto> GetWishlist(int id) => _mapper.Map<WishlistDto>(await _repository.Wishlist.GetById(id, false));
 
-	public async Task<WishlistDto> JoinWishlistToUser(int wishlistId, int userId)
+    public async Task<WishlistDto> GetUserWishlist(int userId) => _mapper.Map<WishlistDto>(await _repository.Wishlist.GetUserWishList(userId, false));
+    public async Task<WishlistDto> JoinWishlistToUser(int wishlistId, int userId)
 	{
 		Wishlist wishlist = await _repository.Wishlist.GetById(wishlistId, true);
 		wishlist.UserId = userId;

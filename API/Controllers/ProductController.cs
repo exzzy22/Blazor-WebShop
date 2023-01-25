@@ -132,14 +132,20 @@ public class ProductController : ControllerBase
         return NoContent();
     }
 
-	[HttpGet("cart/add/{productId}/{cartId}/{quantity}/{userId?}")]
+	[HttpPost("cart/add/{productId}/{cartId}/{quantity}/{userId?}")]
 	public async Task<IActionResult> AddProductToCart(int productId, int cartId, int quantity, int? userId = null) => Ok(await _serviceManager.ProductService.AddProductToCart(productId,cartId,quantity,userId));
 
-	[HttpGet("cart/remove/{productId}/{cartId}")]
+	[HttpPost("cart/remove/{productId}/{cartId}")]
 	public async Task<IActionResult> RemoveProductFromCart(int productId, int cartId) => Ok(await _serviceManager.ProductService.RemoveProductFromCart(productId, cartId));
 
-	[HttpGet("cart/{cartId}")]
+    [HttpPost("cart/clear/{cartId}")]
+    public async Task<IActionResult> ClearCart(int cartId) => Ok(await _serviceManager.ProductService.ClearCart(cartId));
+
+    [HttpGet("cart/{cartId}")]
 	public async Task<IActionResult> GetCart(int cartId) => Ok(await _serviceManager.ProductService.GetCart(cartId));
+
+    [HttpGet("cart/user/{userId}")]
+    public async Task<IActionResult> GetUserCart(int userId) => Ok(await _serviceManager.ProductService.GetUserCart(userId));
 
     [HttpGet("cart/{cartId}/{userId}")]
     [Authorize]
@@ -148,11 +154,15 @@ public class ProductController : ControllerBase
 	[HttpGet("wishlist/{id}")]
 	public async Task<IActionResult> GetWishlist(int id) => Ok(await _serviceManager.ProductService.GetWishlist(id));
 
-	[HttpPost("wishlist/{wishlistId}/{productId}/{userId?}")]
+    [HttpGet("wishlist/user/{userId}")]
+    public async Task<IActionResult> GetUserWishlist(int userId) => Ok(await _serviceManager.ProductService.GetUserWishlist(userId));
+
+    [HttpPost("wishlist/{wishlistId}/{productId}/{userId?}")]
 	public async Task<IActionResult> AddRemoveFromWishlist(int wishlistId, int productId, int? userId = null) => Ok(await _serviceManager.ProductService.AddRemoveFromWishlist(wishlistId, productId,userId));
 
 	[HttpPost("wishlist/join/{wishlistId}/{userId}")]
-	public async Task<IActionResult> JoinWishlistToUser(int wishlistId, int userId) => Ok(await _serviceManager.ProductService.JoinWishlistToUser(wishlistId,userId));
+    [Authorize]
+    public async Task<IActionResult> JoinWishlistToUser(int wishlistId, int userId) => Ok(await _serviceManager.ProductService.JoinWishlistToUser(wishlistId,userId));
 
 
 }

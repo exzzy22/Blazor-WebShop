@@ -275,7 +275,7 @@ public sealed class ApiService : IApiService
 
 	public async Task<CartVM> AddProductToCart(int productId, int cartId, int quantity, int? userId = null)
     {
-		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/add/{productId}/{cartId}/{quantity}/{userId}");
+		HttpResponseMessage response = await _httpClient.PostAsync($"api/product/cart/add/{productId}/{cartId}/{quantity}/{userId}",null);
 
 		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -283,7 +283,7 @@ public sealed class ApiService : IApiService
 	}
 	public async Task<CartVM> RemoveProductFromCart(int productId, int cartId)
     {
-		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/remove/{productId}/{cartId}");
+		HttpResponseMessage response = await _httpClient.PostAsync($"api/product/cart/remove/{productId}/{cartId}", null);
 
 		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -298,7 +298,26 @@ public sealed class ApiService : IApiService
 
 		return _mapper.Map<CartVM>(cartResponse);
 	}
-	public async Task<CartVM> JoinCartToUser(int cartId, int userId)
+
+    public async Task<CartVM> GetUserCart(int userId)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/user/{userId}");
+
+        CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+        return _mapper.Map<CartVM>(cartResponse);
+    }
+
+    public async Task<CartVM> ClearCart(int cartId)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsync($"api/product/cart/clear/{cartId}", null);
+
+        CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+        return _mapper.Map<CartVM>(cartResponse);
+    }
+
+    public async Task<CartVM> JoinCartToUser(int cartId, int userId)
 	{
 		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/{cartId}/{userId}");
 
@@ -327,7 +346,16 @@ public sealed class ApiService : IApiService
 		return _mapper.Map<WishlistVM>(wishlist);
 	}
 
-	public async Task<WishlistVM> JoinWishlistToUser(int wishlistId, int userId)
+    public async Task<WishlistVM> GetUserWishlist(int userId)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/product/wishlist/user/{userId}");
+
+        WishlistDto wishlist = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+        return _mapper.Map<WishlistVM>(wishlist);
+    }
+
+    public async Task<WishlistVM> JoinWishlistToUser(int wishlistId, int userId)
 	{
 		HttpResponseMessage response = await _httpClient.PostAsync($"api/product/wishlist/join/{wishlistId}/{userId}",null);
 
@@ -346,5 +374,12 @@ public sealed class ApiService : IApiService
 
         return paymentUrl;
     }
-	#endregion
+
+    public async Task<bool> ValidatePayment(int orderId, string sessionId)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsync($"api/payment/validate/{orderId}/{sessionId}", null);
+
+        return response.IsSuccessStatusCode;
+    }
+    #endregion
 }

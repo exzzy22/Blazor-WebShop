@@ -17,10 +17,13 @@ public interface IProductService
     Task<CartDto> AddProductToCart(int productId, int cartId, int quantity, int? userId = null);
 	Task<CartDto> RemoveProductFromCart(int productId, int cartId);
 	Task<CartDto> GetCart(int cartId);
+    Task<CartDto> GetUserCart(int userId);
+    Task<CartDto> ClearCart(int cartId);
     Task<CartDto> JoinCartToUser(int cartId, int userId);
 
 	Task<WishlistDto> AddRemoveFromWishlist(int wishlistId, int productId, int? userId = null);
     Task<WishlistDto> GetWishlist(int id);
-	Task<WishlistDto> JoinWishlistToUser(int wishlistId, int userId);
+    Task<WishlistDto> GetUserWishlist(int userId);
+    Task<WishlistDto> JoinWishlistToUser(int wishlistId, int userId);
 
 }

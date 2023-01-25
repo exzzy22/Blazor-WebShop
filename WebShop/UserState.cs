@@ -75,13 +75,31 @@ public class UserState : INotifyPropertyChanged
 			string cartID = await _localStorageService.GetItemAsStringAsync("CartId");
 			Cart = await _apiService.GetCart(Convert.ToInt32(cartID));
 		}
+		else if (User is not null)
+		{ 
+			CartVM? cart = await _apiService.GetUserCart(User.Id);
+			if (cart is not null)
+			{
+				Cart = cart;
+                await _localStorageService.SetItemAsStringAsync("CartId", Cart.Id.ToString());
+            }
+        }
 
 		if (await _localStorageService.ContainKeyAsync("WishlistId"))
 		{
 			string wishlistID = await _localStorageService.GetItemAsStringAsync("WishlistId");
 			Wishlist = await _apiService.GetWishlist(Convert.ToInt32(wishlistID));
 		}
-	}
+		else if (User is not null)
+		{
+            WishlistVM? wishlist = await _apiService.GetUserWishlist(User.Id);
+			if (wishlist is not null)
+			{
+				Wishlist = wishlist;
+                await _localStorageService.SetItemAsStringAsync("WishlistId", Wishlist.Id.ToString());
+            }
+        }
+    }
 
 	public async Task LoadUserData()
 	{
@@ -89,12 +107,14 @@ public class UserState : INotifyPropertyChanged
 		if (Cart.Id != default)
 		{
 			Cart = await _apiService.JoinCartToUser(Cart.Id,User.Id);
-		}
+            await _localStorageService.SetItemAsStringAsync("CartId", Cart.Id.ToString());
+        }
 
 		if (Wishlist.Id != default)
 		{
 			Wishlist = await _apiService.JoinWishlistToUser(Wishlist.Id, User.Id);
-		}
+            await _localStorageService.SetItemAsStringAsync("WishlistId", Wishlist.Id.ToString());
+        }
 	}
 
 	public async Task AddToCart(int productId, int quantity = 1) 
@@ -109,7 +129,9 @@ public class UserState : INotifyPropertyChanged
 
 	public async Task RemoveFromCart(int productId) => Cart = await _apiService.RemoveProductFromCart(productId, Cart.Id);
 
-	public async Task AddRemoveFromWishlist(int productId)
+    public async Task ClearCart() => Cart = await _apiService.ClearCart(Cart.Id);
+
+    public async Task AddRemoveFromWishlist(int productId)
 	{
 		Wishlist = await _apiService.AddRemoveFromWishlist(Wishlist.Id,productId,User is null ? null : User.Id);
 

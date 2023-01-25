@@ -1,0 +1,65 @@
+﻿@page "/{OrderId:int}/{SessionId}"
+
+
+<div class="container">
+    <div class="row">
+        <div class="row d-flex justify-content-center">
+            <div class="col-xs-12 my-div mx-auto">
+                @if (_isError)
+                {
+                <div class="payment">
+                    <div class="payment_header error">
+                        <div class="check">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h1>Payment Error !</h1>
+                        <p>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </p>
+                        <a class="error" href="/">Go to Home</a>
+                    </div>
+                    </div>
+                }
+                else
+                {
+                <div class="payment">
+                    <div class="payment_header success">
+                        <div class="check">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h1>Payment Success !</h1>
+                        <p>Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. </p>
+                        <a class="success" href="/">Go to Home</a>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    bool _isError = false;
+
+    [Parameter]
+    public int OrderId { get; set; }
+    [Parameter]
+    public string SessionId { get; set; } = null!;
+    [Inject]
+    IApiService ApiService { get; set; } = null!;
+    [Inject]
+    UserState UserState { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UserState.TryLoadData();
+
+        _isError = await ApiService.ValidatePayment(OrderId,SessionId);
+
+        if (!_isError)
+            await UserState.ClearCart();
+    }
+
+}

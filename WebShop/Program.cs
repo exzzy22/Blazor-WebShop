@@ -21,6 +21,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddSingleton<IApiService, ApiService>();
 builder.Services.AddSingleton<UserState>();
+builder.Services.AddOptions();
+builder.Services.AddAuthorizationCore();
 
 var host = builder.Build();
 

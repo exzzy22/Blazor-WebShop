@@ -1,18 +1,16 @@
 ﻿using Stripe;
-using System.Configuration;
-using Shared.ConfigurationModels.Configuration;
 using Configuration = Shared.ConfigurationModels.Configuration.Configuration;
-using Domain.Models;
 using Stripe.Checkout;
+using Shared.Extensions;
 
 namespace Service.Implementations;
 
-internal sealed class StripeService : IPaymentService
+internal sealed class PaymentService : IPaymentService
 {
     private readonly Configuration _configuration;
     private readonly IRepositoryManager _repositoryManager;
     private readonly IMapper _mapper;
-	public StripeService(IOptions<Configuration> configuration,IRepositoryManager repositoryManager,IMapper mapper)
+	public PaymentService(IOptions<Configuration> configuration,IRepositoryManager repositoryManager,IMapper mapper)
 	{
         StripeConfiguration.ApiKey = configuration.Value.Stripe.SecretKey;
         _configuration = configuration.Value;
@@ -33,6 +31,7 @@ internal sealed class StripeService : IPaymentService
 			UserId = cart.UserId,
             StripeId = "",
 			CurrencyISO4217 = order.CurrencyISO,
+            SessionId = Guid.NewGuid(),
             Amount = GetCartTotal(order.CurrencyISO, cart.Products.ToList()),
 		};
 
@@ -47,11 +46,19 @@ internal sealed class StripeService : IPaymentService
                 new SessionLineItemOptions
                 { 
                     Quantity = 1,
-                    PriceData = new SessionLineItemPriceDataOptions { UnitAmountDecimal = (decimal)GetCartTotal(order.CurrencyISO,cart.Products.ToList())*100, Currency = order.CurrencyISO, ProductData = new SessionLineItemPriceDataProductDataOptions { Name = "WebShop" } }
+                    PriceData = new SessionLineItemPriceDataOptions 
+                    { 
+                        UnitAmountDecimal = (decimal)GetCartTotal(order.CurrencyISO,cart.Products.ToList())*100, 
+                        Currency = order.CurrencyISO, 
+                        ProductData = new SessionLineItemPriceDataProductDataOptions 
+                        { 
+                            Name = "Blazor WebShop" 
+                        } 
+                    }
                 }
             } ,
             Mode = "payment",
-            SuccessUrl = _configuration.BaseUrls.WebShop + orderToCreate.Id,
+            SuccessUrl = _configuration.BaseUrls.WebShop + orderToCreate.Id + "/" + orderToCreate.SessionId.ToString().ComputeSha512Hash(),
             CancelUrl = _configuration.BaseUrls.WebShop,
             Currency= order.CurrencyISO,
         };
@@ -63,15 +70,28 @@ internal sealed class StripeService : IPaymentService
         orderToUpdate.StripeId = session.Id;
         await _repositoryManager.SaveAsync();
 
-
 		return session.Url;
     }
 
-	double GetCartTotal(string currencyIsoCode, List<ProductCart> products)
+    public async Task<bool> ValidatePayment(int orderId, string sessionId)
+    {
+        Order order = await _repositoryManager.Order.GetOrderAsync(orderId, true);
+
+        if(!order.SessionId.ToString().ComputeSha512Hash().Equals(sessionId))
+            return false;
+
+        order.Status = Domain.OrderStatus.Paid;
+
+        await _repositoryManager.SaveAsync();
+        
+        return true;
+    }
+
+    double GetCartTotal(string currencyIsoCode, List<ProductCart> products)
 	{
 		double sum = 0;
 
-		foreach (var product in products)
+		foreach (ProductCart product in products)
 		{
             double price = product.Product.Prices.First(p => p.Currency.ISO4217.Equals(currencyIsoCode)).Value;
 			sum += product.Quantity * CalculateDiscountedPrice(price, product.Product.Discount);

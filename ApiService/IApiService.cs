@@ -48,17 +48,21 @@ public interface IApiService
     Task<CartVM> AddProductToCart(int productId, int cartId, int quantity, int? userId = null);
 	Task<CartVM> RemoveProductFromCart(int productId, int cartId);
     Task<CartVM> GetCart(int cartId);
+    Task<CartVM> GetUserCart(int userId);
+    Task<CartVM> ClearCart(int cartId);
     Task<CartVM> JoinCartToUser(int cartId, int userId);
     #endregion
 
     #region Wishlist
     Task<WishlistVM> AddRemoveFromWishlist(int wishlistId, int productId, int? userId = null);
 	Task<WishlistVM> GetWishlist(int id);
-	Task<WishlistVM> JoinWishlistToUser(int wishlistId, int userId);
+    Task<WishlistVM> GetUserWishlist(int userId);
+    Task<WishlistVM> JoinWishlistToUser(int wishlistId, int userId);
 	#endregion
 
 	#region Payment
 	Task<string> CreatePayment(OrderVM order);
+    Task<bool> ValidatePayment(int orderId, string sessionId);
     #endregion
     bool AuthenticationHeaderExits();
     void SetAuthenticationHeader(string jwtToken);

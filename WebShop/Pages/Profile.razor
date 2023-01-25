@@ -9,12 +9,16 @@
         <div class="row">
                 <div class="col-md-4">
                     <div id="profile-menu" class="list-group">
+                        <AuthorizeView>
                         <button @onclick="() => _section = ProfileSections.Details" class="list-group-item list-group-item-action @(_section == ProfileSections.Details ? "active" : null)">Details</button>
                         <button @onclick="() => _section = ProfileSections.ChangePassword" class="list-group-item list-group-item-action @(_section == ProfileSections.ChangePassword ? "active" : null)">Change Password</button>
                         <button @onclick="() => _section = ProfileSections.Orders" class="list-group-item list-group-item-action @(_section == ProfileSections.Orders ? "active" : null)">Orders</button>
+                        </AuthorizeView>
                         <button @onclick="() => _section = ProfileSections.Wishlist" class="list-group-item list-group-item-action @(_section == ProfileSections.Wishlist ? "active" : null)">Wishlist</button>
                         <button @onclick="() => _section = ProfileSections.Cart" class="list-group-item list-group-item-action @(_section == ProfileSections.Cart ? "active" : null)">Cart</button>
+                        <AuthorizeView>
                         <button class="list-group-item list-group-item-action" @onclick="async () => await LogOut()">Logout</button>
+                        </AuthorizeView>
                     </div>
                 </div>
                 @switch (_section)
@@ -60,8 +64,5 @@
         NavigationManager.NavigateTo("/");
     }
 
-    async Task DeleteCookie()
-    {
-        await JSRuntime.InvokeVoidAsync("deleteCookie", "jwtToken");
-    }
+    async Task DeleteCookie() => await JSRuntime.InvokeVoidAsync("deleteCookie", "jwtToken");
 }

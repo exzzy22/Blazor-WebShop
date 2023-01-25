@@ -20,10 +20,10 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		await UserState.TryLoadData();
 		AuthenticationState.AuthenticationStateChanged += OnAuthenticationStateChanged;
 		var authState = await AuthenticationState.GetAuthenticationStateAsync();
 		User = authState.User;
+		await UserState.TryLoadData();
 	}
 
 

@@ -10,4 +10,10 @@ public class WishlistRepository : RepositoryBase<Wishlist>, IWishlistRepository
 		.Include(w => w.Products)
 		.ThenInclude(p => p.Images)
 		.FirstAsync();
+
+    public async Task<Wishlist> GetUserWishList(int userId, bool trackChanges) =>
+        await FindByCondition(w => w.UserId == userId, trackChanges)
+        .Include(w => w.Products)
+        .ThenInclude(p => p.Images)
+        .FirstAsync();
 }
