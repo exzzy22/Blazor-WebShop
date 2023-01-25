@@ -1,4 +1,11 @@
-﻿<div class="col-md-8">
+﻿@if (WishlistVM.Products.Count == 0)
+{
+	<div class="col-md-8">
+		<img src="./img/emptycart.png" />
+	</div>
+	return;
+}
+<div class="col-md-8">
 <table class="table">
 	<tbody>
 	@foreach (var product in WishlistVM.Products)
@@ -53,6 +60,6 @@
 	{
 		_loader = true;
 		await UserState.AddRemoveFromWishlist(productId);
-		_loader = true;
+		_loader = false;
 	}
 }

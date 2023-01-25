@@ -188,6 +188,9 @@
 	protected override async Task OnInitializedAsync()
 	{
 		Cart = UserState.Cart;
+		if (Cart.Products.Count == 0)
+			NavigationManager.NavigateTo("/");
+
 		if (UserState.User is not null)
 			LoadAddress();
 

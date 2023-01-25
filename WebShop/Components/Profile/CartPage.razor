@@ -1,4 +1,11 @@
-﻿<div class="col-md-8">
+﻿@if (Cart.Products.Count == 0)
+{
+	<div class="col-md-8">
+		<img src="./img/emptycart.png" />
+	</div>
+	return;
+}
+<div class="col-md-8">
 	<table class="table">
 		<tbody>
 			@foreach (var product in Cart.Products)
