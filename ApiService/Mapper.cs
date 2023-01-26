@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Shared.RequestFeatures;
 using ViewModels;
 
 namespace ApiServices;
@@ -30,8 +31,10 @@ public class Mapper : Profile
 		CreateMap<UserForRegistrationVM, UserForRegistrationDto>().ReverseMap();
 		CreateMap<UserForAuthenticationVM, UserForAuthenticationDto>().ReverseMap();
         CreateMap<TokenVM, TokenDto>().ReverseMap();
-        CreateMap<OrderVM, OrderDto>().ReverseMap();
-        CreateMap<AdressDto, AdressVM>().ReverseMap();
+        CreateMap<OrderForCreationVM, OrderForCreationDto>().ReverseMap();
+        CreateMap<AddressDto, AddressVM>().ReverseMap();
 		CreateMap<WishlistVM, WishlistDto>().ReverseMap();
+        CreateMap<OrderVM, OrderDto>().ReverseMap();
+		CreateMap<PagedList<OrderDto>, PagedList<OrderVM>>().ReverseMap();
 	}
 }

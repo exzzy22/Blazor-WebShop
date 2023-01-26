@@ -7,6 +7,7 @@
         ICategoryService CategoryService { get; }
         ICurrencyService CurrencyService { get; }
         IPaymentService PaymentService { get; }
+        IOrderService OrderService { get; }
 
     }
 }

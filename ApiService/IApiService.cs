@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using Shared.RequestFeatures;
+using System.Net.Http;
 
 namespace ApiServices;
 
@@ -61,8 +62,12 @@ public interface IApiService
 	#endregion
 
 	#region Payment
-	Task<string> CreatePayment(OrderVM order);
+	Task<string> CreatePayment(OrderForCreationVM order);
     Task<bool> ValidatePayment(int orderId, string sessionId);
+    #endregion
+
+    #region Order
+    Task<PagedList<OrderVM>> GetOrdersAsync(OrderParameters orderParameters);
     #endregion
     bool AuthenticationHeaderExits();
     void SetAuthenticationHeader(string jwtToken);

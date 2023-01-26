@@ -1,6 +1,8 @@
 ﻿using Domain.Exceptions.ModelSpecific;
 using Domain.Models;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
+using System.Text.Json;
 using ViewModels;
 
 namespace ApiServices;
@@ -366,13 +368,11 @@ public sealed class ApiService : IApiService
 	#endregion
 
 	#region Payment
-	public async Task<string> CreatePayment(OrderVM order)
+	public async Task<string> CreatePayment(OrderForCreationVM order)
     {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/payment/create", _mapper.Map<OrderDto>(order));
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/payment/create", _mapper.Map<OrderForCreationDto>(order));
 
-        string paymentUrl = await response.Content.ReadAsStringAsync() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
-
-        return paymentUrl;
+        return await response.Content.ReadAsStringAsync() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
     }
 
     public async Task<bool> ValidatePayment(int orderId, string sessionId)
@@ -380,6 +380,17 @@ public sealed class ApiService : IApiService
         HttpResponseMessage response = await _httpClient.PostAsync($"api/payment/validate/{orderId}/{sessionId}", null);
 
         return response.IsSuccessStatusCode;
+    }
+    #endregion
+
+    #region Orders
+    public async Task<PagedList<OrderVM>> GetOrdersAsync(OrderParameters orderParameters)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/order/page");
+
+		PagedList<OrderDto> orders = await response.Content.ReadFromJsonAsync<PagedList<OrderDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return _mapper.Map<PagedList<OrderVM>>(orders);
     }
     #endregion
 }

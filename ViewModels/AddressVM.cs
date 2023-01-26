@@ -3,7 +3,7 @@ using ViewModels.ValidationAttributes;
 
 namespace ViewModels;
 
-public class AdressVM
+public class AddressVM
 {
 	[Required]
 	public string FirstName { get; set; } = null!;

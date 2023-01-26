@@ -1,17 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Shared;
 
 namespace ViewModels;
 
 public class OrderVM
 {
-	[ValidateComplexType]
-	public AdressVM BillingAddress { get; set; } = new();
-	[ValidateComplexType]
-	public AdressVM ShippingAddress { get; set; } = new();
-	[Required]
-	[Range(typeof(bool), "true", "true",ErrorMessage = "You must agree to the Terms and Conditions")]
-	public bool TosAccepted { get; set; } = false;
-	public string? Note { get; set; }
-	public int CartId { get; set; }
-	public string CurrencyISO { get; set; } = null!;
+    public int Id { get; set; }
+    public int CartId { get; set; }
+    public int? UserId { get; set; }
+    public int BillingAddressId { get; set; }
+    public int ShippingAddressId { get; set; }
+    public string StripeId { get; set; } = null!;
+    public string Email { get; set; } = null!;
+    public string CurrencyISO4217 { get; set; } = null!;
+    public double Amount { get; set; }
+    public Guid SessionId { get; set; }
+    public OrderStatus Status { get; set; } = OrderStatus.Created;
+    public DateTime CratedDate { get; set; }
+
+
+    public virtual AddressVM BillingAddress { get; set; } = null!;
+    public virtual AddressVM ShippingAddress { get; set; } = null!;
 }

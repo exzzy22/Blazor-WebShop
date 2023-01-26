@@ -14,7 +14,7 @@ public class PaymentController : ControllerBase
 
     [HttpPost("create")]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
-    public async Task<IActionResult> CreatePayment(OrderDto order)
+    public async Task<IActionResult> CreatePayment(OrderForCreationDto order)
     {
         string paymentUrl = await _service.PaymentService.CreatePaymentUrl(order);
 

@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
 </Project>

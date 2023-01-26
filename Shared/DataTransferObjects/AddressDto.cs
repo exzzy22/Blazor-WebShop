@@ -1,6 +1,6 @@
 ﻿namespace Shared.DataTransferObjects;
 
-public record AdressDto
+public record AddressDto
 {
     public string FirstName { get; init; } = null!;
     public string LastName { get; init; } = null!;

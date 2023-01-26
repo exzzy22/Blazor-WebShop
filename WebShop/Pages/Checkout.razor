@@ -176,7 +176,7 @@
 	bool _shipToDifferentAddress = false;
 	bool _loader = false;
 
-	OrderVM Model { get; set; } = new();
+	OrderForCreationVM Model { get; set; } = new();
 	CartVM Cart { get; set; } = new();
 	[Inject]
 	UserState UserState { get; set; } = null!;

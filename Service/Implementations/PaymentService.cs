@@ -18,7 +18,7 @@ internal sealed class PaymentService : IPaymentService
         _mapper = mapper;
     }
 
-    public async Task<string> CreatePaymentUrl(OrderDto order)
+    public async Task<string> CreatePaymentUrl(OrderForCreationDto order)
     {
         Cart cart = await _repositoryManager.Cart.GetCartAsync(order.CartId,false) ?? throw new CartNotFound(order.CartId);
 

@@ -1,0 +1,34 @@
+﻿@using Shared.RequestFeatures;
+@if (Orders.Items.Count == 0)
+{
+	<div class="col-md-8">
+		<img src="./img/emptycart.png" />
+	</div>
+	return;
+}
+<div class="col-md-8">
+	<table class="table">
+		<tbody>
+			@foreach (var order in Orders.Items)
+			{
+				<tr>
+					<td>@order.Id</td>
+					<td>@order.Amount</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+@code {
+	bool _loader = false;
+
+	PagedList<OrderVM> Orders { get; set; } = null!;
+	[Inject]
+	IApiService ApiService { get; set; } = null!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		Orders = await ApiService.GetOrdersAsync(new OrderParameters { });
+	}
+}

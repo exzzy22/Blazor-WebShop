@@ -1,11 +1,23 @@
-﻿namespace Shared.DataTransferObjects;
+﻿using Domain.Models;
+
+namespace Shared.DataTransferObjects;
 
 public record OrderDto
 {
-    public AdressDto BillingAddress { get; init; } = null!;
-    public AdressDto ShippingAddress { get; init; } = null!;
-    public bool TosAccepted { get; init; }
-    public string? Note { get; init; }
+    public int Id { get; init; }
     public int CartId { get; init; }
-    public string CurrencyISO { get; init; } = null!;
+    public int? UserId { get; init; }
+    public int BillingAddressId { get; init; }
+    public int ShippingAddressId { get; init; }
+    public string StripeId { get; init; } = null!;
+    public string Email { get; init; } = null!;
+    public string CurrencyISO4217 { get; init; } = null!;
+    public double Amount { get; init; }
+    public Guid SessionId { get; init; }
+    public OrderStatus Status { get; init; } = OrderStatus.Created;
+    public DateTime CratedDate { get; init; }
+
+
+    public virtual AddressDto BillingAddress { get; init; } = null!;
+    public virtual AddressDto ShippingAddress { get; init; } = null!;
 }

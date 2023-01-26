@@ -12,6 +12,7 @@ namespace Service
         private readonly Lazy<ICategoryService> _categoryService;
         private readonly Lazy<ICurrencyService> _currencyService;
         private readonly Lazy<IPaymentService> _paymentService;
+        private readonly Lazy<IOrderService> _orderService;
         public ServiceManager(IRepositoryManager repositoryManager, 
             ILoggerManager logger, 
             IMapper mapper,
@@ -27,11 +28,13 @@ namespace Service
             _categoryService = new Lazy<ICategoryService>(() => new CategoryService(repositoryManager, logger, mapper));
             _currencyService = new Lazy<ICurrencyService>(() => new CurrencyService(repositoryManager, logger, mapper));
             _paymentService = new Lazy<IPaymentService>( () => new PaymentService(configuration,repositoryManager,mapper));
+            _orderService = new Lazy<IOrderService>(() => new OrderService(repositoryManager, logger, mapper));
         }
         public IAuthenticationService AuthenticationService => _authenticationService.Value;
         public IProductService ProductService => _productService.Value;
         public ICategoryService CategoryService => _categoryService.Value;
         public ICurrencyService CurrencyService => _currencyService.Value;
         public IPaymentService PaymentService => _paymentService.Value;
+        public IOrderService OrderService => _orderService.Value;
     }
 }

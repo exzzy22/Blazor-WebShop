@@ -13,6 +13,7 @@ public class Order
 	public double Amount { get; set; }
 	public Guid SessionId { get; set; }
 	public OrderStatus Status { get; set; } = OrderStatus.Created;
+	public DateTime CratedDate { get; set; }
 
 
 	public virtual Address BillingAddress { get; set; } = null!;

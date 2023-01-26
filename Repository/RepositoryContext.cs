@@ -46,8 +46,20 @@ namespace Repository
 				        .HasForeignKey<Address>(a => a.ShippingOrderId)
 				        .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.HasOne(o => o.ShippingAddress)
+                    .WithOne(a => a.ShippingOrder)
+                    .HasForeignKey<Address>(a => a.ShippingOrderId)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-			base.OnModelCreating(modelBuilder);
+                entity.Property(e => e.CratedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+            });
+
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Product> Products { get; set; } = null!;

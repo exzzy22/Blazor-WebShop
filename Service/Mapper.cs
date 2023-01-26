@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Models;
+using Microsoft.AspNetCore.Http;
+using Shared.RequestFeatures;
 
 namespace Service;
 
@@ -31,7 +33,9 @@ public class Mapper : Profile
 		CreateMap<CartDto, Cart>().ReverseMap();
         CreateMap<ProductCartDto,ProductCart>().ReverseMap();
         CreateMap<UserForRegistrationDto, User>();
-        CreateMap<Address, AdressDto>().ReverseMap();
+        CreateMap<Address, AddressDto>().ReverseMap();
 		CreateMap<Wishlist, WishlistDto>().ReverseMap();
+        CreateMap<Order, OrderDto>().ReverseMap();
+		CreateMap<PagedList<Order>, PagedList<OrderDto>>().ReverseMap();
 	}
 }
