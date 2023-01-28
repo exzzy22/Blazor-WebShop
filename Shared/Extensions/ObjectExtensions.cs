@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using System.Text;
-
-namespace Shared.Extensions;
+﻿namespace Shared.Extensions;
 
 public static class ObjectExtensions
 {

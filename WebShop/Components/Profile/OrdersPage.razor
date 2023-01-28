@@ -8,27 +8,70 @@
 }
 <div class="col-md-8">
 	<table class="table">
-		<tbody>
+		<tbody style="text-align:center">
+			<tr style="background-color: #333;color: white;">
+				<td>Order number</td>
+				<td>Date</td>
+				<td>Status</td>
+				<td>Total Amount</td>
+			</tr>
 			@foreach (var order in Orders.Items)
 			{
 				<tr>
 					<td>@order.Id</td>
-					<td>@order.Amount</td>
+					<td>@order.CratedDate.ToString("MM/dd/yyyy HH:mm:ss")</td>
+					<td>@order.Status</td>
+					<td>@order.Amount.ToString("N2") @Currencies.First(c => c.ISO4217.Equals(order.CurrencyISO4217)).Symbol</td>
 				</tr>
 			}
 		</tbody>
 	</table>
+	@if (Orders.MetaData.TotalPages > 1)
+	{
+		<div class="store-filter clearfix">
+			@if (Orders.MetaData is not null)
+			{
+				<span class="store-qty">Showing 20-100 products</span>
+				<ul class="store-pagination" style="cursor:pointer">
+				@if (Orders.MetaData.HasPrevious)
+				{
+						<li><a @onclick="async () => await GoToPage(Orders.MetaData.CurrentPage -1)"><i class="fa fa-angle-left"></i></a></li>
+					}
+				@foreach (var pageNum in Orders.GetPagesToShow())
+				{
+					if (pageNum == Orders.MetaData.CurrentPage)
+					{
+							<li class="active">@pageNum</li>
+					}
+					else
+					{
+							<li><a @onclick="async () => await GoToPage(pageNum)">@pageNum</a></li>
+					}
+				}
+				@if (Orders.MetaData.HasNext)
+				{
+						<li><a @onclick="async () => await GoToPage(Orders.MetaData.CurrentPage +1)"><i class="fa fa-angle-right"></i></a></li>
+				}
+				</ul>
+			}
+		</div>
+	}
 </div>
 
 @code {
 	bool _loader = false;
 
 	PagedList<OrderVM> Orders { get; set; } = null!;
+	List<CurrencyVM> Currencies { get; set; } = null!;
 	[Inject]
 	IApiService ApiService { get; set; } = null!;
 
 	protected override async Task OnInitializedAsync()
 	{
-		Orders = await ApiService.GetOrdersAsync(new OrderParameters { PageSize = 12, Filter = new OrderFilter { ISO4217="EUR" } });
+		Orders = await ApiService.GetOrdersAsync(new OrderParameters { PageSize = 8 });
+		Currencies = await ApiService.GetCurrencies();
 	}
+
+	async Task GoToPage(int pageNumber) => Orders = await ApiService.GetOrdersAsync(new OrderParameters { PageSize = 8, PageNumber = pageNumber });
+
 }

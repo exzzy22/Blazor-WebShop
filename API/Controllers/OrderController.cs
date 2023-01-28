@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Shared.RequestFeatures;
-using System.Text.Json;
+﻿using Shared.RequestFeatures;
 
 namespace API.Controllers;
 

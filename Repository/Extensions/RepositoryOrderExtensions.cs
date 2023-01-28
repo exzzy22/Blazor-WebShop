@@ -47,12 +47,12 @@ public static class RepositoryOrderExtensions
     public static IQueryable<Order> Sort(this IQueryable<Order> orders, string orderByQueryString)
     {
         if (string.IsNullOrWhiteSpace(orderByQueryString))
-            return orders.OrderBy(e => e.CratedDate);
+            return orders.OrderByDescending(e => e.CratedDate);
 
         string orderQuery = OrderByQueryBuilder.CreateOrderQuery<Order>(orderByQueryString);
 
         if (string.IsNullOrWhiteSpace(orderQuery))
-            return orders.OrderBy(e => e.CratedDate);
+            return orders.OrderByDescending(e => e.CratedDate);
 
         return orders.OrderBy(orderQuery);
     }
