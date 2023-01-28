@@ -31,7 +31,7 @@
 		<div class="store-filter clearfix">
 			@if (Orders.MetaData is not null)
 			{
-				<span class="store-qty">Showing 20-100 products</span>
+				<span class="store-qty">@Orders.MetaData.TotalCount orders total</span>
 				<ul class="store-pagination" style="cursor:pointer">
 				@if (Orders.MetaData.HasPrevious)
 				{

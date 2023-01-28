@@ -18,4 +18,6 @@ public class Order
 
 	public virtual Address BillingAddress { get; set; } = null!;
 	public virtual Address ShippingAddress { get; set; } = null!;
+	public virtual ICollection<ProductOrder> Prodcuts { get; set; } = null!;
+
 }

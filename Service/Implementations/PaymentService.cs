@@ -23,19 +23,21 @@ internal sealed class PaymentService : IPaymentService
         Cart cart = await _repositoryManager.Cart.GetCartAsync(order.CartId,false) ?? throw new CartNotFound(order.CartId);
 
 		Order orderToCreate = new Order
-		{
-			CartId = cart.Id,
-			Email = order.BillingAddress.Email,
-			BillingAddress = _mapper.Map<Domain.Models.Address>(order.BillingAddress),
-			ShippingAddress = _mapper.Map<Domain.Models.Address>(order.ShippingAddress),
-			UserId = cart.UserId,
+        {
+            CartId = cart.Id,
+            Email = order.BillingAddress.Email,
+            BillingAddress = _mapper.Map<Domain.Models.Address>(order.BillingAddress),
+            ShippingAddress = _mapper.Map<Domain.Models.Address>(order.ShippingAddress),
+            UserId = cart.UserId,
             StripeId = "",
-			CurrencyISO4217 = order.CurrencyISO,
+            CurrencyISO4217 = order.CurrencyISO,
             SessionId = Guid.NewGuid(),
             Amount = GetCartTotal(order.CurrencyISO, cart.Products.ToList()),
+			Prodcuts = GenerateOrderProducts(cart, order)
 		};
 
 		_repositoryManager.Order.Create(orderToCreate);
+
 		await _repositoryManager.SaveAsync();
 
 		var options = new SessionCreateOptions
@@ -86,6 +88,26 @@ internal sealed class PaymentService : IPaymentService
         
         return true;
     }
+
+    List<ProductOrder> GenerateOrderProducts(Cart cart, OrderForCreationDto order)
+    {
+		List<ProductOrder> productOrders= new ();
+
+        foreach (var product in cart.Products) 
+        {
+            productOrders.Add(new ProductOrder 
+            {
+                Price = product.Product.Prices.First(p => p.Currency.ISO4217.Equals(order.CurrencyISO)).Value,
+                CurrencyISO4217 = order.CurrencyISO,
+                CurrencySymbol = product.Product.Prices.First(p => p.Currency.ISO4217.Equals(order.CurrencyISO)).Currency.Symbol,
+				Quantity = product.Quantity,
+                Name = product.Product.Name,
+                ShortName = product.Product.ShortName,
+            });
+        }
+
+        return productOrders;
+	}
 
     double GetCartTotal(string currencyIsoCode, List<ProductCart> products)
 	{
