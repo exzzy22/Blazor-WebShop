@@ -22,7 +22,6 @@ public class PaymentController : ControllerBase
     }
 
     [HttpPost("validate/{orderId}/{sessionId}")]
-    [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> ValidatePayment(int orderId, string sessionId)
     {
         bool result = await _service.PaymentService.ValidatePayment(orderId, sessionId);

@@ -9,7 +9,11 @@ internal sealed class OrderRepository : RepositoryBase<Order>, IOrderRepository
 
     public OrderRepository(RepositoryContext repositoryContext) : base(repositoryContext) => _repositoryContext = repositoryContext;
 
-	public async Task<Order> GetOrderAsync(int orderId, bool trackChanges) => await FindByCondition(o => o.Id == orderId,trackChanges).FirstAsync();
+	public async Task<Order> GetOrderAsync(int orderId, bool trackChanges) => 
+        await FindByCondition(o => o.Id == orderId,trackChanges)
+        .Include(o => o.BillingAddress)
+		.Include(o => o.ShippingAddress)
+		.FirstAsync();
 
     public async Task<PagedList<Order>> GetOrdersAsync(OrderParameters orderParameters, bool trackChanges)
     {

@@ -13,7 +13,9 @@ public record OrderDto
     public string Email { get; init; } = null!;
     public string CurrencyISO4217 { get; init; } = null!;
     public double Amount { get; init; }
-    public Guid SessionId { get; init; }
+	public string? Note { get; init; }
+	public string? Invoice { get; init; }
+	public Guid SessionId { get; init; }
     public OrderStatus Status { get; init; } = OrderStatus.Created;
     public DateTime CratedDate { get; init; }
 

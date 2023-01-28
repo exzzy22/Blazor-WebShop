@@ -43,8 +43,8 @@
 							<ValidationMessage For="@(() => Model.BillingAddress.Email)" />
 						</div>
 						<div class="form-group">
-							<InputText id="address" class="input" @bind-Value="Model.BillingAddress.Address" placeholder="Address" />
-							<ValidationMessage For="@(() => Model.BillingAddress.Address)" />
+							<InputText id="address" class="input" @bind-Value="Model.BillingAddress.Street" placeholder="Address" />
+							<ValidationMessage For="@(() => Model.BillingAddress.Street)" />
 						</div>
 						<div class="form-group">
 							<InputText id="city" class="input" @bind-Value="Model.BillingAddress.City" placeholder="City" />
@@ -89,8 +89,8 @@
 									<ValidationMessage For="@(() => Model.ShippingAddress.Email)" />
 								</div>
 								<div class="form-group">
-									<InputText class="input" placeholder="Address" @bind-Value="Model.ShippingAddress.Address" />
-									<ValidationMessage For="@(() => Model.ShippingAddress.Address)" />
+									<InputText class="input" placeholder="Address" @bind-Value="Model.ShippingAddress.Street" />
+									<ValidationMessage For="@(() => Model.ShippingAddress.Street)" />
 								</div>
 								<div class="form-group">
 									<InputText class="input" placeholder="City" @bind-Value="Model.ShippingAddress.City" />
@@ -234,7 +234,7 @@
 		Model.BillingAddress.FirstName = UserState.User.FirstName;
 		Model.BillingAddress.LastName = UserState.User.LastName;
 		Model.BillingAddress.Email = UserState.User.Email;
-		Model.BillingAddress.Address = UserState.User.Address;
+		Model.BillingAddress.Street = UserState.User.Address;
 		Model.BillingAddress.City = UserState.User.City;
 		Model.BillingAddress.Country = UserState.User.Country;
 		Model.BillingAddress.ZipCode = UserState.User.ZipCode;

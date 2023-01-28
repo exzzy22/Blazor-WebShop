@@ -2,6 +2,9 @@
 using Configuration = Shared.ConfigurationModels.Configuration.Configuration;
 using Stripe.Checkout;
 using Shared.Extensions;
+using Service.QuestPdf;
+using QuestPDF.Fluent;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Service.Implementations;
 
@@ -10,15 +13,18 @@ internal sealed class PaymentService : IPaymentService
     private readonly Configuration _configuration;
     private readonly IRepositoryManager _repositoryManager;
     private readonly IMapper _mapper;
-	public PaymentService(IOptions<Configuration> configuration,IRepositoryManager repositoryManager,IMapper mapper)
+	private readonly string _documentPath;
+
+	public PaymentService(IOptions<Configuration> configuration,IRepositoryManager repositoryManager,IMapper mapper, IWebHostEnvironment webHostEnvironment)
 	{
         StripeConfiguration.ApiKey = configuration.Value.Stripe.SecretKey;
         _configuration = configuration.Value;
         _repositoryManager = repositoryManager;
         _mapper = mapper;
-    }
+		_documentPath = webHostEnvironment.WebRootPath + _configuration.FilePathConfiguration.Document;
+	}
 
-    public async Task<string> CreatePaymentUrl(OrderForCreationDto order)
+	public async Task<string> CreatePaymentUrl(OrderForCreationDto order)
     {
         Cart cart = await _repositoryManager.Cart.GetCartAsync(order.CartId,false) ?? throw new CartNotFound(order.CartId);
 
@@ -84,7 +90,15 @@ internal sealed class PaymentService : IPaymentService
 
         order.Status = Domain.OrderStatus.Paid;
 
-        await _repositoryManager.SaveAsync();
+		InvoiceDocument document = new (order);
+        
+        string guid = Guid.NewGuid().ToString();
+
+        document.GeneratePdf($"{_documentPath}{guid}.pdf");
+
+        order.Invoice = guid;
+
+		await _repositoryManager.SaveAsync();
         
         return true;
     }

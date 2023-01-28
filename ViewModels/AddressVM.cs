@@ -13,7 +13,7 @@ public class AddressVM
 	[EmailAddress]
 	public string Email { get; set; } = null!;
 	[Required]
-	public string Address { get; set; } = null!;
+	public string Street { get; set; } = null!;
 	[Required]
 	public string City { get; set; } = null!;
 	[Required]
