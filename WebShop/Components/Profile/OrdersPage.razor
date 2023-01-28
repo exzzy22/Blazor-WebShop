@@ -29,6 +29,6 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		Orders = await ApiService.GetOrdersAsync(new OrderParameters { });
+		Orders = await ApiService.GetOrdersAsync(new OrderParameters { PageSize = 12, Filter = new OrderFilter { ISO4217="EUR" } });
 	}
 }

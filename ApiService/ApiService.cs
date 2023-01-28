@@ -1,6 +1,7 @@
 ﻿using Domain.Exceptions.ModelSpecific;
 using Domain.Models;
 using Shared.DataTransferObjects;
+using Shared.Extensions;
 using Shared.RequestFeatures;
 using System.Text.Json;
 using ViewModels;
@@ -386,7 +387,7 @@ public sealed class ApiService : IApiService
     #region Orders
     public async Task<PagedList<OrderVM>> GetOrdersAsync(OrderParameters orderParameters)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync($"api/order/page");
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/order/page{orderParameters.ToQueryString()}");
 
 		PagedList<OrderDto> orders = await response.Content.ReadFromJsonAsync<PagedList<OrderDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
