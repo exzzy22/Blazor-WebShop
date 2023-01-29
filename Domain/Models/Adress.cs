@@ -11,10 +11,10 @@ public class Address
 	public string Country { get; set; } = null!;
 	public string ZipCode { get; set; } = null!;
 	public string Tel { get; set; } = null!;
-	public int? BillingOrderId { get; set; }
-	public int? ShippingOrderId { get; set; }
+    public virtual int? BillingOrderId { get; set; }
+    public virtual int? ShippingOrderId { get; set; }
 
-	public virtual Order? BillingOrder { get; set; }
-	public virtual Order? ShippingOrder { get; set; }
+    public virtual Order? BillingOrder { get; set; }
+    public virtual Order? ShippingOrder { get; set; }
 }
 

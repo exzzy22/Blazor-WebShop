@@ -34,22 +34,15 @@ public class RepositoryContext : IdentityDbContext<User, Role, int>
         modelBuilder.Entity<Order>(entity =>
         {
             entity.HasOne(o => o.BillingAddress)
-					.WithOne(a => a.BillingOrder)
-					.HasForeignKey<Address>(a => a.BillingOrderId)
-					.OnDelete(DeleteBehavior.NoAction);
+                .WithOne(a => a.BillingOrder)
+                .HasForeignKey<Address>(a => a.BillingOrderId);
 
             entity.HasOne(o => o.ShippingAddress)
-					.WithOne(a => a.ShippingOrder)
-					.HasForeignKey<Address>(a => a.ShippingOrderId)
-					.OnDelete(DeleteBehavior.NoAction);
-
-			entity.HasOne(o => o.ShippingAddress)
-                    .WithOne(a => a.ShippingOrder)
-                    .HasForeignKey<Address>(a => a.ShippingOrderId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                .WithOne(a => a.ShippingOrder)
+                .HasForeignKey<Address>(a => a.ShippingOrderId);
 
             entity.Property(e => e.CratedDate)
-                    .HasColumnType("datetime")
+                    .HasColumnType("datetime2")
                     .HasDefaultValueSql("(getdate())");
         });
 

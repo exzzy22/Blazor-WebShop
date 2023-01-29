@@ -16,7 +16,7 @@ public class UserForRegistrationVM
 	[EmailAddress]
 	[Compare(nameof(Email), ErrorMessage = "Emails don't match.")]
 	public string Email2 { get; set; } = null!;
-	public string Address { get; set; } = null!;
+	public string Street { get; set; } = null!;
 	public string City { get; set; } = null!;
 	public string Country { get; set; } = null!;
 	public string ZipCode { get; set; } = null!;

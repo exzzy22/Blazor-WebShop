@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,11 @@ using Repository;
 namespace API.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20230129120707_ChangOrderAdress")]
+    partial class ChangOrderAdress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,12 +212,15 @@ namespace API.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
+                    b.Property<int>("BillingAddressId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CratedDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("CurrencyISO4217")
@@ -233,6 +239,9 @@ namespace API.Migrations
 
                     b.Property<Guid>("SessionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ShippingAddressId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -769,11 +778,13 @@ namespace API.Migrations
                 {
                     b.HasOne("Domain.Models.Order", "BillingOrder")
                         .WithOne("BillingAddress")
-                        .HasForeignKey("Domain.Models.Address", "BillingOrderId");
+                        .HasForeignKey("Domain.Models.Address", "BillingOrderId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Domain.Models.Order", "ShippingOrder")
                         .WithOne("ShippingAddress")
-                        .HasForeignKey("Domain.Models.Address", "ShippingOrderId");
+                        .HasForeignKey("Domain.Models.Address", "ShippingOrderId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("BillingOrder");
 

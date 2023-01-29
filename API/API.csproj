@@ -33,6 +33,7 @@
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\image\" />
     <Folder Include="wwwroot\document\" />
+    <Folder Include="wwwroot\document\" />
   </ItemGroup>
 
 </Project>

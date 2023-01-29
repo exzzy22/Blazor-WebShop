@@ -35,3 +35,7 @@ function getLanguage() {
     }
 }
 
+function openPDF(pdfUrl) {
+    window.open(pdfUrl, "_blank");
+}
+

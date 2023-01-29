@@ -385,13 +385,22 @@ public sealed class ApiService : IApiService
     #endregion
 
     #region Orders
-    public async Task<PagedList<OrderVM>> GetOrdersAsync(OrderParameters orderParameters)
+    public async Task<PagedList<OrderVM>> GetOrders(OrderParameters orderParameters)
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/order/page{orderParameters.ToQueryString()}");
 
 		PagedList<OrderDto> orders = await response.Content.ReadFromJsonAsync<PagedList<OrderDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
 		return _mapper.Map<PagedList<OrderVM>>(orders);
+    }
+
+    public async Task<string> GetInvoice(string invoiceId)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/order/invoice/{invoiceId}");
+
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadAsStringAsync();
     }
     #endregion
 }

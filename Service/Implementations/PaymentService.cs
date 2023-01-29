@@ -12,11 +12,13 @@ internal sealed class PaymentService : IPaymentService
 {
     private readonly Configuration _configuration;
     private readonly IRepositoryManager _repositoryManager;
+    private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
 	private readonly string _documentPath;
 
-	public PaymentService(IOptions<Configuration> configuration,IRepositoryManager repositoryManager,IMapper mapper, IWebHostEnvironment webHostEnvironment)
+	public PaymentService(ILoggerManager logger,IOptions<Configuration> configuration,IRepositoryManager repositoryManager,IMapper mapper, IWebHostEnvironment webHostEnvironment)
 	{
+        _logger = logger;
         StripeConfiguration.ApiKey = configuration.Value.Stripe.SecretKey;
         _configuration = configuration.Value;
         _repositoryManager = repositoryManager;
@@ -90,15 +92,22 @@ internal sealed class PaymentService : IPaymentService
 
         order.Status = Domain.OrderStatus.Paid;
 
-		InvoiceDocument document = new (order);
-        
-        string guid = Guid.NewGuid().ToString();
+        await _repositoryManager.SaveAsync();
 
-        document.GeneratePdf($"{_documentPath}{guid}.pdf");
+        try
+        {
+            InvoiceDocument document = new(order);
 
-        order.Invoice = guid;
+            string guid = Guid.NewGuid().ToString();
+            document.GeneratePdf($"{_documentPath}{guid}.pdf");
+            order.Invoice = guid;
 
-		await _repositoryManager.SaveAsync();
+            await _repositoryManager.SaveAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error creating invoice: "+ex.Message);
+        }
         
         return true;
     }

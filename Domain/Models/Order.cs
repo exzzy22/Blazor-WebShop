@@ -5,8 +5,6 @@ public class Order
 	public int Id { get; set; }
 	public int CartId { get; set; }
 	public int? UserId { get; set; }
-	public int BillingAddressId { get; set; }
-	public int ShippingAddressId { get; set; }
 	public string StripeId { get; set; } = null!;
 	public string Email { get; set; } = null!;
 	public string CurrencyISO4217 { get; set; } = null!;
