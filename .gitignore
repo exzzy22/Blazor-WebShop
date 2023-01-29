@@ -366,3 +366,5 @@ FodyWeavers.xsd
 appsettings.Development.json
 appsettings.Production.json
 API/internal_logs/
+API/wwwroot/document
+API/wwwroot/image

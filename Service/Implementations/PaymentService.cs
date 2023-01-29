@@ -114,6 +114,8 @@ internal sealed class PaymentService : IPaymentService
                 Price = product.Product.Prices.First(p => p.Currency.ISO4217.Equals(order.CurrencyISO)).Value,
                 CurrencyISO4217 = order.CurrencyISO,
                 CurrencySymbol = product.Product.Prices.First(p => p.Currency.ISO4217.Equals(order.CurrencyISO)).Currency.Symbol,
+                Discount = product.Product.Discount,
+                TotalPrice = CalculateDiscountedPrice(product.Product.Prices.First(p => p.Currency.ISO4217.Equals(order.CurrencyISO)).Value, product.Product.Discount)*product.Quantity,
 				Quantity = product.Quantity,
                 Name = product.Product.Name,
                 ShortName = product.Product.ShortName,
@@ -136,5 +138,5 @@ internal sealed class PaymentService : IPaymentService
 		return sum;
 	}
 
-	double CalculateDiscountedPrice(double price, double discount) => price - price * (discount / 100.0);
+	double CalculateDiscountedPrice(double price, int discount) => price - price * (discount / 100.0);
 }

@@ -2,6 +2,7 @@
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Service.QuestPdf;
 
@@ -42,8 +43,8 @@ public class InvoiceDocument : IDocument
 			row.RelativeItem().Column(Column =>
 			{
 				Column
-					.Item().Text($"Invoice #{Model.Id.ToString("######")}")
-					.FontSize(20).SemiBold().FontColor(Colors.Blue.Medium);
+					.Item().Text($"Invoice #{string.Format("{0:00000}", Model.Id)}")
+					.FontSize(20).SemiBold().FontColor(Colors.Black);
 
 				Column.Item().Text(text =>
 				{
@@ -84,7 +85,7 @@ public class InvoiceDocument : IDocument
 
 			column.Item().Element(ComposeTable);
 
-			column.Item().PaddingRight(5).AlignRight().Text($"Total: {Model.Amount} {Model.Prodcuts.First().CurrencySymbol}").SemiBold();
+			column.Item().PaddingRight(5).AlignRight().Text($"Total: {Model.Amount.ToString("N2")} {Model.Prodcuts.First().CurrencySymbol}").SemiBold();
 
 			if (!string.IsNullOrWhiteSpace(Model.Note))
 				column.Item().PaddingTop(25).Element(ComposeComments);
@@ -102,7 +103,8 @@ public class InvoiceDocument : IDocument
 				columns.ConstantColumn(25);
 				columns.RelativeColumn(3);
 				columns.RelativeColumn();
-				columns.RelativeColumn();
+                columns.RelativeColumn();
+                columns.RelativeColumn();
 				columns.RelativeColumn();
 			});
 
@@ -111,10 +113,11 @@ public class InvoiceDocument : IDocument
 				header.Cell().Text("#");
 				header.Cell().Text("Product").Style(headerStyle);
 				header.Cell().AlignRight().Text("Unit price").Style(headerStyle);
-				header.Cell().AlignRight().Text("Quantity").Style(headerStyle);
+                header.Cell().AlignRight().Text("Discount").Style(headerStyle);
+                header.Cell().AlignRight().Text("Quantity").Style(headerStyle);
 				header.Cell().AlignRight().Text("Total").Style(headerStyle);
 
-				header.Cell().ColumnSpan(5).PaddingTop(5).BorderBottom(1).BorderColor(Colors.Black);
+				header.Cell().ColumnSpan(6).PaddingTop(5).BorderBottom(1).BorderColor(Colors.Black);
 			});
 
 			List<ProductOrder> products = Model.Prodcuts.ToList();
@@ -125,9 +128,10 @@ public class InvoiceDocument : IDocument
 
 				table.Cell().Element(CellStyle).Text($"{index}");
 				table.Cell().Element(CellStyle).Text(product.Name);
-				table.Cell().Element(CellStyle).AlignRight().Text($"{product.Price}$");
-				table.Cell().Element(CellStyle).AlignRight().Text($"{product.Quantity}");
-				table.Cell().Element(CellStyle).AlignRight().Text($"{product.Price * product.Quantity}$");
+				table.Cell().Element(CellStyle).AlignRight().Text($"{product.Price.ToString("N2")} {product.CurrencySymbol}");
+                table.Cell().Element(CellStyle).AlignCenter().Text($"{product.Discount}%");
+                table.Cell().Element(CellStyle).AlignCenter().Text($"{product.Quantity}");
+				table.Cell().Element(CellStyle).AlignRight().Text($"{product.TotalPrice.ToString("N2")} {product.CurrencySymbol}");
 
 				static IContainer CellStyle(IContainer container) => container.BorderBottom(1).BorderColor(Colors.Grey.Lighten2).PaddingVertical(5);
 			}

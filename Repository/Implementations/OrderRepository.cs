@@ -13,6 +13,7 @@ internal sealed class OrderRepository : RepositoryBase<Order>, IOrderRepository
         await FindByCondition(o => o.Id == orderId,trackChanges)
         .Include(o => o.BillingAddress)
 		.Include(o => o.ShippingAddress)
+        .Include(o => o.Prodcuts)
 		.FirstAsync();
 
     public async Task<PagedList<Order>> GetOrdersAsync(OrderParameters orderParameters, bool trackChanges)
