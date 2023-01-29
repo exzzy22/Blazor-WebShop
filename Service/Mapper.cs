@@ -12,7 +12,7 @@ public class Mapper : Profile
         CreateMap<Product, ProductCarouselDto>()
 						.ForMember(dest => dest.Image, opt => opt.MapFrom(soruce => soruce.Images.First(i => i.MainImage).File));
 		CreateMap<Product, ProductDto>().ReverseMap();
-        CreateMap<Category, CategoryDto>().ReverseMap();
+		CreateMap<Category, CategoryDto>().ReverseMap();
         CreateMap<Attributes, AttributesDto>().IncludeAllDerived();
         CreateMap<AttributesDto, Attributes>().IncludeAllDerived();
         CreateMap<CpuAtrributes, CpuAtrributesDto>().ReverseMap();
@@ -37,5 +37,6 @@ public class Mapper : Profile
 		CreateMap<Wishlist, WishlistDto>().ReverseMap();
         CreateMap<Order, OrderDto>().ReverseMap();
 		CreateMap<PagedList<Order>, PagedList<OrderDto>>().ReverseMap();
+		CreateMap<PagedList<Product>, PagedList<ProductDto>>().ReverseMap();
 	}
 }

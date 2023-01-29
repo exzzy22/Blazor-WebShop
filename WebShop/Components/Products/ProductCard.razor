@@ -1,0 +1,50 @@
+﻿<div class="col-md-4 col-xs-6">
+	<div class="product">
+		<div class="product-img">
+			<img src="@(Configuration.ApiImageAddress + Product.Images.First(p => p.MainImage).File)" alt="@Product.ShortName">
+			<div class="product-label">
+				@if (Product.IsDiscounted)
+				{
+					<span class="sale">-@Product.Discount%</span>
+				}
+				<span class="new">NEW</span>
+			</div>
+		</div>
+	<div class="product-body">
+		<p class="product-category">@Product.CategoryId</p>
+		<h3 class="product-name"><a href="#">@Product.ShortName</a></h3>
+			@if (StaticConfig.Currency is not null)
+			{
+				<h4 class="product-price">@StaticConfig.Currency.Symbol @(Product.IsDiscounted ? (Product.CalculateDiscountedPrice(StaticConfig.Currency)).ToPriceString() : Product.GetPrice(StaticConfig.Currency).ToPriceString())<del class="product-old-price">@(Product.IsDiscounted ? $" {StaticConfig.Currency.Symbol}" + Product.GetPrice(StaticConfig.Currency).ToPriceString() : "")</del></h4>
+			}
+		<div class="product-rating">
+			<i class="fa fa-star"></i>
+			<i class="fa fa-star"></i>
+			<i class="fa fa-star"></i>
+			<i class="fa fa-star"></i>
+			<i class="fa fa-star"></i>
+		</div>
+		<div class="product-btns">
+			<button class="add-to-wishlist" @onclick="() => UserState.AddRemoveFromWishlist(Product.Id)"><i class="@(UserState.Wishlist.Products.Any(p => p.Id == Product.Id) ? "fa fa-heart" : "fa fa-heart-o")"></i><span class="tooltipp">add to wishlist</span></button>
+		</div>
+	</div>
+		<div class="add-to-cart">
+			<button class="add-to-cart-btn" @onclick="() => UserState.AddToCart(Product.Id)"><i class="fa fa-shopping-cart"></i> add to cart</button>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public ProductVM Product { get; set; } = null!;
+	[Inject]
+	WebShopConfiguration Configuration { get; set; } = null!;
+	[Inject]
+	UserState UserState { get; set; } = null!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		await UserState.TryLoadData();
+	}
+
+}

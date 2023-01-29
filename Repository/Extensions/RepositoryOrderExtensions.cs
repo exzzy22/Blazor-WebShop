@@ -1,12 +1,6 @@
-﻿using Domain;
-using Repository.Extensions.Utility;
-using Shared.RequestFeatures;
-using System.Linq.Dynamic.Core;
+﻿namespace Repository.Extensions;
 
-
-namespace Repository.Extensions;
-
-public static class RepositoryOrderExtensions
+internal static class RepositoryOrderExtensions
 {
     public static IQueryable<Order> FilterOrders(this IQueryable<Order> orders, OrderFilter filter)
     {
@@ -32,17 +26,6 @@ public static class RepositoryOrderExtensions
 
         return orders;
     }
-
-
-    //public static IQueryable<Order> Search(this IQueryable<Order> orders, string searchTerm)
-    //{
-    //    if (string.IsNullOrWhiteSpace(searchTerm))
-    //        return orders;
-
-    //    string lowerCaseTerm = searchTerm.Trim().ToLower();
-
-    //    return orders.Where(e => e.Id.ToString().ToLower().Contains(lowerCaseTerm));
-    //}
 
     public static IQueryable<Order> Sort(this IQueryable<Order> orders, string orderByQueryString)
     {

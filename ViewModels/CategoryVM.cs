@@ -8,5 +8,5 @@ public class CategoryVM
     [Required]
     public string Name { get; set; } = null!;
 
-    public virtual ICollection<ProductVM>? Products { get; set; }
+    public  List<ProductVM>? Products { get; set; }
 }

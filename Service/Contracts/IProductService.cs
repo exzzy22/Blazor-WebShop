@@ -1,4 +1,6 @@
-﻿namespace Service.Contracts;
+﻿using Shared.RequestFeatures;
+
+namespace Service.Contracts;
 
 public interface IProductService
 {
@@ -9,7 +11,8 @@ public interface IProductService
     Task UpdateProductAsync(ProductForCreationDto product);
     Task UpdateProductAsync(ProductDto product);
     Task<IEnumerable<ProductDto>> GetProductsAsync();
-    Task<IEnumerable<ProductCarouselDto>> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfProducts);
+	Task<PagedList<ProductDto>> GetProductsAsync(ProductParameters productParameters);
+	Task<IEnumerable<ProductCarouselDto>> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfProducts);
     void DeleteImage(string name);
     void DeleteImage(List<string> names);
     Task<IEnumerable<ImageForTableDto>> GetListOfUnusedImages();

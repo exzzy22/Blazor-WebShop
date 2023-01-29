@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Shared.ConfigurationModels.Configuration;
 using Shared.DataTransferObjects;
 using Shared.Extensions;
+using Shared.RequestFeatures;
 
 namespace Service.Implementations;
 
@@ -97,7 +98,9 @@ internal sealed class ProductService : IProductService
         return _mapper.Map<IEnumerable<ProductDto>>(products);
     }
 
-    public async Task<ProductForCreationDto> GetProductForUpdateAsync(int productId)
+	public async Task<PagedList<ProductDto>> GetProductsAsync(ProductParameters productParameters) => _mapper.Map<PagedList<ProductDto>>(await _repository.Product.GetProductsAsync(productParameters));
+
+	public async Task<ProductForCreationDto> GetProductForUpdateAsync(int productId)
     {
         Product product = await _repository.Product.GetProductAsync(productId, false) ?? throw new ProductNotFound(productId);
 

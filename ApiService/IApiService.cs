@@ -1,4 +1,5 @@
-﻿using Shared.RequestFeatures;
+﻿using Domain.Models;
+using Shared.RequestFeatures;
 using System.Net.Http;
 
 namespace ApiServices;
@@ -13,7 +14,8 @@ public interface IApiService
     Task<bool> UpdateProduct(ProductVM product);
     Task<bool> UpdateProduct(ProductForCreationVM product);
     Task<List<ProductVM>> GetProducts();
-    Task<IEnumerable<ProductCarouselVM>> GetCarouselTopSelling(int numberOfProducts);
+    Task<PagedList<ProductVM>> GetProducts(ProductParameters productParameters);
+	Task<IEnumerable<ProductCarouselVM>> GetCarouselTopSelling(int numberOfProducts);
     Task<bool> DeleteImage(string image);
     Task<bool> DeleteImage(List<string> images);
     Task<List<ImageForTableVM>> GetUnusedImages();

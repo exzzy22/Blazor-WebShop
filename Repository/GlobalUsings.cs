@@ -6,3 +6,6 @@ global using Repository.Contracts;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Repository.Configuration;
 global using Repository.Implementations;
+global using Repository.Extensions.Utility;
+global using Shared.RequestFeatures;
+global using System.Linq.Dynamic.Core;

@@ -1,4 +1,6 @@
-﻿namespace Repository.Implementations;
+﻿using Repository.Extensions;
+
+namespace Repository.Implementations;
 
 internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepository
 {
@@ -35,4 +37,16 @@ internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepo
         .OrderBy(orderBy)
         .Take(numberOfProducts)
 	    .ToListAsync();
+
+	public async Task<PagedList<Product>> GetProductsAsync(ProductParameters productParameters)
+	{
+		List<Product> products = await _repositoryContext.Products
+            .FilterProducts(productParameters.Filter)
+			.Sort(productParameters.OrderBy)
+            .Include(p => p.Category)
+            .Include(p => p.Images)
+			.ToListAsync();
+
+		return PagedList<Product>.ToPagedList(products, productParameters.PageNumber, productParameters.PageSize);
+	}
 }

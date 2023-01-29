@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Service.Contracts;
+using Shared.RequestFeatures;
 using System.Reflection.Metadata.Ecma335;
 
 namespace API.Controllers;
@@ -25,7 +26,14 @@ public class ProductController : ControllerBase
     [HttpGet("all")]
     public async Task<IActionResult> GetProducts() => Ok(await _serviceManager.ProductService.GetProductsAsync());
 
-    [HttpGet("carousel/topSelling/{numberOfProducts}")]
+    [HttpGet]
+    public async Task<IActionResult> GetProducts([FromQuery] ProductParameters productParameters)
+    {
+        PagedList<ProductDto> products = await _serviceManager.ProductService.GetProductsAsync(productParameters);
+		return Ok(await _serviceManager.ProductService.GetProductsAsync(productParameters));
+	}
+
+	[HttpGet("carousel/topSelling/{numberOfProducts}")]
     public async Task<IActionResult> GetCarouselTopSelling(int numberOfProducts) => Ok(await _serviceManager.ProductService.GetCarouselProductsAsync(p => (p.Sold), numberOfProducts));
 
     [HttpPost("add")]

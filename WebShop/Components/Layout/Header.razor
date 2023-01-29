@@ -44,8 +44,8 @@
 				<!-- SEARCH BAR -->
 				<div class="col-md-6">
 					<div class="header-search">
-						<EditForm Model="ProductParameters" OnSubmit="Search">
-							<InputSelect class="input-select" @bind-Value="ProductParameters.Filter.CategoryId">
+						<EditForm Model="HeaderSearchVM" OnSubmit="Search">
+							<InputSelect class="input-select" @bind-Value="HeaderSearchVM.CategoryId">
 								<option value="0">All Categories</option>
 								@if (Categories is not null)
 								{
@@ -55,7 +55,7 @@
 									}
 								}
 							</InputSelect>
-							<InputText class="input" placeholder="Search here" @bind-Value="ProductParameters.Filter.Keywords" />
+							<InputText class="input" placeholder="Search here" @bind-Value="HeaderSearchVM.Keywords" />
 							<button class="search-btn">Search</button>
 						</EditForm>
 					</div>
@@ -141,7 +141,7 @@
 @code {
 	List<CurrencyVM> Currencies { get; set; } = null!;
 	List<CategoryVM> Categories { get; set; } = null!;
-	ProductParameters ProductParameters { get; set; } = new();
+	HeaderSearchVM HeaderSearchVM { get; set; } = new();
 
 	[CascadingParameter]
 	public ClaimsPrincipal User { get; set; } = null!;
@@ -188,8 +188,15 @@
 		await LocalStorageService.SetItemAsync<CurrencyVM>("Currency", currency);
 	}
 
-	async Task Search()
+	void Search()
 	{
-		
+		if (HeaderSearchVM.CategoryId is 0)
+		{
+			NavigationManager.NavigateTo($"products/{HeaderSearchVM.Keywords}");
+		}
+		else
+		{
+			NavigationManager.NavigateTo($"products/{HeaderSearchVM.Keywords}/{HeaderSearchVM.CategoryId}");
+		}
 	}
 }

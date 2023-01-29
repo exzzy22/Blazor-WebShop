@@ -1,4 +1,6 @@
-﻿namespace Shared.DataTransferObjects;
+﻿using Domain.Models;
+
+namespace Shared.DataTransferObjects;
 
 public record ProductDto
 {
@@ -9,7 +11,7 @@ public record ProductDto
     public int InStock { get; init; }
     public int Sold { get; init; }
     public int CategoryId { get; init; }
-    public AttributesDto Attributes { get; init; } = null!;
-    public ICollection<ImageDto> Images { get; set; } = null!;
-    public ICollection<PriceDto> Prices { get; init; } = null!;
+	public AttributesDto Attributes { get; init; } = null!;
+    public List<ImageDto> Images { get; set; } = null!;
+    public List<PriceDto> Prices { get; init; } = null!;
 }

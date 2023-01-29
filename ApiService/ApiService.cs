@@ -98,7 +98,16 @@ public sealed class ApiService : IApiService
         return _mapper.Map<List<ProductVM>>(products);
     }
 
-    public async Task<IEnumerable<ProductCarouselVM>> GetCarouselTopSelling(int numberOfProducts)
+	public async Task<PagedList<ProductVM>> GetProducts(ProductParameters productParameters)
+	{
+		HttpResponseMessage response = await _httpClient.GetAsync($"api/product{productParameters.ToQueryString()}");
+
+		PagedList<ProductDto> products = await response.Content.ReadFromJsonAsync<PagedList<ProductDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return _mapper.Map<PagedList<ProductVM>>(products);
+	}
+
+	public async Task<IEnumerable<ProductCarouselVM>> GetCarouselTopSelling(int numberOfProducts)
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/carousel/topSelling/{numberOfProducts}");
 
@@ -402,5 +411,5 @@ public sealed class ApiService : IApiService
 
         return await response.Content.ReadAsStringAsync();
     }
-    #endregion
+	#endregion
 }
