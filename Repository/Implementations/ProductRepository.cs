@@ -38,7 +38,7 @@ internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepo
         .Take(numberOfProducts)
 	    .ToListAsync();
 
-	public async Task<PagedList<Product>> GetProductsAsync(ProductParameters productParameters)
+	public async Task<ProductPagedList<Product>> GetProductsAsync(ProductParameters productParameters)
 	{
 		List<Product> products = await _repositoryContext.Products
             .FilterProducts(productParameters.Filter)
@@ -47,6 +47,6 @@ internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepo
             .Include(p => p.Images)
 			.ToListAsync();
 
-		return PagedList<Product>.ToPagedList(products, productParameters.PageNumber, productParameters.PageSize);
+		return ProductPagedList<Product>.ToProductPagedList(products, productParameters.PageNumber, productParameters.PageSize);
 	}
 }

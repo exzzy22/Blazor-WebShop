@@ -29,7 +29,6 @@ public class ProductController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetProducts([FromQuery] ProductParameters productParameters)
     {
-        PagedList<ProductDto> products = await _serviceManager.ProductService.GetProductsAsync(productParameters);
 		return Ok(await _serviceManager.ProductService.GetProductsAsync(productParameters));
 	}
 
