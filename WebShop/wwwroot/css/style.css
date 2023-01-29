@@ -502,8 +502,9 @@ textarea.input {
 }
 
 .header-search form .input-select {
-  margin-right: -4px;
-  border-radius: 40px 0px 0px 40px;
+    margin-right: -4px;
+    border-radius: 40px 0px 0px 40px;
+    width: 11em;
 }
 
 .header-search form .input {

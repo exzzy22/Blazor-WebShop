@@ -13,7 +13,10 @@
 	<div class="product-body">
 		<p class="product-category">@Product.Category.Name</p>
 		<h3 class="product-name"><a href="#">@Product.ShortName</a></h3>
-		<h4 class="product-price">@StaticConfig.Currency.Symbol @(Product.IsDiscounted ? (Product.CalculateDiscountedPrice(StaticConfig.Currency)).ToPriceString() : Product.GetPrice(StaticConfig.Currency).Value.ToPriceString())<del class="product-old-price">@(Product.IsDiscounted ? $" {StaticConfig.Currency.Symbol}" + Product.GetPrice(StaticConfig.Currency).Value.ToPriceString() : "")</del></h4>
+		@if (StaticConfig.Currency is not null)
+		{
+			<h4 class="product-price">@StaticConfig.Currency.Symbol @(Product.IsDiscounted ? (Product.CalculateDiscountedPrice(StaticConfig.Currency)).ToPriceString() : Product.GetPrice(StaticConfig.Currency).Value.ToPriceString())<del class="product-old-price">@(Product.IsDiscounted ? $" {StaticConfig.Currency.Symbol}" + Product.GetPrice(StaticConfig.Currency).Value.ToPriceString() : "")</del></h4>
+		}
 		<div class="product-rating">
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star"></i>
