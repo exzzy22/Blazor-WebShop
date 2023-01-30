@@ -1,4 +1,6 @@
 ﻿@page "/products/{Keywords}/{CategoryId:int?}"
+@page "/products/{CategoryId:int?}"
+@page "/products"
 
 <!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
@@ -32,16 +34,16 @@
 				<div class="aside">
 					<h3 class="aside-title">Categories</h3>
 					<div class="checkbox-filter">
-						@if (Categories is not null)
+						@if (ProductsList is not null)
 						{
-							foreach (var category in Categories)
+							foreach (var kvp in ProductsList.MetaData.CategoryCount)
 							{
 								<div class="input-checkbox">
-									<input type="checkbox" id="category-@category.Id">
-									<label for="category-@category.Id">
+									<input type="checkbox" id="category-@kvp.Key" checked="@(kvp.Key == ProductParameters.Filter.CategoryId)">
+									<label for="category-@kvp.Key">
 										<span></span>
-										@category.Name
-										<small>(120)</small>
+										@Categories.First(c => c.Id == kvp.Key).Name
+										<small>(@kvp.Value)</small>
 									</label>
 								</div>
 							}	
@@ -72,54 +74,20 @@
 				<div class="aside">
 					<h3 class="aside-title">Brand</h3>
 					<div class="checkbox-filter">
-						<div class="input-checkbox">
-							<input type="checkbox" id="brand-1">
-							<label for="brand-1">
-								<span></span>
-								SAMSUNG
-								<small>(578)</small>
-							</label>
-						</div>
-						<div class="input-checkbox">
-							<input type="checkbox" id="brand-2">
-							<label for="brand-2">
-								<span></span>
-								LG
-								<small>(125)</small>
-							</label>
-						</div>
-						<div class="input-checkbox">
-							<input type="checkbox" id="brand-3">
-							<label for="brand-3">
-								<span></span>
-								SONY
-								<small>(755)</small>
-							</label>
-						</div>
-						<div class="input-checkbox">
-							<input type="checkbox" id="brand-4">
-							<label for="brand-4">
-								<span></span>
-								SAMSUNG
-								<small>(578)</small>
-							</label>
-						</div>
-						<div class="input-checkbox">
-							<input type="checkbox" id="brand-5">
-							<label for="brand-5">
-								<span></span>
-								LG
-								<small>(125)</small>
-							</label>
-						</div>
-						<div class="input-checkbox">
-							<input type="checkbox" id="brand-6">
-							<label for="brand-6">
-								<span></span>
-								SONY
-								<small>(755)</small>
-							</label>
-						</div>
+					@if (ProductsList is not null)
+					{
+						foreach (var kvp in ProductsList.MetaData.ManufacturerCount)
+						{
+							<div class="input-checkbox">
+								<input type="checkbox" id="@kvp.Key">
+									<label for="@kvp.Key">
+									<span></span>
+									@kvp.Key
+									<small>(@kvp.Value)</small>
+								</label>
+							</div>
+						}
+					}
 					</div>
 				</div>
 				<!-- /aside Widget -->

@@ -196,7 +196,10 @@
 		}
 		else
 		{
-			NavigationManager.NavigateTo($"products/{HeaderSearchVM.Keywords}/{HeaderSearchVM.CategoryId}");
+			if(string.IsNullOrEmpty(HeaderSearchVM.Keywords))
+				NavigationManager.NavigateTo($"products/{HeaderSearchVM.CategoryId}");
+			else
+				NavigationManager.NavigateTo($"products/{HeaderSearchVM.Keywords}/{HeaderSearchVM.CategoryId}");
 		}
 	}
 }

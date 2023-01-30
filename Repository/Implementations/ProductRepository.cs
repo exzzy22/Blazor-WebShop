@@ -40,13 +40,25 @@ internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepo
 
 	public async Task<ProductPagedList<Product>> GetProductsAsync(ProductParameters productParameters)
 	{
-		List<Product> products = await _repositoryContext.Products
+        var products = _repositoryContext.Products
             .FilterProducts(productParameters.Filter)
-			.Sort(productParameters.OrderBy)
+            .Sort(productParameters.OrderBy)
             .Include(p => p.Category)
-            .Include(p => p.Images)
-			.ToListAsync();
+            .Include(p => p.Images);
 
-		return ProductPagedList<Product>.ToProductPagedList(products, productParameters.PageNumber, productParameters.PageSize);
+        Dictionary<int,int> categoryCount = new ();
+        Dictionary<string,int> manufacturerCount = new ();
+
+        foreach (int categoryId in products.Select(p => p.CategoryId).Distinct().ToList())
+        {
+            categoryCount.Add(categoryId,products.Count(p => p.CategoryId == categoryId));
+        }
+
+		foreach (string manufacturer in products.Select(p => p.Attributes.Manufacturer).Distinct().ToList())
+		{
+			manufacturerCount.Add(manufacturer, products.Count(p => p.Attributes.Manufacturer.Equals(manufacturer)));
+		}
+
+		return ProductPagedList<Product>.ToProductPagedList(await products.ToListAsync(), productParameters.PageNumber, productParameters.PageSize,categoryCount, manufacturerCount);
 	}
 }

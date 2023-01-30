@@ -7,19 +7,21 @@ public class ProductPagedList<T> : PagedList<T>
 	{
 
 	}
-	public ProductPagedList(List<T> items, int count, int pageNumber, int pageSize)
+	public ProductPagedList(List<T> items, int count, int pageNumber, int pageSize, IDictionary<int, int> categoryCount, IDictionary<string,int> manufacturerCount)
 	{
 		MetaData = new ProductResponseMetaData
 		{
 			TotalCount = count,
 			PageSize = pageSize,
 			CurrentPage = pageNumber,
-			TotalPages = (int)Math.Ceiling(count / (double)pageSize)
+			TotalPages = (int)Math.Ceiling(count / (double)pageSize),
+			CategoryCount = categoryCount,
+			ManufacturerCount = manufacturerCount
 		};
 		Items = items;
 	}
 
-	public static ProductPagedList<T> ToProductPagedList(IEnumerable<T> source, int pageNumber, int pageSize)
+	public static ProductPagedList<T> ToProductPagedList(IEnumerable<T> source, int pageNumber, int pageSize, IDictionary<int, int> categoryCount, IDictionary<string, int> manufacturerCount)
 	{
 		int count = source.Count();
 		List<T> items = source
@@ -27,6 +29,6 @@ public class ProductPagedList<T> : PagedList<T>
 		  .Take(pageSize)
 		  .ToList();
 
-		return new ProductPagedList<T>(items, count, pageNumber, pageSize);
+		return new ProductPagedList<T>(items, count, pageNumber, pageSize, categoryCount, manufacturerCount);
 	}
 }
