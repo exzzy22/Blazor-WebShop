@@ -39,7 +39,7 @@
 							foreach (var kvp in ProductsList.MetaData.CategoryCount)
 							{
 								<div class="input-checkbox">
-									<input type="checkbox" id="category-@kvp.Key" checked="@(kvp.Key == ProductParameters.Filter.CategoryId)">
+									<input type="checkbox" id="category-@kvp.Key" checked="@(ProductParameters.Filter.CategoryId.Contains(kvp.Key))" @onchange="async () => await SetCategory(kvp.Key)">
 									<label for="category-@kvp.Key">
 										<span></span>
 										@Categories.First(c => c.Id == kvp.Key).Name
@@ -79,7 +79,7 @@
 						foreach (var kvp in ProductsList.MetaData.ManufacturerCount)
 						{
 							<div class="input-checkbox">
-								<input type="checkbox" id="@kvp.Key">
+									<input type="checkbox" id="@kvp.Key" @onchange="async () => await SetManufacturer(kvp.Key)">
 									<label for="@kvp.Key">
 									<span></span>
 									@kvp.Key
@@ -164,7 +164,7 @@
 					{
 						foreach (var product in ProductsList.Items)
 						{
-							<ProductCard Product="product" />
+							<ProductCard Product="product" CategoryName="@Categories.First(c => c.Id == product.CategoryId).Name" />
 						}	
 					}
 				</div>
@@ -192,7 +192,7 @@
 
 
 @code {
-	ProductParameters ProductParameters { get; set; } = new();
+	ProductParameters ProductParameters { get; set; } = new() { PageNumber = 1, PageSize = 11 };
 	ProductPagedList<ProductVM> ProductsList { get; set; } = null!;
 	List<CategoryVM> Categories { get; set; } = null!;
 
@@ -206,8 +206,36 @@
 	protected override async Task OnParametersSetAsync()
 	{
 		ProductParameters.Filter.Keywords = Keywords;
-		ProductParameters.Filter.CategoryId = CategoryId;
+		if (CategoryId is not null)
+		{
+			ProductParameters.Filter.CategoryId.Add((int)CategoryId);
+		}
 		ProductsList = await ApiService.GetProducts(ProductParameters);
 		Categories = await ApiService.GetCategories();
+	}
+
+	async Task SetCategory(int categoryId)
+	{
+		if (ProductParameters.Filter.CategoryId.Contains(categoryId))
+		{
+			ProductParameters.Filter.CategoryId.Remove(categoryId);
+		}
+		else
+		{
+			ProductParameters.Filter.CategoryId.Add(categoryId);
+		}
+		ProductsList = await ApiService.GetProducts(ProductParameters);
+	}
+	async Task SetManufacturer(string manufacturer)
+	{
+		if (ProductParameters.Filter.Manufacturer.Contains(manufacturer))
+		{
+			ProductParameters.Filter.Manufacturer.Remove(manufacturer);
+		}
+		else
+		{
+			ProductParameters.Filter.Manufacturer.Add(manufacturer);
+		}
+		ProductsList = await ApiService.GetProducts(ProductParameters);
 	}
 }

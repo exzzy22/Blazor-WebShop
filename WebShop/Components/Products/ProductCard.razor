@@ -11,7 +11,7 @@
 			</div>
 		</div>
 	<div class="product-body">
-		<p class="product-category">@Product.CategoryId</p>
+		<p class="product-category">@CategoryName</p>
 		<h3 class="product-name"><a href="#">@Product.ShortName</a></h3>
 			@if (StaticConfig.Currency is not null)
 			{
@@ -37,6 +37,8 @@
 @code {
 	[Parameter]
 	public ProductVM Product { get; set; } = null!;
+	[Parameter]
+	public string CategoryName { get; set; } = null!;
 	[Inject]
 	WebShopConfiguration Configuration { get; set; } = null!;
 	[Inject]

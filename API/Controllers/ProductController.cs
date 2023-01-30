@@ -26,8 +26,8 @@ public class ProductController : ControllerBase
     [HttpGet("all")]
     public async Task<IActionResult> GetProducts() => Ok(await _serviceManager.ProductService.GetProductsAsync());
 
-    [HttpGet]
-    public async Task<IActionResult> GetProducts([FromQuery] ProductParameters productParameters)
+    [HttpPost]
+    public async Task<IActionResult> GetProducts(ProductParameters productParameters)
     {
 		return Ok(await _serviceManager.ProductService.GetProductsAsync(productParameters));
 	}

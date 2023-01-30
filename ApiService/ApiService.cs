@@ -100,7 +100,7 @@ public sealed class ApiService : IApiService
 
 	public async Task<ProductPagedList<ProductVM>> GetProducts(ProductParameters productParameters)
 	{
-		HttpResponseMessage response = await _httpClient.GetAsync($"api/product{productParameters.ToQueryString()}");
+		HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"api/product",productParameters);
 
 		ProductPagedList<ProductDto> products = await response.Content.ReadFromJsonAsync<ProductPagedList<ProductDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 

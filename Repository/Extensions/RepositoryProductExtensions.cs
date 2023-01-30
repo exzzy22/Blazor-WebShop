@@ -10,9 +10,14 @@ internal static class RepositoryProductExtensions
 			products = products.Where(e => e.Name.ToLower().Contains(lowerCaseTerm) || e.ShortName.ToLower().Contains(lowerCaseTerm));
 		}
 
-		if (filter.CategoryId.HasValue)
+		if (filter.CategoryId.Count>0 && filter.CategoryId.Any())
 		{
-			products = products.Where(e => e.CategoryId.Equals(filter.CategoryId.Value));
+			products = products.Where(e => filter.CategoryId.Contains(e.CategoryId));
+		}
+
+		if (filter.Manufacturer.Count > 0 && filter.Manufacturer.Any())
+		{
+			products = products.Where(e => filter.Manufacturer.Contains(e.Attributes.Manufacturer));
 		}
 
 		return products;
