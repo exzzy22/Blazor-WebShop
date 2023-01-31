@@ -55,17 +55,16 @@
 				<div class="aside">
 					<h3 class="aside-title">Price</h3>
 					<div class="price-filter">
-						<div id="price-slider"></div>
 						<div class="input-number price-min">
-							<input id="price-min" type="number">
-							<span class="qty-up">+</span>
-							<span class="qty-down">-</span>
+							<InputNumber id="price-min" type="number" @bind-Value="ProductParameters.Filter.MinPrice" @bind-Value:after="Search"/>
+							<span class="qty-up" @onclick="async () => {ProductParameters.Filter.MinPrice++; await Search();}">+</span>
+							<span class="qty-down" @onclick="async () => {ProductParameters.Filter.MinPrice--; await Search();}">-</span>
 						</div>
 						<span>-</span>
 						<div class="input-number price-max">
-							<input id="price-max" type="number">
-							<span class="qty-up">+</span>
-							<span class="qty-down">-</span>
+							<InputNumber id="price-max" type="number" @bind-Value="ProductParameters.Filter.MaxPrice" @bind-Value:after="Search" />
+							<span class="qty-up" @onclick="async () => {ProductParameters.Filter.MaxPrice++; await Search();}">+</span>
+							<span class="qty-down" @onclick="async () => {ProductParameters.Filter.MaxPrice--; await Search();}">-</span>
 						</div>
 					</div>
 				</div>
@@ -145,20 +144,21 @@
 
 						<label>
 							Show:
-							<select class="input-select">
-								<option value="0">20</option>
-								<option value="1">50</option>
-							</select>
+							<InputSelect class="input-select" @bind-Value="ProductParameters.PageSize" @bind-Value:after="Search">
+								<option value="6">6</option>
+								<option value="12">12</option>
+								<option value="18">18</option>
+							</InputSelect>
 						</label>
 					</div>
 					<ul class="store-grid">
 						<li class="active"><i class="fa fa-th"></i></li>
-						<li><a href="#"><i class="fa fa-th-list"></i></a></li>
+						<li><a><i class="fa fa-th-list"></i></a></li>
 					</ul>
 				</div>
 				<!-- /store top filter -->
 				<!-- store products -->
-				<div class="row">
+				<div class="row" style="display:contents">
 					<!-- product -->
 					@if (ProductsList is not null)
 					{
@@ -210,7 +210,7 @@
 
 
 @code {
-	ProductParameters ProductParameters { get; set; } = new() { PageNumber = 1, PageSize = 11 };
+	ProductParameters ProductParameters { get; set; } = new() { PageNumber = 1, PageSize = 12, Filter = new ProductFilter { CurrencyId = StaticConfig.Currency.Id } };
 	ProductPagedList<ProductVM> ProductsList { get; set; } = null!;
 	List<CategoryVM> Categories { get; set; } = null!;
 
@@ -234,6 +234,8 @@
 
 	async Task GoToPage(int pageNumber) => ProductsList = await ApiService.GetProducts(new ProductParameters { PageSize = 8, PageNumber = pageNumber });
 
+	async Task Search() => ProductsList = await ApiService.GetProducts(ProductParameters);
+
 
 	async Task SetCategory(int categoryId)
 	{
@@ -245,7 +247,7 @@
 		{
 			ProductParameters.Filter.CategoryId.Add(categoryId);
 		}
-		ProductsList = await ApiService.GetProducts(ProductParameters);
+		await Search();
 	}
 	async Task SetManufacturer(string manufacturer)
 	{
@@ -257,6 +259,6 @@
 		{
 			ProductParameters.Filter.Manufacturer.Add(manufacturer);
 		}
-		ProductsList = await ApiService.GetProducts(ProductParameters);
+		await Search();
 	}
 }

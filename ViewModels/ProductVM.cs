@@ -23,8 +23,8 @@ public class ProductVM
 
 		return Prices.First(p => p.Currency.Id.Equals(currency.Id)).Value;
 	}
-
-	public double CalculateDiscountedPrice(CurrencyVM currency) => GetPriceForCurrency(currency).Value - (GetPriceForCurrency(currency).Value * (Discount / 100.0));
+	public double GetOrginalPrice(CurrencyVM currency) => Prices.First(p => p.Currency.Id.Equals(currency.Id)).Value;
+	double CalculateDiscountedPrice(CurrencyVM currency) => GetPriceForCurrency(currency).Value - (GetPriceForCurrency(currency).Value * (Discount / 100.0));
 	PriceVM GetPriceForCurrency(CurrencyVM currency) => Prices.First(p => p.Currency.Id.Equals(currency.Id));
 
 

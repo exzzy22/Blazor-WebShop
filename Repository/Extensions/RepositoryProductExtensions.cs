@@ -7,17 +7,27 @@ internal static class RepositoryProductExtensions
 		if (!string.IsNullOrWhiteSpace(filter.Keywords))
 		{
 			string lowerCaseTerm = filter.Keywords.Trim().ToLower();
-			products = products.Where(e => e.Name.ToLower().Contains(lowerCaseTerm) || e.ShortName.ToLower().Contains(lowerCaseTerm));
+			products = products.Where(p => p.Name.ToLower().Contains(lowerCaseTerm) || p.ShortName.ToLower().Contains(lowerCaseTerm));
 		}
 
 		if (filter.CategoryId.Count>0 && filter.CategoryId.Any())
 		{
-			products = products.Where(e => filter.CategoryId.Contains(e.CategoryId));
+			products = products.Where(p => filter.CategoryId.Contains(p.CategoryId));
 		}
 
 		if (filter.Manufacturer.Count > 0 && filter.Manufacturer.Any())
 		{
-			products = products.Where(e => filter.Manufacturer.Contains(e.Attributes.Manufacturer));
+			products = products.Where(p => filter.Manufacturer.Contains(p.Attributes.Manufacturer));
+		}
+
+		if (filter.MinPrice.HasValue)
+		{
+			products = products.Where(p => p.Prices.First( price => price.CurrencyId == filter.CurrencyId).Value > filter.MinPrice);
+		}
+
+		if (filter.MaxPrice.HasValue)
+		{
+			products = products.Where(p => p.Prices.First(price => price.CurrencyId == filter.CurrencyId).Value < filter.MaxPrice);
 		}
 
 		return products;
