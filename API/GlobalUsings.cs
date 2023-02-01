@@ -16,3 +16,4 @@ global using Shared.ConfigurationModels;
 global using Shared.DataTransferObjects;
 global using System.Text;
 global using Microsoft.AspNetCore.Authorization;
+global using Shared.RequestFeatures;

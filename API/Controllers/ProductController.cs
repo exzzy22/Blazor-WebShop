@@ -1,9 +1,4 @@
-﻿using Domain.Models;
-using Service.Contracts;
-using Shared.RequestFeatures;
-using System.Reflection.Metadata.Ecma335;
-
-namespace API.Controllers;
+﻿namespace API.Controllers;
 
 [Route("api/product")]
 [ApiController]
