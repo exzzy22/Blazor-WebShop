@@ -1,5 +1,7 @@
 ﻿@page "/product/{ProductId:int}"
 
+@if (Product is null) return;
+
 <!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
 	<!-- container -->
@@ -8,11 +10,10 @@
 		<div class="row">
 			<div class="col-md-12">
 				<ul class="breadcrumb-tree">
-					<li><a href="#">Home</a></li>
-					<li><a href="#">All Categories</a></li>
-					<li><a href="#">Accessories</a></li>
-					<li><a href="#">Headphones</a></li>
-					<li class="active">Product name goes here</li>
+					<li><a href="/">Home</a></li>
+					<li><a href="products">All Categories</a></li>
+					<li><a href="@($"products/{Product.CategoryId}")">@Categories.First(c => c.Id == Product.Id).Name</a></li>
+					<li class="active">@Product.ShortName</li>
 				</ul>
 			</div>
 		</div>
@@ -30,42 +31,24 @@
 			<!-- Product main img -->
 			<div class="col-md-5 col-md-push-2">
 				<div id="product-main-img">
-					<div class="product-preview">
-						<img src="./img/product01.png" alt="">
-					</div>
-
-					<div class="product-preview">
-						<img src="./img/product03.png" alt="">
-					</div>
-
-					<div class="product-preview">
-						<img src="./img/product06.png" alt="">
-					</div>
-
-					<div class="product-preview">
-						<img src="./img/product08.png" alt="">
-					</div>
+					@foreach (var image in Product.Images)
+					{
+						<div class="product-preview">
+							<img src="@(Configuration.ApiImageAddress + image.File)" alt="Product Image">
+						</div>
+					}
 				</div>
 			</div>
 			<!-- /Product main img -->
 			<!-- Product thumb imgs -->
 			<div class="col-md-2  col-md-pull-5">
 				<div id="product-imgs">
-					<div class="product-preview">
-						<img src="./img/product01.png" alt="">
-					</div>
-
-					<div class="product-preview">
-						<img src="./img/product03.png" alt="">
-					</div>
-
-					<div class="product-preview">
-						<img src="./img/product06.png" alt="">
-					</div>
-
-					<div class="product-preview">
-						<img src="./img/product08.png" alt="">
-					</div>
+					@foreach (var image in Product.Images)
+					{
+						<div class="product-preview">
+							<img src="@(Configuration.ApiImageAddress + image.File)" alt="Product Image">
+						</div>
+					}
 				</div>
 			</div>
 			<!-- /Product thumb imgs -->
@@ -78,7 +61,7 @@
 						<a class="review-link" href="#">10 Review(s) | Add your review</a>
 					</div>
 					<div>
-						<h3 class="product-price">@StaticConfig.Currency.Symbol @Product.GetPrice(StaticConfig.Currency) <del class="product-old-price">@(Product.IsDiscounted ? $" {StaticConfig.Currency.Symbol}" + Product.GetOrginalPrice(StaticConfig.Currency).ToPriceString() : "")</del></h3>
+						<h3 class="product-price">@StaticConfig.Currency.Symbol @Product.GetPrice(StaticConfig.Currency).ToString("N2") <del class="product-old-price">@(Product.IsDiscounted ? GetDicountedPrice(): "")</del></h3>
 						<span class="product-available">In Stock</span>
 					</div>
 					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
@@ -475,11 +458,23 @@
 	public int ProductId { get; set; }
 	[Inject]
 	IApiService ApiService { get; set; } = null!;
-	public ProductVM Product { get; set; } = null!;
+	[Inject]
+	WebShopConfiguration Configuration { get; set; } = null!;
+	[Inject]
+	IJSRuntime JSRuntime { get; set; } = null!;
+	ProductVM Product { get; set; } = null!;
+	List<CategoryVM> Categories { get; set; } = null!;
 
 	protected override async Task OnInitializedAsync()
 	{
 		Product = await ApiService.GetProduct(ProductId);
+		Categories = await ApiService.GetCategories();
 	}
 
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		await JSRuntime.InvokeVoidAsync("detailsSlick");
+	}
+
+	string GetDicountedPrice() => StaticConfig.Currency.Symbol + Product.GetOrginalPrice(StaticConfig.Currency).ToString("N2");
 }
