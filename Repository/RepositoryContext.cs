@@ -24,7 +24,12 @@ public class RepositoryContext : IdentityDbContext<User, Role, int>
                     .HasForeignKey<Attributes>(p => p.ProductId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Attributes>()
+		modelBuilder.Entity<Review>()
+                    .Property(r => r.CreatedDate)
+					.HasColumnType("datetime2")
+					.HasDefaultValueSql("(getdate())");
+
+		modelBuilder.Entity<Attributes>()
                     .ToTable("Attributes")
                     .HasDiscriminator<int>("AttributesType")
                     .HasValue<Attributes>(0)
@@ -61,4 +66,5 @@ public class RepositoryContext : IdentityDbContext<User, Role, int>
 	public DbSet<Order> Orders { get; set; } = null!;
 	public DbSet<Address> Adresses { get; set; } = null!;
     public DbSet<ProductOrder> ProductOrders { get; set; } = null!;
+    public DbSet<Review> Reviews { get; set; } = null!;
 }

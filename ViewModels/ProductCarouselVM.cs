@@ -17,6 +17,14 @@ public class ProductCarouselVM
     public CategoryVM Category { get; set; } = null!;
     public List<PriceVM> Prices { get; set; } = null!;
 
-	public double CalculateDiscountedPrice(CurrencyVM currency) => GetPrice(currency).Value - (GetPrice(currency).Value * (Discount / 100.0));
-    public PriceVM GetPrice(CurrencyVM currency) => Prices.First(p => p.Currency.Id.Equals(currency.Id));
+	public double GetPrice(CurrencyVM currency)
+	{
+		if (Discount > 0)
+			return CalculateDiscountedPrice(currency);
+
+		return Prices.First(p => p.Currency.Id.Equals(currency.Id)).Value;
+	}
+	public double GetOrginalPrice(CurrencyVM currency) => Prices.First(p => p.Currency.Id.Equals(currency.Id)).Value;
+	double CalculateDiscountedPrice(CurrencyVM currency) => GetPriceForCurrency(currency).Value - (GetPriceForCurrency(currency).Value * (Discount / 100.0));
+	PriceVM GetPriceForCurrency(CurrencyVM currency) => Prices.First(p => p.Currency.Id.Equals(currency.Id));
 }
