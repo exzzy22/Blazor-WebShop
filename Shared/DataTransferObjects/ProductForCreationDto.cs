@@ -9,6 +9,7 @@ public class ProductForCreationDto
     public int InStock { get; set; }
     public int Sold { get; set; }
     public int CategoryId { get; set; }
+	public string? Description { get; set; }
 	public string SelectedSpecification { get; set; } = null!;
     public AttributesDto Attributes { get; set; } = null!;
     public List<ImageForCreationDto> Images { get; set; } = null!;

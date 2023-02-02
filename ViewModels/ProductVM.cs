@@ -12,7 +12,8 @@ public class ProductVM
 	public int InStock { get; set; }
     public int Sold { get; set; }
     public int CategoryId { get; set; }
-    public AttributesVM Attributes { get; set; } = null!;
+	public string? Description { get; set; }
+	public AttributesVM Attributes { get; set; } = null!;
 	public List<PriceVM> Prices { get; set; } = null!;
 	public List<ImageVM> Images { get; set; } = null!;
 

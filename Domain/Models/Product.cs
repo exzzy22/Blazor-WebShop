@@ -12,6 +12,7 @@ public class Product
     public int Sold { get; set; } = 0;
     public int CategoryId { get; set; }
     public string SelectedSpecification { get; set; } = null!;
+    public string? Description { get; set; }
 
     public virtual Category Category { get; set; } = null!;
     public virtual Attributes Attributes { get; set; } = null!;

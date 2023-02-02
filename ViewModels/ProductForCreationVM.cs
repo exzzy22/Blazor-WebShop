@@ -22,6 +22,7 @@ public class ProductForCreationVM
     public int? CategoryId { get; set; }
 	[Required]
 	public int Sold { get; set; } = 0;
+	public string? Description { get; set; }
 	[Required]
     public AttributesVM? Attributes { get; set; } = null!;
 

@@ -11,6 +11,7 @@ public record ProductDto
     public int InStock { get; init; }
     public int Sold { get; init; }
     public int CategoryId { get; init; }
+	public string? Description { get; set; }
 	public AttributesDto Attributes { get; init; } = null!;
     public List<ImageDto> Images { get; set; } = null!;
     public List<PriceDto> Prices { get; init; } = null!;

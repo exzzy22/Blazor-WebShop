@@ -1,23 +1,35 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ViewModels.ValidationAttributes;
 
 namespace ViewModels;
 
 public class CpuAtrributesVM : AttributesVM
 {
     [Required]
-    public string Socket { get; set; } = null!;
+	[NameForDisplay("CPU Socket")]
+	public string Socket { get; set; } = null!;
     [Required]
-    public int CoreCount { get; set; }
+	[NameForDisplay("# of CPU Cores")]
+	public int CoreCount { get; set; }
     [Required]
-    public int ThreadCount { get; set; }
+	[NameForDisplay("# of Threads")]
+	public int ThreadCount { get; set; }
     [Required]
-    public int CacheL3 { get; set; }
+	[NameForDisplay("L3 Cache")]
+	[ValueAdditionText("MB")]
+	public int CacheL3 { get; set; }
     [Required]
-    public float BaseClockCpu { get; set; }
+	[NameForDisplay("Base Clock")]
+	[ValueAdditionText("GHz")]
+	public float BaseClockCpu { get; set; }
     [Required]
-    public float BoostClockCpu { get; set; }
+	[NameForDisplay("Max. Boost Clock")]
+	[ValueAdditionText("GHz")]
+	public float BoostClockCpu { get; set; }
     [Required]
-    public int TDP { get; set; }
+	[NameForDisplay("Default TDP")]
+	[ValueAdditionText("W")]
+	public int TDP { get; set; }
     [Required]
-    public string Graphics { get; set; } = null!;
+	[NameForDisplay("Integrated Graphic")]
+	public string Graphics { get; set; } = null!;
 }
