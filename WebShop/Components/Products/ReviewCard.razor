@@ -2,7 +2,7 @@
 	<div class="review-heading">
 		<h5 class="name">@(Review.Name ?? "Anonymous")</h5>
 		<p class="date">@Review.CreatedDate.ToString("dd MMM yyyy, h:mm tt")</p>
-		<StarRating StarCount="Review.StarRating"/>
+		<StarRating StarCount="Review.StarRating" Type="RatingType.Review"/>
 	</div>
 	<div class="review-body">
 		<p>@Review.Description</p>

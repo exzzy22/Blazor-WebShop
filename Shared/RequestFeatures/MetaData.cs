@@ -1,5 +1,8 @@
-﻿namespace Shared.RequestFeatures;
+﻿using System.Text.Json.Serialization;
 
+namespace Shared.RequestFeatures;
+
+[JsonDerivedType(typeof(ReviewMetaData), 1)]
 public class MetaData
 {
     public int CurrentPage { get; set; }

@@ -1,0 +1,54 @@
+﻿<!-- Rating -->
+<div class="col-md-3">
+	<div id="rating">
+		<div class="rating-avg">
+			<span>@MetaData.AverageStarRating(TotalRating)</span>
+			<StarRating StarCount="(int)Math.Round(MetaData.AverageStarRating(TotalRating))" Type="RatingType.RatingStars"/>
+		</div>
+		<ul class="rating">
+			<li>
+				<StarRating StarCount="5" Type="RatingType.RatingStars" />
+				<div class="rating-progress">
+					<div style="width: @MetaData.StarRatingPercentage(MetaData.FiveStarCount)%;"></div>
+				</div>
+				<span class="sum">@MetaData.FiveStarCount</span>
+			</li>
+			<li>
+				<StarRating StarCount="4" Type="RatingType.RatingStars" />
+				<div class="rating-progress">
+					<div style="width: @MetaData.StarRatingPercentage(MetaData.FourStarCount)%;"></div>
+				</div>
+				<span class="sum">@MetaData.FourStarCount</span>
+			</li>
+			<li>
+				<StarRating StarCount="3" Type="RatingType.RatingStars" />
+				<div class="rating-progress">
+					<div style="width: @MetaData.StarRatingPercentage(MetaData.ThreeStarCount)%;"></div>
+				</div>
+				<span class="sum">@MetaData.ThreeStarCount</span>
+			</li>
+			<li>
+				<StarRating StarCount="2" Type="RatingType.RatingStars" />
+				<div class="rating-progress">
+					<div style="width: @MetaData.StarRatingPercentage(MetaData.TwoStarCount)%;"></div>
+				</div>
+				<span class="sum">@MetaData.TwoStarCount</span>
+			</li>
+			<li>
+				<StarRating StarCount="1" Type="RatingType.RatingStars" />
+				<div class="rating-progress">
+					<div style="width: @MetaData.StarRatingPercentage(MetaData.OneStarCount)%;"></div>
+				</div>
+				<span class="sum">@MetaData.OneStarCount</span>
+			</li>
+		</ul>
+	</div>
+</div>
+<!-- /Rating -->
+
+@code {
+	[Parameter]
+	public ReviewMetaData MetaData { get; set; } = null!;
+	[Parameter]
+	public double TotalRating { get; set; }
+}

@@ -143,9 +143,9 @@ public sealed class ApiService : IApiService
 	{
 		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/review{reviewParameters.ToQueryString()}");
 
-		PagedList<ReviewDto> orders = await response.Content.ReadFromJsonAsync<PagedList<ReviewDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		PagedList<ReviewDto> reviews = await response.Content.ReadFromJsonAsync<PagedList<ReviewDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
-		return _mapper.Map<PagedList<ReviewVM>>(orders);
+		return _mapper.Map<PagedList<ReviewVM>>(reviews);
 	}
 	#endregion
 

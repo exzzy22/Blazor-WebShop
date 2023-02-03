@@ -1,7 +1,7 @@
 ﻿@switch (StarCount)
 {
 	case 0:
-		<div class="product-rating">
+		<div class="@GenerateCss()">
 			<i class="fa fa-star-o"></i>
 			<i class="fa fa-star-o"></i>
 			<i class="fa fa-star-o"></i>
@@ -10,7 +10,7 @@
 		</div>
 		break;
 	case 1:
-		<div class="product-rating">
+		<div class="@GenerateCss()">
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star-o"></i>
 			<i class="fa fa-star-o"></i>
@@ -19,7 +19,7 @@
 		</div>
 		break;
 	case 2:
-		<div class="product-rating">
+		<div class="@GenerateCss()">
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star-o"></i>
@@ -28,7 +28,7 @@
 		</div>
 		break;
 	case 3:
-		<div class="product-rating">
+		<div class="@GenerateCss()">
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star"></i>
@@ -37,7 +37,7 @@
 		</div>
 		break;
 	case 4:
-		<div class="product-rating">
+		<div class="@GenerateCss()">
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star"></i>
@@ -46,7 +46,7 @@
 		</div>
 		break;
 	case 5:
-		<div class="product-rating">
+		<div class="@GenerateCss()">
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star"></i>
 			<i class="fa fa-star"></i>
@@ -57,7 +57,24 @@
 }
 
 @code {
-    [Parameter]
-    public int StarCount { get; set; }
+	[Parameter]
+	public int StarCount { get; set; }
+	[Parameter]
+	public RatingType Type { get; set; }
+
+	string GenerateCss()
+	{
+		switch (Type)
+		{
+			case RatingType.Product:
+				return "product-rating";
+			case RatingType.Review:
+				return "review-rating";
+			case RatingType.RatingStars:
+				return "rating-stars";
+			default:
+				return "";
+		}
+	}
 
 }
