@@ -11,6 +11,7 @@ public sealed class RepositoryManager : IRepositoryManager
     private readonly Lazy<ICartRepository> _cartRepository;
     private readonly Lazy<IOrderRepository> _orderRepository;
     private readonly Lazy<IWishlistRepository> _wishlistRepository;
+    private readonly Lazy<IReviewRepository> _reviewRepository;
 
 
     public RepositoryManager(RepositoryContext repositoryContext)
@@ -24,6 +25,7 @@ public sealed class RepositoryManager : IRepositoryManager
         _cartRepository = new Lazy<ICartRepository>( () => new CartRepository(repositoryContext));
 		_orderRepository = new Lazy<IOrderRepository>(() => new OrderRepository(repositoryContext));
         _wishlistRepository = new Lazy<IWishlistRepository>( () => new WishlistRepository(repositoryContext));
+        _reviewRepository = new Lazy<IReviewRepository> ( () => new ReviewRepository(repositoryContext));
 
 	}
 
@@ -35,6 +37,7 @@ public sealed class RepositoryManager : IRepositoryManager
     public ICartRepository Cart => _cartRepository.Value;
     public IOrderRepository Order => _orderRepository.Value;
     public IWishlistRepository Wishlist => _wishlistRepository.Value;
+    public IReviewRepository Review => _reviewRepository.Value;
 
     public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
     public void Save() => _repositoryContext.SaveChanges();

@@ -166,5 +166,8 @@ public class ProductController : ControllerBase
     [Authorize]
     public async Task<IActionResult> JoinWishlistToUser(int wishlistId, int userId) => Ok(await _serviceManager.ProductService.JoinWishlistToUser(wishlistId,userId));
 
+    [HttpGet("review")]
+    public async Task<IActionResult> GetReviews([FromQuery] ReviewParameters reviewParameters) => Ok(_serviceManager.ProductService.GetProductReviews(reviewParameters));
+
 
 }

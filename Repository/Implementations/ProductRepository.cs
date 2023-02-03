@@ -19,7 +19,7 @@ internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepo
         .Include(p => p.Category)
         .Include(p => p.Attributes)
         .Include(p => p.Images)
-		.IgnoreAutoIncludes()
+        .IgnoreAutoIncludes()
 		.FirstOrDefaultAsync();
 
 

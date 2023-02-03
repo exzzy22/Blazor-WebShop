@@ -15,4 +15,5 @@ public record ProductDto
 	public AttributesDto Attributes { get; init; } = null!;
     public List<ImageDto> Images { get; set; } = null!;
     public List<PriceDto> Prices { get; init; } = null!;
+    public List<Review> Reviews { get; init; } = null!;
 }

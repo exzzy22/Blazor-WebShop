@@ -139,10 +139,18 @@ public sealed class ApiService : IApiService
         return _mapper.Map<List<ImageForTableVM>>(imageForTable);
     }
 
-    #endregion
+	public async Task<PagedList<ReviewVM>> GetReviews(ReviewParameters reviewParameters)
+	{
+		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/review{reviewParameters.ToQueryString()}");
 
-    #region Accounts
-    public async Task<List<AdminVM>> GetAdmins()
+		PagedList<ReviewDto> orders = await response.Content.ReadFromJsonAsync<PagedList<ReviewDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+		return _mapper.Map<PagedList<ReviewVM>>(orders);
+	}
+	#endregion
+
+	#region Accounts
+	public async Task<List<AdminVM>> GetAdmins()
     {
         HttpResponseMessage response = await _httpClient.GetAsync("api/account/admin");
 

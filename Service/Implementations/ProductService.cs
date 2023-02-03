@@ -267,4 +267,6 @@ internal sealed class ProductService : IProductService
 
 		return _mapper.Map<WishlistDto>(wishlist);
 	}
+
+    public PagedList<ReviewDto> GetProductReviews(ReviewParameters reviewParameters) => _mapper.Map<PagedList<ReviewDto>>(_repository.Review.GetReviews(reviewParameters));
 }

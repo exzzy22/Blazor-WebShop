@@ -19,6 +19,7 @@ public interface IApiService
     Task<bool> DeleteImage(string image);
     Task<bool> DeleteImage(List<string> images);
     Task<List<ImageForTableVM>> GetUnusedImages();
+    Task<PagedList<ReviewVM>> GetReviews(ReviewParameters reviewParameters);
     #endregion
 
     #region Accounts

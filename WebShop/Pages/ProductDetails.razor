@@ -252,54 +252,13 @@
 								<div class="col-md-6">
 									<div id="reviews">
 										<ul class="reviews">
-											<li>
-												<div class="review-heading">
-													<h5 class="name">John</h5>
-													<p class="date">27 DEC 2018, 8:0 PM</p>
-													<div class="review-rating">
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star-o empty"></i>
-													</div>
-												</div>
-												<div class="review-body">
-													<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-												</div>
-											</li>
-											<li>
-												<div class="review-heading">
-													<h5 class="name">John</h5>
-													<p class="date">27 DEC 2018, 8:0 PM</p>
-													<div class="review-rating">
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star-o empty"></i>
-													</div>
-												</div>
-												<div class="review-body">
-													<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-												</div>
-											</li>
-											<li>
-												<div class="review-heading">
-													<h5 class="name">John</h5>
-													<p class="date">27 DEC 2018, 8:0 PM</p>
-													<div class="review-rating">
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star-o empty"></i>
-													</div>
-												</div>
-												<div class="review-body">
-													<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-												</div>
-											</li>
+											@if (Reviews is not null)
+											{
+												foreach (var review in Reviews.Items)
+												{
+													<ReviewCard Review="review"/>
+												}	
+											}
 										</ul>
 										<ul class="reviews-pagination">
 											<li class="active">1</li>
@@ -494,11 +453,13 @@
 	IJSRuntime JSRuntime { get; set; } = null!;
 	ProductVM Product { get; set; } = null!;
 	List<CategoryVM> Categories { get; set; } = null!;
+	PagedList<ReviewVM> Reviews { get; set; } = null!;
 
 	protected override async Task OnInitializedAsync()
 	{
 		Product = await ApiService.GetProduct(ProductId);
 		Categories = await ApiService.GetCategories();
+		Reviews = await ApiService.GetReviews(new ReviewParameters { PageNumber = 1, PageSize = 3, ProductId = ProductId });
 	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)

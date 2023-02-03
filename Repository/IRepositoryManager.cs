@@ -12,6 +12,7 @@ namespace Repository
         ICartRepository Cart { get; }
         IOrderRepository Order { get; }
         IWishlistRepository Wishlist { get; }
+        IReviewRepository Review { get; }
 
 
         Task SaveAsync();

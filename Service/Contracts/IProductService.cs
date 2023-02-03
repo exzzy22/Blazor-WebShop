@@ -29,4 +29,5 @@ public interface IProductService
     Task<WishlistDto> GetUserWishlist(int userId);
     Task<WishlistDto> JoinWishlistToUser(int wishlistId, int userId);
 
+    PagedList<ReviewDto> GetProductReviews(ReviewParameters reviewParameters);
 }
