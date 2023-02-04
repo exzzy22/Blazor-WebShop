@@ -19,10 +19,11 @@ public class ReviewMetaData : MetaData
 	public int ThreeStarCount { get; set; }
 	public int FourStarCount { get; set; }
 	public int FiveStarCount { get; set; }
+	public double TotalRating { get; set; }
 
-	public double AverageStarRating(double totalRating)
+	public double AverageStarRating()
 	{
-		double averageRating = totalRating / TotalCount;
+		double averageRating = TotalRating / TotalCount;
 		return Math.Round(averageRating, 1);
 	}
 

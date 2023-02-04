@@ -8,4 +8,5 @@ public record ReviewDto
     public string Email { get; init; } = null!;
     public int StarRating { get; init; }
     public DateTime CreatedDate { get; init; }
+	public int ProductId { get; set; }
 }

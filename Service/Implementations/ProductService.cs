@@ -269,4 +269,10 @@ internal sealed class ProductService : IProductService
 	}
 
     public PagedList<ReviewDto> GetProductReviews(ReviewParameters reviewParameters) => _mapper.Map<PagedList<ReviewDto>>(_repository.Review.GetReviews(reviewParameters));
+
+    public async Task SubmitReview(SubmitReviewDto submitReview)
+    { 
+        _repository.Review.Create(_mapper.Map<Review>(submitReview));
+        await _repository.SaveAsync();
+    }
 }

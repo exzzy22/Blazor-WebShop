@@ -109,7 +109,7 @@
 					<ul class="tab-nav">
 						<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
 						<li><a data-toggle="tab" href="#tab2">Details</a></li>
-						<li><a data-toggle="tab" href="#tab3">Reviews (3)</a></li>
+						<li><a data-toggle="tab" href="#tab3">Reviews @(Reviews.MetaData.TotalCount > 0 ? $"({Reviews.MetaData.TotalCount})" : "")</a></li>
 					</ul>
 					<!-- /product tab nav -->
 					<!-- product tab content -->
@@ -142,7 +142,7 @@
 									<br>
 
 									<div class="row">
-										<div class="col-md-2"><h4>Test</h4></div>
+										<div class="col-md-2"><h4>Specs</h4></div>
 										<div class="col-md-10">
 											@foreach (var property in Product.Attributes.GetType().GetProperties())
 											{
@@ -164,7 +164,7 @@
 						<!-- /tab2  -->
 						<!-- tab3  -->
 						<div id="tab3" class="tab-pane fade in">
-							<ReviewTab Reviews="Reviews" ProductId="ProductId" />
+							<ReviewTab ProductId="ProductId" @bind-Reviews="Reviews" />
 						</div>
 						<!-- /tab3  -->
 					</div>
@@ -315,6 +315,8 @@
 <!-- /Section -->
 
 @code {
+	bool _render = true;
+
 	[Parameter]
 	public int ProductId { get; set; }
 	[Inject]
@@ -336,7 +338,11 @@
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		await JSRuntime.InvokeVoidAsync("detailsSlick");
+		if (!firstRender && _render)
+		{
+			await JSRuntime.InvokeVoidAsync("detailsSlick");
+			_render = false;
+		}
 	}
 
 	string GetDicountedPrice() => StaticConfig.Currency.Symbol + Product.GetOrginalPrice(StaticConfig.Currency).ToString("N2");

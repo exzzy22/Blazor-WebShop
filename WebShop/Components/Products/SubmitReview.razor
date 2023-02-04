@@ -1,0 +1,46 @@
+﻿<div class="col-md-3">
+	<div id="review-form">
+		<EditForm class="review-form" Model="Model" OnValidSubmit="OnValidSubmit">
+			<DataAnnotationsValidator />
+			<InputText class="input" type="text" placeholder="Your Name" @bind-Value="Model.Name" />
+			<InputText class="input" type="email" placeholder="Your Email" @bind-Value="Model.Email" />
+			<InputTextArea class="input" placeholder="Your Review" @bind-Value="Model.Description"></InputTextArea>
+			<div class="input-rating">
+				<span>Your Rating: </span>
+				<div class="stars">
+					<input id="star5" name="rating" value="5" type="radio" @onchange="() => Model.StarRating = 5"><label for="star5"></label>
+					<input id="star4" name="rating" value="4" type="radio" @onchange="() => Model.StarRating = 4"><label for="star4"></label>
+					<input id="star3" name="rating" value="3" type="radio" @onchange="() => Model.StarRating = 3"><label for="star3"></label>
+					<input id="star2" name="rating" value="2" type="radio" @onchange="() => Model.StarRating = 2"><label for="star2"></label>
+					<input id="star1" name="rating" value="1" type="radio" @onchange="() => Model.StarRating = 1"><label for="star1"></label>
+				</div>
+				<ValidationMessage For="() => Model.StarRating" />
+			</div>
+			<button class="primary-btn">Submit</button>
+		</EditForm>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int ProductId { get; set; }
+	[Parameter]
+	public Action LoadReviews { get; set; } = null!;
+	[Inject]
+	IApiService ApiService { get; set; } = null!;
+
+	SubmitReviewVM Model { get; set; } = null!;
+
+	protected override void OnParametersSet() => Model = new SubmitReviewVM { ProductId = ProductId };
+
+	async Task OnValidSubmit()
+	{
+		bool result = await ApiService.SubmitReview(Model);
+
+		if (result)
+		{
+			Model = new SubmitReviewVM { ProductId = ProductId };
+			LoadReviews.Invoke();
+		}
+	}
+}

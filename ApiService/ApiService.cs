@@ -147,6 +147,13 @@ public sealed class ApiService : IApiService
 
 		return _mapper.Map<PagedList<ReviewVM>>(reviews);
 	}
+
+	public async Task<bool> SubmitReview(SubmitReviewVM reviewVM)
+	{
+		HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/product/review/submit",reviewVM);
+
+        return response.IsSuccessStatusCode;
+	}
 	#endregion
 
 	#region Accounts

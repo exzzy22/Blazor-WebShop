@@ -39,5 +39,6 @@ public class Mapper : Profile
 		CreateMap<PagedList<ReviewDto>, PagedList<ReviewVM>>().ReverseMap();
 		CreateMap<ProductPagedList<ProductDto>, ProductPagedList<ProductVM>>().ReverseMap();
         CreateMap<ReviewDto, ReviewVM>().ReverseMap();
+		CreateMap<SubmitReviewDto, SubmitReviewVM>().ReverseMap();
 	}
 }

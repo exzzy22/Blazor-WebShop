@@ -1,5 +1,5 @@
 ﻿<div class="row">
-	<Rating MetaData="(ReviewMetaData)Reviews.MetaData" TotalRating="Reviews.Items.Sum(r => r.StarRating)" />
+	<Rating MetaData="(ReviewMetaData)Reviews.MetaData"/>
 	<!-- Reviews -->
 	<div class="col-md-6">
 		<div id="reviews">
@@ -40,26 +40,7 @@
 	</div>
 	<!-- /Reviews -->
 	<!-- Review Form -->
-	<div class="col-md-3">
-		<div id="review-form">
-			<form class="review-form">
-				<input class="input" type="text" placeholder="Your Name">
-				<input class="input" type="email" placeholder="Your Email">
-				<textarea class="input" placeholder="Your Review"></textarea>
-				<div class="input-rating">
-					<span>Your Rating: </span>
-					<div class="stars">
-						<input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
-						<input id="star4" name="rating" value="4" type="radio"><label for="star4"></label>
-						<input id="star3" name="rating" value="3" type="radio"><label for="star3"></label>
-						<input id="star2" name="rating" value="2" type="radio"><label for="star2"></label>
-						<input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
-					</div>
-				</div>
-				<button class="primary-btn">Submit</button>
-			</form>
-		</div>
-	</div>
+	<SubmitReview ProductId="ProductId" LoadReviews="async () => await LoadReviews()"/>
 	<!-- /Review Form -->
 </div>
 
@@ -68,9 +49,16 @@
 	public PagedList<ReviewVM> Reviews { get; set; } = null!;
 	[Parameter]
 	public int ProductId { get; set; }
+	[Parameter]
+	public EventCallback<PagedList<ReviewVM>> ReviewsChanged { get; set; }
 	[Inject]
 	IApiService ApiService { get; set; } = null!;
 
 	async Task GoToPage(int pageNumber) => Reviews = await ApiService.GetReviews(new ReviewParameters { PageNumber = pageNumber, PageSize = 3, ProductId = ProductId });
 
+	async Task LoadReviews()
+	{
+		Reviews = await ApiService.GetReviews(new ReviewParameters { PageNumber = 1, PageSize = 3, ProductId = ProductId });
+		await ReviewsChanged.InvokeAsync(Reviews);
+	}
 }

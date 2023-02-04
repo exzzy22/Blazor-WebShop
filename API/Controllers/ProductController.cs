@@ -169,5 +169,12 @@ public class ProductController : ControllerBase
     [HttpGet("review")]
     public async Task<IActionResult> GetReviews([FromQuery] ReviewParameters reviewParameters) => Ok(_serviceManager.ProductService.GetProductReviews(reviewParameters));
 
+	[HttpPost("review/submit")]
+	public async Task<IActionResult> SubmitReview(SubmitReviewDto submitReview)
+    {
+        await _serviceManager.ProductService.SubmitReview(submitReview);
+
+        return Ok();
+	}
 
 }

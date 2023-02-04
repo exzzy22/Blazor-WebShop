@@ -11,9 +11,9 @@ internal sealed class ReviewRepository : RepositoryBase<Review>, IReviewReposito
 
 	public PagedList<Review> GetReviews(ReviewParameters reviewParameters)
 	{
-		var reviews = _repositoryContext.Products.Include(p => p.Reviews)
-			.Where(p => p.Id == reviewParameters.ProductId)
-			.SelectMany(p => p.Reviews);
+		var reviews = _repositoryContext.Reviews
+			.Where(r => r.ProductId == reviewParameters.ProductId)
+			.OrderByDescending(r => r.CreatedDate);
 
 		PagedList<Review> pagedList = PagedList<Review>.ToPagedList(reviews, reviewParameters.PageNumber, reviewParameters.PageSize);
 
@@ -23,7 +23,8 @@ internal sealed class ReviewRepository : RepositoryBase<Review>, IReviewReposito
 			TwoStarCount = reviews.Count(r => r.StarRating == 2),
 			ThreeStarCount = reviews.Count(r => r.StarRating == 3),
 			FourStarCount = reviews.Count(r => r.StarRating == 4),
-			FiveStarCount = reviews.Count(r => r.StarRating == 5)
+			FiveStarCount = reviews.Count(r => r.StarRating == 5),
+			TotalRating = reviews.Sum(r => r.StarRating)
 		};
 
 		pagedList.MetaData = metaData;

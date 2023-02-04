@@ -8,4 +8,5 @@ public class ReviewVM
     public string Email { get; set; } = null!;
     public int StarRating { get; set; }
     public DateTime CreatedDate { get; set; }
+	public int ProductId { get; set; }
 }

@@ -20,10 +20,12 @@ public interface IApiService
     Task<bool> DeleteImage(List<string> images);
     Task<List<ImageForTableVM>> GetUnusedImages();
     Task<PagedList<ReviewVM>> GetReviews(ReviewParameters reviewParameters);
-    #endregion
+	Task<bool> SubmitReview(SubmitReviewVM reviewVM);
 
-    #region Accounts
-    Task<List<AdminVM>> GetAdmins();
+	#endregion
+
+	#region Accounts
+	Task<List<AdminVM>> GetAdmins();
     Task<List<UserVM>> GetUsers();
     Task<bool> CreateAdmin(AdminForCreationVM admin);
     Task<bool> DeleteAdmin(int adminId);

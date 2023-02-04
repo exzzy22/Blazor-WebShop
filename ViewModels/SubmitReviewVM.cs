@@ -1,12 +1,15 @@
-﻿namespace Domain.Models;
+﻿namespace ViewModels;
 
-public class Review
+public class SubmitReviewVM
 {
-	public int Id { get; set; }
 	public string? Name { get; set; }
+	[Required]
 	public string Description { get; set; } = null!;
+	[Required]
+	[EmailAddress]
 	public string Email { get; set; } = null!;
+	[Required]
+	[Range(1, 5, ErrorMessage = "Please select rating")]
 	public int StarRating { get; set; }
-	public DateTime CreatedDate { get; set; }
 	public int ProductId { get; set; }
 }

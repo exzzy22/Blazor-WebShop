@@ -2,8 +2,8 @@
 <div class="col-md-3">
 	<div id="rating">
 		<div class="rating-avg">
-			<span>@MetaData.AverageStarRating(TotalRating)</span>
-			<StarRating StarCount="(int)Math.Round(MetaData.AverageStarRating(TotalRating))" Type="RatingType.RatingStars"/>
+			<span>@MetaData.AverageStarRating()</span>
+			<StarRating StarCount="(int)Math.Round(MetaData.AverageStarRating())" Type="RatingType.RatingStars"/>
 		</div>
 		<ul class="rating">
 			<li>
@@ -49,6 +49,4 @@
 @code {
 	[Parameter]
 	public ReviewMetaData MetaData { get; set; } = null!;
-	[Parameter]
-	public double TotalRating { get; set; }
 }
