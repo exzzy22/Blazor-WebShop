@@ -1,0 +1,41 @@
+﻿@implements IDisposable
+
+<div class="product-widget">
+	<div class="product-img">
+		<img src="@(Configuration.ApiImageAddress + Product.Images.First(p => p.MainImage).File)" alt="@Product.ShortName">
+	</div>
+	<div class="product-body">
+		<p class="product-category">@CategoryName</p>
+		<h3 class="product-name"><a href="@($"product/{Product.Id}")">@Product.ShortName</a></h3>
+		@if (StaticConfig.Currency is not null)
+		{
+					<h4 class="product-price">@StaticConfig.Currency.Symbol @Product.GetPrice(StaticConfig.Currency).ToString("N2") <del class="product-old-price">@(Product.IsDiscounted ? GetDicountedPrice() : "")</del></h4>
+		}
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public ProductVM Product { get; set; } = null!;
+	[Parameter]
+	public string CategoryName { get; set; } = null!;
+	[Inject]
+	WebShopConfiguration Configuration { get; set; } = null!;
+
+	protected override void OnInitialized()
+	{
+		StaticConfig.PropertyChanged += OnCurrencyChanged;
+	}
+
+	private void OnCurrencyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		StateHasChanged();
+	}
+
+	string GetDicountedPrice() => StaticConfig.Currency.Symbol + Product.GetOrginalPrice(StaticConfig.Currency).ToString("N2");
+
+	void IDisposable.Dispose()
+	{
+		StaticConfig.PropertyChanged -= OnCurrencyChanged;
+	}
+}

@@ -15,7 +15,7 @@
 				<ul class="breadcrumb-tree">
 					<li><a href="/">Home</a></li>
 					<li><a href="products">All Categories</a></li>
-					<li><a href="@($"products/{Product.CategoryId}")">@Categories.First(c => c.Id == Product.Id).Name</a></li>
+					<li><a href="@($"products/{Product.CategoryId}")">@Categories.First(c => c.Id == Product.CategoryId).Name</a></li>
 					<li class="active">@Product.ShortName</li>
 				</ul>
 			</div>
@@ -89,7 +89,7 @@
 
 					<ul class="product-links">
 						<li>Category:</li>
-						<li><a href="@($"products/{Product.CategoryId}")">@Categories.First(c => c.Id == Product.Id).Name</a></li>
+						<li><a href="@($"products/{Product.CategoryId}")">@Categories.First(c => c.Id == Product.CategoryId).Name</a></li>
 					</ul>
 
 					<ul class="product-links">

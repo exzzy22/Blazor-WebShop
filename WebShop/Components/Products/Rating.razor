@@ -2,8 +2,16 @@
 <div class="col-md-3">
 	<div id="rating">
 		<div class="rating-avg">
-			<span>@MetaData.AverageStarRating()</span>
-			<StarRating StarCount="(int)Math.Round(MetaData.AverageStarRating())" Type="RatingType.RatingStars"/>
+			@if (MetaData.TotalCount > 1)
+			{
+				<span>@MetaData.AverageStarRating()</span>
+				<StarRating StarCount="(int)Math.Round(MetaData.AverageStarRating())" Type="RatingType.RatingStars" />
+			}
+			else
+			{
+				<span>No data</span>
+				<StarRating StarCount="0" Type="RatingType.RatingStars" />
+			}
 		</div>
 		<ul class="rating">
 			<li>
