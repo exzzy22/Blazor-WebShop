@@ -1,5 +1,6 @@
 ﻿@using System.Globalization;
 @inherits LayoutComponentBase
+@implements IDisposable
 
 <CascadingValue Value="User">
 <Header/>
@@ -26,9 +27,13 @@
 		await UserState.TryLoadData();
 	}
 
-
 	private async void OnAuthenticationStateChanged(Task<AuthenticationState> task)
 	{
 		User = (await task).User;
+	}
+
+	void IDisposable.Dispose()
+	{
+		AuthenticationState.AuthenticationStateChanged -= OnAuthenticationStateChanged;
 	}
 }

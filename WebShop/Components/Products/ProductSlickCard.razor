@@ -17,13 +17,7 @@
 		{
 			<h4 class="product-price">@StaticConfig.Currency.Symbol @Product.GetPrice(StaticConfig.Currency).ToString("N2") <del class="product-old-price">@(Product.IsDiscounted ? GetDicountedPrice() : "")</del></h4>
 		}
-		<div class="product-rating">
-			<i class="fa fa-star"></i>
-			<i class="fa fa-star"></i>
-			<i class="fa fa-star"></i>
-			<i class="fa fa-star"></i>
-			<i class="fa fa-star"></i>
-		</div>
+		<StarRating StarCount="Product.AvgStarRating" />
 		<div class="product-btns">
 			<button class="add-to-wishlist" @onclick="async () => await UserState.AddRemoveFromWishlist(Product.Id)"><i class="@(UserState.Wishlist.Products.Any(p => p.Id == Product.Id) ? "fa fa-heart" : "fa fa-heart-o")"></i><span class="tooltipp">add to wishlist</span></button>
 		</div>

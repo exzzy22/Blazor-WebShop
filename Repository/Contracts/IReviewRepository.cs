@@ -4,4 +4,5 @@ public interface IReviewRepository
 {
     void Create(Review review);
 	PagedList<Review> GetReviews(ReviewParameters reviewParameters);
+	int GetProductAvgRating(int productId);
 }

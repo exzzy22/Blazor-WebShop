@@ -1,4 +1,6 @@
-﻿<div class="@CssClass">
+﻿@implements IDisposable
+
+<div class="@CssClass">
 	<div class="product">
 		<div class="product-img">
 			<img src="@(Configuration.ApiImageAddress + Product.Images.First(p => p.MainImage).File)" alt="@Product.ShortName">
@@ -17,13 +19,7 @@
 			{
 				<h4 class="product-price">@StaticConfig.Currency.Symbol @Product.GetPrice(StaticConfig.Currency).ToString("N2") <del class="product-old-price">@(Product.IsDiscounted ? GetDicountedPrice() : "")</del></h4>
 			}
-		<div class="product-rating">
-			<i class="fa fa-star"></i>
-			<i class="fa fa-star"></i>
-			<i class="fa fa-star"></i>
-			<i class="fa fa-star"></i>
-			<i class="fa fa-star"></i>
-		</div>
+		<StarRating StarCount="Product.AvgStarRating"/>
 		<div class="product-btns">
 			<button class="add-to-wishlist" @onclick="() => UserState.AddRemoveFromWishlist(Product.Id)"><i class="@(UserState.Wishlist.Products.Any(p => p.Id == Product.Id) ? "fa fa-heart" : "fa fa-heart-o")"></i><span class="tooltipp">add to wishlist</span></button>
 		</div>
@@ -49,7 +45,18 @@
 	protected override async Task OnInitializedAsync()
 	{
 		await UserState.TryLoadData();
+		StaticConfig.PropertyChanged += OnCurrencyChanged;
+	}
+
+	private void OnCurrencyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		StateHasChanged();
 	}
 
 	string GetDicountedPrice() => StaticConfig.Currency.Symbol + Product.GetOrginalPrice(StaticConfig.Currency).ToString("N2");
+
+	void IDisposable.Dispose()
+	{
+		StaticConfig.PropertyChanged -= OnCurrencyChanged;
+	}
 }

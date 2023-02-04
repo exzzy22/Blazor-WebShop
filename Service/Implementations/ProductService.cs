@@ -86,9 +86,15 @@ internal sealed class ProductService : IProductService
     }
     public async Task<IEnumerable<ProductCarouselDto>> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfProducts)
     {
-        IEnumerable<Product> products = await _repository.Product.GetProductsAsync(orderBy, numberOfProducts);
+        IEnumerable<ProductCarouselDto> products = _mapper.Map<IEnumerable<ProductCarouselDto>>(await _repository.Product.GetProductsAsync(orderBy, numberOfProducts));
 
-        return _mapper.Map<IEnumerable<ProductCarouselDto>>(products);
+		foreach (ProductCarouselDto product in products)
+		{
+			product.AvgStarRating = _repository.Review.GetProductAvgRating(product.Id);
+		}
+
+
+        return products;
     }
 
     public async Task<IEnumerable<ProductDto>> GetProductsAsync()
@@ -98,10 +104,29 @@ internal sealed class ProductService : IProductService
         return _mapper.Map<IEnumerable<ProductDto>>(products);
     }
 
-    public async Task<IEnumerable<ProductDto>> GetProductsForCategoryAsync(int categoryId, int numberOfProducts) => _mapper.Map<IEnumerable<ProductDto>>(await _repository.Product.GetProductsForCategoryAsync(categoryId,numberOfProducts));
+    public async Task<IEnumerable<ProductDto>> GetProductsForCategoryAsync(int categoryId, int numberOfProducts)
+    {
+        IEnumerable<ProductDto> products = _mapper.Map<IEnumerable<ProductDto>>(await _repository.Product.GetProductsForCategoryAsync(categoryId, numberOfProducts));
 
-    public async Task<ProductPagedList<ProductDto>> GetProductsAsync(ProductParameters productParameters) => _mapper.Map<ProductPagedList<ProductDto>>(await _repository.Product.GetProductsAsync(productParameters));
+        foreach (ProductDto product in products)
+        {
+            product.AvgStarRating = _repository.Review.GetProductAvgRating(product.Id);
+        }
 
+        return products;
+    }
+
+    public async Task<ProductPagedList<ProductDto>> GetProductsAsync(ProductParameters productParameters)
+    {
+        ProductPagedList<ProductDto> products = _mapper.Map<ProductPagedList<ProductDto>>(await _repository.Product.GetProductsAsync(productParameters));
+
+		foreach (ProductDto product in products.Items)
+		{
+			product.AvgStarRating = _repository.Review.GetProductAvgRating(product.Id);
+		}
+
+        return products;
+	}
 	public async Task<ProductForCreationDto> GetProductForUpdateAsync(int productId)
     {
         Product product = await _repository.Product.GetProductAsync(productId, false) ?? throw new ProductNotFound(productId);
@@ -254,7 +279,7 @@ internal sealed class ProductService : IProductService
 
         await _repository.SaveAsync();
 
-        return _mapper.Map<WishlistDto>(wishlistDb);
+		return _mapper.Map<WishlistDto>(await _repository.Wishlist.GetById(wishlistId, false));
 	}
 
 	public async Task<WishlistDto> GetWishlist(int id) => _mapper.Map<WishlistDto>(await _repository.Wishlist.GetById(id, false));

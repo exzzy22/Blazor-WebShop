@@ -9,6 +9,7 @@ public record ProductCarouselDto
     public int InStock { get; init; } = 0;
     public int Sold { get; init; } = 0;
     public int CategoryId { get; init; }
+	public int AvgStarRating { get; set; }
 	public string Image { get; set; } = null!;
 
 	public CategoryDto Category { get; set; } = null!;

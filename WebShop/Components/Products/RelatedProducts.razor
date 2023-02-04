@@ -15,7 +15,7 @@
 			{
 				foreach (var product in Products)
 				{
-					<ProductCard CategoryName="Category.Name" Product="product" CssClass="col-md-3 col-xs-6" />
+					<ProductCard CategoryName="@Category.Name" Product="product" CssClass="col-md-3 col-xs-6" />
 				}
 			}
 
@@ -29,13 +29,16 @@
 @code {
 	[Parameter]
 	public CategoryVM Category { get; set; } = null!;
+	[Parameter]
+	public int ProductId { get; set; }
 	[Inject]
 	IApiService ApiService { get; set; } = null!;
 	List<ProductVM> Products { get; set; } = null!;
 
 	protected override async Task OnInitializedAsync()
 	{
-		Products = await ApiService.GetProductsForCategory(Category.Id, 4);
+		var products = await ApiService.GetProductsForCategory(Category.Id, 5);
+		Products = products.Where(p => p.Id != ProductId).Take(4).ToList();
 	}
 
 }

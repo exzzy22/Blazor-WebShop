@@ -1,4 +1,5 @@
 ﻿@page "/checkout"
+@implements IDisposable
 
 <!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
@@ -134,7 +135,7 @@
 						{
 							<div class="order-col">
 									<div>@product.Quantity x @product.Product.ShortName</div>
-									<div>@StaticConfig.Currency.Symbol @product.Product.GetPrice(StaticConfig.Currency).ToPriceString()</div>
+									<div>@StaticConfig.Currency.Symbol @product.Product.GetPrice(StaticConfig.Currency).ToString("N2")</div>
 							</div>
 						}
 					</div>
@@ -144,7 +145,7 @@
 					</div>
 					<div class="order-col">
 						<div><strong>TOTAL</strong></div>
-							<div><strong class="order-total">@StaticConfig.Currency.Symbol @Cart.GetCartTotal(StaticConfig.Currency).ToPriceString()</strong></div>
+							<div><strong class="order-total">@StaticConfig.Currency.Symbol @Cart.GetCartTotal(StaticConfig.Currency).ToString("N2")</strong></div>
 					</div>
 				</div>
 				<div class="input-checkbox">
@@ -187,6 +188,8 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		StaticConfig.PropertyChanged += OnCurrencyChanged;
+
 		Cart = UserState.Cart;
 		if (Cart.Products.Count == 0)
 			NavigationManager.NavigateTo("/");
@@ -194,6 +197,11 @@
 		if (UserState.User is not null)
 			LoadAddress();
 
+	}
+
+	private void OnCurrencyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		StateHasChanged();
 	}
 
 	async Task OnValidSubmit()
@@ -241,6 +249,11 @@
 		Model.BillingAddress.Tel = UserState.User.PhoneNumber;
 
 		Model.ShippingAddress = Model.BillingAddress;
+	}
+
+	void IDisposable.Dispose()
+	{
+		StaticConfig.PropertyChanged -= OnCurrencyChanged;
 	}
 
 

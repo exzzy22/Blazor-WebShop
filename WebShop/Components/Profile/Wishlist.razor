@@ -1,4 +1,6 @@
-﻿@if (WishlistVM.Products.Count == 0)
+﻿@implements IDisposable
+
+@if (WishlistVM.Products.Count == 0)
 {
 	<div class="col-md-8">
 		<img src="./img/emptycart.png" />
@@ -19,7 +21,7 @@
 			<td>@product.Name</td>
 			<td style="white-space:nowrap;">
 				<div>
-					@(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @product.GetPrice(StaticConfig.Currency).ToPriceString()
+					@(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @product.GetPrice(StaticConfig.Currency).ToString("N2")
 				</div>
 			</td>
 			<td>
@@ -48,6 +50,12 @@
 	{
 		WishlistVM = UserState.Wishlist;
 		UserState.PropertyChanged += PropertyChanged;
+		StaticConfig.PropertyChanged += OnCurrencyChanged;
+	}
+
+	private void OnCurrencyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		StateHasChanged();
 	}
 
 	private void PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -61,5 +69,11 @@
 		_loader = true;
 		await UserState.AddRemoveFromWishlist(productId);
 		_loader = false;
+	}
+
+	void IDisposable.Dispose()
+	{
+		StaticConfig.PropertyChanged -= OnCurrencyChanged;
+		UserState.PropertyChanged -= PropertyChanged;
 	}
 }

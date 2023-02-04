@@ -1,6 +1,7 @@
 ﻿@page "/product/{ProductId:int}"
 @using System.Reflection;
 @using ViewModels.ValidationAttributes;
+@implements IDisposable
 
 @if (Product is null) return;
 
@@ -147,7 +148,7 @@
 	<!-- /container -->
 </div>
 <!-- /SECTION -->
-<RelatedProducts Category="Categories.First(c => c.Id == Product.CategoryId)" />
+<RelatedProducts Category="Categories.First(c => c.Id == Product.CategoryId)" ProductId="ProductId" />
 
 @code {
 	bool _render = true;
@@ -169,9 +170,15 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		StaticConfig.PropertyChanged += OnCurrencyChanged;
 		Product = await ApiService.GetProduct(ProductId);
 		Categories = await ApiService.GetCategories();
 		Reviews = await ApiService.GetReviews(new ReviewParameters { PageNumber = 1, PageSize = 3, ProductId = ProductId });
+	}
+
+	private void OnCurrencyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		StateHasChanged();
 	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -206,5 +213,10 @@
 			_quantity = Product.InStock;
 			return;
 		}
+	}
+
+	void IDisposable.Dispose()
+	{
+		StaticConfig.PropertyChanged -= OnCurrencyChanged;
 	}
 }

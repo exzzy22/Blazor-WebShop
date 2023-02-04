@@ -1,4 +1,5 @@
 ﻿@page "/"
+@implements IDisposable
 
 <!-- NAVIGATION -->
 <nav id="navigation">
@@ -155,6 +156,11 @@
 		await InvokeAsync(StateHasChanged);
 		Products = await ApiService.GetCarouselTopSelling(8);
 		await InvokeAsync(StateHasChanged);
+	}
+
+	void IDisposable.Dispose()
+	{
+		StaticConfig.PropertyChanged -= OnCurrencyChanged;
 	}
 
 }

@@ -9,6 +9,18 @@ internal sealed class ReviewRepository : RepositoryBase<Review>, IReviewReposito
 
     public ReviewRepository(RepositoryContext repositoryContext) : base(repositoryContext) => _repositoryContext = repositoryContext;
 
+	public int GetProductAvgRating(int productId)
+	{
+		var reviews = _repositoryContext.Reviews.Where(r => r.ProductId == productId);
+
+		if(reviews.Count() == 0)
+			return 0;
+
+		double averageRating = reviews.Sum(r => r.StarRating) / reviews.Count();
+
+		return (int)Math.Round(averageRating);
+	}
+
 	public PagedList<Review> GetReviews(ReviewParameters reviewParameters)
 	{
 		var reviews = _repositoryContext.Reviews

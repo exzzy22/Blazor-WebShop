@@ -238,7 +238,11 @@
 		Categories = await ApiService.GetCategories();
 	}
 
-	async Task GoToPage(int pageNumber) => ProductsList = await ApiService.GetProducts(new ProductParameters { PageSize = 8, PageNumber = pageNumber });
+	async Task GoToPage(int pageNumber)
+	{
+		ProductParameters.PageNumber = pageNumber;
+		ProductsList = await ApiService.GetProducts(ProductParameters);
+	}
 
 	async Task Search() => ProductsList = await ApiService.GetProducts(ProductParameters);
 
