@@ -1,4 +1,4 @@
-﻿<div class="col-md-4 col-xs-6">
+﻿<div class="@CssClass">
 	<div class="product">
 		<div class="product-img">
 			<img src="@(Configuration.ApiImageAddress + Product.Images.First(p => p.MainImage).File)" alt="@Product.ShortName">
@@ -39,6 +39,8 @@
 	public ProductVM Product { get; set; } = null!;
 	[Parameter]
 	public string CategoryName { get; set; } = null!;
+	[Parameter]
+	public string CssClass { get; set; } = "col-md-4 col-xs-6";
 	[Inject]
 	WebShopConfiguration Configuration { get; set; } = null!;
 	[Inject]

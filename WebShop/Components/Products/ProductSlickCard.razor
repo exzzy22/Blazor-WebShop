@@ -25,11 +25,11 @@
 			<i class="fa fa-star"></i>
 		</div>
 		<div class="product-btns">
-			<button class="add-to-wishlist" @onclick="() => UserState.AddRemoveFromWishlist(Product.Id)"><i class="@(UserState.Wishlist.Products.Any(p => p.Id == Product.Id) ? "fa fa-heart" : "fa fa-heart-o")"></i><span class="tooltipp">add to wishlist</span></button>
+			<button class="add-to-wishlist" @onclick="async () => await UserState.AddRemoveFromWishlist(Product.Id)"><i class="@(UserState.Wishlist.Products.Any(p => p.Id == Product.Id) ? "fa fa-heart" : "fa fa-heart-o")"></i><span class="tooltipp">add to wishlist</span></button>
 		</div>
 	</div>
 	<div class="add-to-cart">
-		<button class="add-to-cart-btn" @onclick="() => UserState.AddToCart(Product.Id)"><i class="fa fa-shopping-cart"></i> add to cart</button>
+		<button class="add-to-cart-btn" @onclick="async() => await UserState.AddToCart(Product.Id)"><i class="fa fa-shopping-cart"></i> add to cart</button>
 	</div>
 </div>
 <!-- /product -->

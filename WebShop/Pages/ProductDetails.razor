@@ -59,12 +59,12 @@
 				<div class="product-details">
 					<h2 class="product-name">@Product.ShortName</h2>
 					<div>
-						<StarRating StarCount="3" Type="RatingType.Product" />
-						<a class="review-link" href="#">10 Review(s) | Add your review</a>
+						<StarRating StarCount="(int)Math.Round(((ReviewMetaData)Reviews.MetaData).AverageStarRating())" Type="RatingType.Product" />
+						<a class="review-link" style="cursor:pointer;" onclick="focusReviews(event)">@GenerateAddReviewText()</a>
 					</div>
 					<div>
 						<h3 class="product-price">@StaticConfig.Currency.Symbol @Product.GetPrice(StaticConfig.Currency).ToString("N2") <del class="product-old-price">@(Product.IsDiscounted ? GetDicountedPrice(): "")</del></h3>
-						<span class="product-available">In Stock</span>
+						<span class="product-available">@(Product.InStock > 1 ? "In Stock" : "Out of Stock")</span>
 					</div>
 						<p>@Product.Name</p>
 					<div class="product-options">
@@ -74,16 +74,16 @@
 						<div class="qty-label">
 							Qty
 							<div class="input-number">
-								<input type="number" min="1" max="@Product.InStock">
-								<span class="qty-up">+</span>
-								<span class="qty-down">-</span>
+								<input type="number" @bind-value="_quantity" disabled>
+								<span class="qty-up" @onclick="() => {++_quantity; ValidateQuantity();}">+</span>
+								<span class="qty-down" @onclick="() => {--_quantity; ValidateQuantity();}">-</span>
 							</div>
 						</div>
-						<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+						<button class="add-to-cart-btn" @onclick="async() => { ValidateQuantity(); await UserState.AddToCart(Product.Id,_quantity);}"><i class="fa fa-shopping-cart"></i> add to cart</button>
 					</div>
 
 					<ul class="product-btns">
-						<li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
+						<li><a style="cursor:pointer;" @onclick="async () => await UserState.AddRemoveFromWishlist(Product.Id)"><i class="@(UserState.Wishlist.Products.Any(p => p.Id == Product.Id) ? "fa fa-heart" : "fa fa-heart-o")"></i> add to wishlist</a></li>
 					</ul>
 
 					<ul class="product-links">
@@ -109,7 +109,7 @@
 					<ul class="tab-nav">
 						<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
 						<li><a data-toggle="tab" href="#tab2">Details</a></li>
-						<li><a data-toggle="tab" href="#tab3">Reviews @(Reviews.MetaData.TotalCount > 0 ? $"({Reviews.MetaData.TotalCount})" : "")</a></li>
+						<li><a data-toggle="tab" href="#tab3" id="reviews-tab">Reviews @(Reviews.MetaData.TotalCount > 0 ? $"({Reviews.MetaData.TotalCount})" : "")</a></li>
 					</ul>
 					<!-- /product tab nav -->
 					<!-- product tab content -->
@@ -128,38 +128,7 @@
 						<!-- /tab1  -->
 						<!-- tab2  -->
 						<div id="tab2" class="tab-pane fade in">
-							<div class="row">
-								<div class="col-md-12">
-									<div class="row">
-										<div class="col-md-2"><h4>General</h4></div>
-										<div class="col-md-10">
-											<p><b>Manufacturer: </b>@Product.Attributes.Manufacturer</p>
-											<p><b>Model: </b>@Product.Attributes.Model</p>
-										</div>
-									</div>
-									<br>
-									<hr style="border-top: 1px solid #8c8b8b">
-									<br>
-
-									<div class="row">
-										<div class="col-md-2"><h4>Specs</h4></div>
-										<div class="col-md-10">
-											@foreach (var property in Product.Attributes.GetType().GetProperties())
-											{
-												if (property.Name.Equals(nameof(Product.Attributes.Manufacturer)) || property.Name.Equals(nameof(Product.Attributes.Model)))
-													continue;
-
-												NameForDisplay displayName = property.GetCustomAttribute<NameForDisplay>();
-												string name = displayName != null ? displayName.Name : property.Name;
-												object value = property.GetValue(Product.Attributes);
-												ValueAdditionText valueAdditionText = property.GetCustomAttribute<ValueAdditionText>();
-												string text = valueAdditionText != null ? valueAdditionText.Text : "";
-												<p><b>@name: </b>@value @text</p>
-											}
-										</div>
-									</div>
-								</div>
-							</div>
+							<ProductDetailsTab Product="Product" />
 						</div>
 						<!-- /tab2  -->
 						<!-- tab3  -->
@@ -178,144 +147,11 @@
 	<!-- /container -->
 </div>
 <!-- /SECTION -->
-<!-- Section -->
-<div class="section">
-	<!-- container -->
-	<div class="container">
-		<!-- row -->
-		<div class="row">
-
-			<div class="col-md-12">
-				<div class="section-title text-center">
-					<h3 class="title">Related Products</h3>
-				</div>
-			</div>
-
-			<!-- product -->
-			<div class="col-md-3 col-xs-6">
-				<div class="product">
-					<div class="product-img">
-						<img src="./img/product01.png" alt="">
-						<div class="product-label">
-							<span class="sale">-30%</span>
-						</div>
-					</div>
-					<div class="product-body">
-						<p class="product-category">Category</p>
-						<h3 class="product-name"><a href="#">product name goes here</a></h3>
-						<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-						<div class="product-rating">
-						</div>
-						<div class="product-btns">
-							<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-							<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-							<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-						</div>
-					</div>
-					<div class="add-to-cart">
-						<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-					</div>
-				</div>
-			</div>
-			<!-- /product -->
-			<!-- product -->
-			<div class="col-md-3 col-xs-6">
-				<div class="product">
-					<div class="product-img">
-						<img src="./img/product02.png" alt="">
-						<div class="product-label">
-							<span class="new">NEW</span>
-						</div>
-					</div>
-					<div class="product-body">
-						<p class="product-category">Category</p>
-						<h3 class="product-name"><a href="#">product name goes here</a></h3>
-						<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-						<div class="product-rating">
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-						</div>
-						<div class="product-btns">
-							<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-							<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-							<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-						</div>
-					</div>
-					<div class="add-to-cart">
-						<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-					</div>
-				</div>
-			</div>
-			<!-- /product -->
-
-			<div class="clearfix visible-sm visible-xs"></div>
-
-			<!-- product -->
-			<div class="col-md-3 col-xs-6">
-				<div class="product">
-					<div class="product-img">
-						<img src="./img/product03.png" alt="">
-					</div>
-					<div class="product-body">
-						<p class="product-category">Category</p>
-						<h3 class="product-name"><a href="#">product name goes here</a></h3>
-						<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-						<div class="product-rating">
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star-o"></i>
-						</div>
-						<div class="product-btns">
-							<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-							<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-							<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-						</div>
-					</div>
-					<div class="add-to-cart">
-						<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-					</div>
-				</div>
-			</div>
-			<!-- /product -->
-			<!-- product -->
-			<div class="col-md-3 col-xs-6">
-				<div class="product">
-					<div class="product-img">
-						<img src="./img/product04.png" alt="">
-					</div>
-					<div class="product-body">
-						<p class="product-category">Category</p>
-						<h3 class="product-name"><a href="#">product name goes here</a></h3>
-						<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-						<div class="product-rating">
-						</div>
-						<div class="product-btns">
-							<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-							<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-							<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-						</div>
-					</div>
-					<div class="add-to-cart">
-						<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-					</div>
-				</div>
-			</div>
-			<!-- /product -->
-
-		</div>
-		<!-- /row -->
-	</div>
-	<!-- /container -->
-</div>
-<!-- /Section -->
+<RelatedProducts Category="Categories.First(c => c.Id == Product.CategoryId)" />
 
 @code {
 	bool _render = true;
+	int _quantity = 1;
 
 	[Parameter]
 	public int ProductId { get; set; }
@@ -325,6 +161,8 @@
 	WebShopConfiguration Configuration { get; set; } = null!;
 	[Inject]
 	IJSRuntime JSRuntime { get; set; } = null!;
+	[Inject]
+	UserState UserState { get; set; } = null!;
 	ProductVM Product { get; set; } = null!;
 	List<CategoryVM> Categories { get; set; } = null!;
 	PagedList<ReviewVM> Reviews { get; set; } = null!;
@@ -346,4 +184,27 @@
 	}
 
 	string GetDicountedPrice() => StaticConfig.Currency.Symbol + Product.GetOrginalPrice(StaticConfig.Currency).ToString("N2");
+
+	string GenerateAddReviewText()
+	{
+		if (Reviews.MetaData.TotalCount > 0)
+			return $"{Reviews.MetaData.TotalCount} Review(s) | Add your review";
+
+		return "Add your review";
+	}
+
+	void ValidateQuantity()
+	{
+		if (_quantity < 1)
+		{
+			_quantity = 1;
+			return;
+		}
+
+		if (_quantity > Product.InStock)
+		{
+			_quantity = Product.InStock;
+			return;
+		}
+	}
 }

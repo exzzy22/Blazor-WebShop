@@ -14,6 +14,7 @@ public interface IApiService
     Task<bool> UpdateProduct(ProductVM product);
     Task<bool> UpdateProduct(ProductForCreationVM product);
     Task<List<ProductVM>> GetProducts();
+    Task<List<ProductVM>> GetProductsForCategory(int categoryId, int numberOfProducts);
     Task<ProductPagedList<ProductVM>> GetProducts(ProductParameters productParameters);
 	Task<IEnumerable<ProductCarouselVM>> GetCarouselTopSelling(int numberOfProducts);
     Task<bool> DeleteImage(string image);

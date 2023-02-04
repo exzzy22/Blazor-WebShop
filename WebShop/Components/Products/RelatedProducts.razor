@@ -1,0 +1,41 @@
+﻿<!-- Section -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+
+			<div class="col-md-12">
+				<div class="section-title text-center">
+					<h3 class="title">Related Products</h3>
+				</div>
+			</div>
+
+			@if (Products is not null)
+			{
+				foreach (var product in Products)
+				{
+					<ProductCard CategoryName="Category.Name" Product="product" CssClass="col-md-3 col-xs-6" />
+				}
+			}
+
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /Section -->
+
+@code {
+	[Parameter]
+	public CategoryVM Category { get; set; } = null!;
+	[Inject]
+	IApiService ApiService { get; set; } = null!;
+	List<ProductVM> Products { get; set; } = null!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		Products = await ApiService.GetProductsForCategory(Category.Id, 4);
+	}
+
+}

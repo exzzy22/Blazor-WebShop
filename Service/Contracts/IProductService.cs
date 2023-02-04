@@ -12,7 +12,8 @@ public interface IProductService
     Task UpdateProductAsync(ProductDto product);
     Task<IEnumerable<ProductDto>> GetProductsAsync();
 	Task<ProductPagedList<ProductDto>> GetProductsAsync(ProductParameters productParameters);
-	Task<IEnumerable<ProductCarouselDto>> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfProducts);
+    Task<IEnumerable<ProductDto>> GetProductsForCategoryAsync(int categoryId, int numberOfProducts);
+    Task<IEnumerable<ProductCarouselDto>> GetCarouselProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfProducts);
     void DeleteImage(string name);
     void DeleteImage(List<string> names);
     Task<IEnumerable<ImageForTableDto>> GetListOfUnusedImages();

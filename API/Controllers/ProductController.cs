@@ -21,6 +21,9 @@ public class ProductController : ControllerBase
     [HttpGet("all")]
     public async Task<IActionResult> GetProducts() => Ok(await _serviceManager.ProductService.GetProductsAsync());
 
+    [HttpGet("all/{categoryId}/{numberOfProducts}")]
+    public async Task<IActionResult> GetProductsForCategory(int categoryId, int numberOfProducts) => Ok(await _serviceManager.ProductService.GetProductsForCategoryAsync(categoryId,numberOfProducts));
+
     [HttpPost]
     public async Task<IActionResult> GetProducts(ProductParameters productParameters)
     {

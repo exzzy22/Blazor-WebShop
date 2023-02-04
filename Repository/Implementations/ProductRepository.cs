@@ -29,7 +29,13 @@ internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepo
         .Include(p => p.Images)
         .ToListAsync();
 
-	public async Task<IEnumerable<Product>> GetProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfProducts) =>
+    public async Task<IEnumerable<Product>> GetProductsForCategoryAsync(int categoryId, int numberOfProducts) => await FindAll(false)
+		.Include(p => p.Images)
+		.Where(p => p.CategoryId == categoryId)
+        .Take(numberOfProducts)
+        .ToListAsync();
+
+    public async Task<IEnumerable<Product>> GetProductsAsync<T>(Expression<Func<Product, T>> orderBy, int numberOfProducts) =>
         await FindAll(false)
 	    .Include(p => p.Category)
 	    .Include(p => p.Attributes)

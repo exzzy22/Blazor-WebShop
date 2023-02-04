@@ -98,7 +98,9 @@ internal sealed class ProductService : IProductService
         return _mapper.Map<IEnumerable<ProductDto>>(products);
     }
 
-	public async Task<ProductPagedList<ProductDto>> GetProductsAsync(ProductParameters productParameters) => _mapper.Map<ProductPagedList<ProductDto>>(await _repository.Product.GetProductsAsync(productParameters));
+    public async Task<IEnumerable<ProductDto>> GetProductsForCategoryAsync(int categoryId, int numberOfProducts) => _mapper.Map<IEnumerable<ProductDto>>(await _repository.Product.GetProductsForCategoryAsync(categoryId,numberOfProducts));
+
+    public async Task<ProductPagedList<ProductDto>> GetProductsAsync(ProductParameters productParameters) => _mapper.Map<ProductPagedList<ProductDto>>(await _repository.Product.GetProductsAsync(productParameters));
 
 	public async Task<ProductForCreationDto> GetProductForUpdateAsync(int productId)
     {

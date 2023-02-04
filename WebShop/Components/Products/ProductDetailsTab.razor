@@ -1,0 +1,50 @@
+﻿@using System.Reflection;
+@using ViewModels.ValidationAttributes; 
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-2">
+                <h4>General</h4>
+            </div>
+            <div class="col-md-10">
+                <p>
+                    <b>Manufacturer: </b>@Product.Attributes.Manufacturer
+                </p>
+                <p>
+                    <b>Model: </b>@Product.Attributes.Model
+                </p>
+            </div>
+        </div>
+        <br>
+        <hr style="border-top: 1px solid #8c8b8b">
+        <br>
+        <div class="row">
+            <div class="col-md-2">
+                <h4>Specs</h4>
+            </div>
+            <div class="col-md-10">
+                @foreach (var property in Product.Attributes.GetType().GetProperties())
+                {
+                    if (property.Name.Equals(nameof(Product.Attributes.Manufacturer)) || property.Name.Equals(nameof(Product.Attributes.Model)))
+                        continue; 
+
+                        NameForDisplay displayName = property.GetCustomAttribute<NameForDisplay>();
+                        string name = displayName != null ? displayName.Name : property.Name;
+                        object value = property.GetValue(Product.Attributes);
+                        ValueAdditionText valueAdditionText = property.GetCustomAttribute<ValueAdditionText>();
+                        string text = valueAdditionText != null ? valueAdditionText.Text : "";
+                    <p>
+                        <b>@name: </b>@value @text
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+	[Parameter]
+	public ProductVM Product { get; set; } = null!;
+
+}

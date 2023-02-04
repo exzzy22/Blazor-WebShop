@@ -47,7 +47,9 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/{productId}");
 
-        ProductDto product = await response.Content.ReadFromJsonAsync<ProductDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		response.EnsureSuccessStatusCode();
+
+		ProductDto product = await response.Content.ReadFromJsonAsync<ProductDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<ProductVM>(product);
     }
@@ -56,7 +58,9 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/update/{productId}");
 
-        ProductForCreationDto product = await response.Content.ReadFromJsonAsync<ProductForCreationDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		response.EnsureSuccessStatusCode();
+
+		ProductForCreationDto product = await response.Content.ReadFromJsonAsync<ProductForCreationDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<ProductForCreationVM>(product);
     }
@@ -93,14 +97,29 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync("api/product/all");
 
+		response.EnsureSuccessStatusCode();
+
+		List<ProductDto> products = await response.Content.ReadFromJsonAsync<List<ProductDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+        return _mapper.Map<List<ProductVM>>(products);
+    }
+
+    public async Task<List<ProductVM>> GetProductsForCategory(int categoryId, int numberOfProducts)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"api/product/all/{categoryId}/{numberOfProducts}");
+
+        response.EnsureSuccessStatusCode();
+
         List<ProductDto> products = await response.Content.ReadFromJsonAsync<List<ProductDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<ProductVM>>(products);
     }
 
-	public async Task<ProductPagedList<ProductVM>> GetProducts(ProductParameters productParameters)
+    public async Task<ProductPagedList<ProductVM>> GetProducts(ProductParameters productParameters)
 	{
 		HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"api/product",productParameters);
+
+		response.EnsureSuccessStatusCode();
 
 		ProductPagedList<ProductDto> products = await response.Content.ReadFromJsonAsync<ProductPagedList<ProductDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -110,6 +129,8 @@ public sealed class ApiService : IApiService
 	public async Task<IEnumerable<ProductCarouselVM>> GetCarouselTopSelling(int numberOfProducts)
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/carousel/topSelling/{numberOfProducts}");
+
+		response.EnsureSuccessStatusCode();
 
 		IEnumerable<ProductCarouselDto> carousel = await response.Content.ReadFromJsonAsync<IEnumerable<ProductCarouselDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -134,7 +155,9 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/image/unused");
 
-        List<ImageForTableDto> imageForTable = await response.Content.ReadFromJsonAsync<List<ImageForTableDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		response.EnsureSuccessStatusCode();
+
+		List<ImageForTableDto> imageForTable = await response.Content.ReadFromJsonAsync<List<ImageForTableDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<ImageForTableVM>>(imageForTable);
     }
@@ -142,6 +165,8 @@ public sealed class ApiService : IApiService
 	public async Task<PagedList<ReviewVM>> GetReviews(ReviewParameters reviewParameters)
 	{
 		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/review{reviewParameters.ToQueryString()}");
+
+		response.EnsureSuccessStatusCode();
 
 		PagedList<ReviewDto> reviews = await response.Content.ReadFromJsonAsync<PagedList<ReviewDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -161,7 +186,9 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync("api/account/admin");
 
-        List<AdminDto> admins = await response.Content.ReadFromJsonAsync<List<AdminDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		response.EnsureSuccessStatusCode();
+
+		List<AdminDto> admins = await response.Content.ReadFromJsonAsync<List<AdminDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<AdminVM>>(admins);
     }
@@ -198,7 +225,9 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync("api/account/user");
 
-        List<UserDto> admins = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		response.EnsureSuccessStatusCode();
+
+		List<UserDto> admins = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<UserVM>>(admins);
     }
@@ -226,6 +255,8 @@ public sealed class ApiService : IApiService
 	{
 		HttpResponseMessage response = await _httpClient.GetAsync("api/account/user/logged");
 
+		response.EnsureSuccessStatusCode();
+
 		UserDto user = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
 		return _mapper.Map<UserVM>(user);
@@ -244,7 +275,9 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/category/all");
 
-        List<CategoryDto> categories = await response.Content.ReadFromJsonAsync<List<CategoryDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		response.EnsureSuccessStatusCode();
+
+		List<CategoryDto> categories = await response.Content.ReadFromJsonAsync<List<CategoryDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<CategoryVM>>(categories);
     }
@@ -277,7 +310,9 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/currency/all");
 
-        List<CurrencyDto> currencies = await response.Content.ReadFromJsonAsync<List<CurrencyDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		response.EnsureSuccessStatusCode();
+
+		List<CurrencyDto> currencies = await response.Content.ReadFromJsonAsync<List<CurrencyDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<List<CurrencyVM>>(currencies);
     }
@@ -304,6 +339,8 @@ public sealed class ApiService : IApiService
     {
 		HttpResponseMessage response = await _httpClient.PostAsync($"api/product/cart/add/{productId}/{cartId}/{quantity}/{userId}",null);
 
+		response.EnsureSuccessStatusCode();
+
 		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
 		return _mapper.Map<CartVM>(cartResponse);
@@ -311,6 +348,8 @@ public sealed class ApiService : IApiService
 	public async Task<CartVM> RemoveProductFromCart(int productId, int cartId)
     {
 		HttpResponseMessage response = await _httpClient.PostAsync($"api/product/cart/remove/{productId}/{cartId}", null);
+
+		response.EnsureSuccessStatusCode();
 
 		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -321,6 +360,8 @@ public sealed class ApiService : IApiService
 	{
 		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/{cartId}");
 
+		response.EnsureSuccessStatusCode();
+
 		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
 		return _mapper.Map<CartVM>(cartResponse);
@@ -330,7 +371,9 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/user/{userId}");
 
-        CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		response.EnsureSuccessStatusCode();
+
+		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<CartVM>(cartResponse);
     }
@@ -339,7 +382,9 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.PostAsync($"api/product/cart/clear/{cartId}", null);
 
-        CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		response.EnsureSuccessStatusCode();
+
+		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<CartVM>(cartResponse);
     }
@@ -347,6 +392,8 @@ public sealed class ApiService : IApiService
     public async Task<CartVM> JoinCartToUser(int cartId, int userId)
 	{
 		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/{cartId}/{userId}");
+
+		response.EnsureSuccessStatusCode();
 
 		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -359,6 +406,8 @@ public sealed class ApiService : IApiService
 	{
 		HttpResponseMessage response = await _httpClient.PostAsync($"api/product/wishlist/{wishlistId}/{productId}/{userId}", null);
 
+		response.EnsureSuccessStatusCode();
+
 		WishlistDto wishlist = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
 		return _mapper.Map<WishlistVM>(wishlist);
@@ -367,6 +416,8 @@ public sealed class ApiService : IApiService
 	public async Task<WishlistVM> GetWishlist(int id)
 	{
 		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/wishlist/{id}");
+
+		response.EnsureSuccessStatusCode();
 
 		WishlistDto wishlist = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -377,7 +428,9 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/wishlist/user/{userId}");
 
-        WishlistDto wishlist = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		response.EnsureSuccessStatusCode();
+
+		WishlistDto wishlist = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
         return _mapper.Map<WishlistVM>(wishlist);
     }
@@ -385,6 +438,8 @@ public sealed class ApiService : IApiService
     public async Task<WishlistVM> JoinWishlistToUser(int wishlistId, int userId)
 	{
 		HttpResponseMessage response = await _httpClient.PostAsync($"api/product/wishlist/join/{wishlistId}/{userId}",null);
+
+		response.EnsureSuccessStatusCode();
 
 		WishlistDto wishlist = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -397,7 +452,9 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/payment/create", _mapper.Map<OrderForCreationDto>(order));
 
-        return await response.Content.ReadAsStringAsync() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+		response.EnsureSuccessStatusCode();
+
+		return await response.Content.ReadAsStringAsync() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
     }
 
     public async Task<bool> ValidatePayment(int orderId, string sessionId)
@@ -413,6 +470,8 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/order/page{orderParameters.ToQueryString()}");
 
+		response.EnsureSuccessStatusCode();
+
 		PagedList<OrderDto> orders = await response.Content.ReadFromJsonAsync<PagedList<OrderDto>>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
 		return _mapper.Map<PagedList<OrderVM>>(orders);
@@ -422,9 +481,11 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/order/invoice/{invoiceId}");
 
-        response.EnsureSuccessStatusCode();
+		response.EnsureSuccessStatusCode();
+
+		response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadAsStringAsync();
     }
-	#endregion
+    #endregion
 }

@@ -39,3 +39,18 @@ function openPDF(pdfUrl) {
     window.open(pdfUrl, "_blank");
 }
 
+
+function focusReviews(event) {
+    event.preventDefault();
+    document.getElementById('reviews-tab').click();
+    var tab3 = document.getElementById('tab3');
+    tab3.focus();
+
+    setTimeout(function () {
+        tab3.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }, 300);
+}
+
