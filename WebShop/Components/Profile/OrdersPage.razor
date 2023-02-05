@@ -1,70 +1,72 @@
-﻿@if (Orders is null || Orders.Items.Count == 0)
-{
-	<div class="col-md-8">
-		<img src="./img/emptycart.png" />
-	</div>
-	return;
-}
-<div class="col-md-8">
-	<table class="table">
-		<tbody style="text-align:center">
-			<tr style="background-color: #333;color: white;">
-				<td>Order number</td>
-				<td>Date</td>
-				<td>Status</td>
-				<td></td>
-				<td>Total Amount</td>
-			</tr>
-			@foreach (var order in Orders.Items)
-			{
-				<tr>
-					<td>@order.Id</td>
-					<td>@order.CratedDate.ToString("MM/dd/yyyy HH:mm:ss")</td>
-					<td>@order.Status</td>
-					<td>
-						@if (order.Status == Shared.OrderStatus.Paid && order.Invoice is not null)
-						{
-							<button type="button" class="btn btn-default" style="background-color: #333;color: white;" @onclick="async () => await OpenInvoice(order.Invoice)">
-								Invoice
-							</button>
-						}
-					</td>
-					<td>@order.Amount.ToString("N2") @Currencies.First(c => c.ISO4217.Equals(order.CurrencyISO4217)).Symbol</td>
-				</tr>
-			}
-		</tbody>
-	</table>
-	@if (Orders.MetaData.TotalPages > 1)
+﻿<AuthorizeView Context="AuthorizeContext">    	
+	@if (Orders is null || Orders.Items.Count == 0)
 	{
-		<div class="store-filter clearfix">
-			@if (Orders.MetaData is not null)
-			{
-				<span class="store-qty">@Orders.MetaData.TotalCount orders total</span>
-				<ul class="store-pagination" style="cursor:pointer">
-				@if (Orders.MetaData.HasPrevious)
-				{
-						<li><a @onclick="async () => await GoToPage(Orders.MetaData.CurrentPage -1)"><i class="fa fa-angle-left"></i></a></li>
-					}
-				@foreach (var pageNum in Orders.GetPagesToShow())
-				{
-					if (pageNum == Orders.MetaData.CurrentPage)
-					{
-							<li class="active">@pageNum</li>
-					}
-					else
-					{
-							<li><a @onclick="async () => await GoToPage(pageNum)">@pageNum</a></li>
-					}
-				}
-				@if (Orders.MetaData.HasNext)
-				{
-						<li><a @onclick="async () => await GoToPage(Orders.MetaData.CurrentPage +1)"><i class="fa fa-angle-right"></i></a></li>
-				}
-				</ul>
-			}
+		<div class="col-md-8">
+			<img src="./img/emptycart.png" />
 		</div>
+		return;
 	}
-</div>
+	<div class="col-md-8">
+		<table class="table">
+			<tbody style="text-align:center">
+				<tr style="background-color: #333;color: white;">
+					<td>Order number</td>
+					<td>Date</td>
+					<td>Status</td>
+					<td></td>
+					<td>Total Amount</td>
+				</tr>
+				@foreach (var order in Orders.Items)
+				{
+					<tr>
+						<td>@order.Id</td>
+						<td>@order.CratedDate.ToString("MM/dd/yyyy HH:mm:ss")</td>
+						<td>@order.Status</td>
+						<td>
+							@if (order.Status == Shared.OrderStatus.Paid && order.Invoice is not null)
+							{
+								<button type="button" class="btn btn-default" style="background-color: #333;color: white;" @onclick="async () => await OpenInvoice(order.Invoice)">
+									Invoice
+								</button>
+							}
+						</td>
+						<td>@order.Amount.ToString("N2") @Currencies.First(c => c.ISO4217.Equals(order.CurrencyISO4217)).Symbol</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+		@if (Orders.MetaData.TotalPages > 1)
+		{
+			<div class="store-filter clearfix">
+				@if (Orders.MetaData is not null)
+				{
+					<span class="store-qty">@Orders.MetaData.TotalCount orders total</span>
+					<ul class="store-pagination" style="cursor:pointer">
+					@if (Orders.MetaData.HasPrevious)
+					{
+							<li><a @onclick="async () => await GoToPage(Orders.MetaData.CurrentPage -1)"><i class="fa fa-angle-left"></i></a></li>
+						}
+					@foreach (var pageNum in Orders.GetPagesToShow())
+					{
+						if (pageNum == Orders.MetaData.CurrentPage)
+						{
+								<li class="active">@pageNum</li>
+						}
+						else
+						{
+								<li><a @onclick="async () => await GoToPage(pageNum)">@pageNum</a></li>
+						}
+					}
+					@if (Orders.MetaData.HasNext)
+					{
+							<li><a @onclick="async () => await GoToPage(Orders.MetaData.CurrentPage +1)"><i class="fa fa-angle-right"></i></a></li>
+					}
+					</ul>
+				}
+			</div>
+		}
+	</div>
+</AuthorizeView>
 
 @code {
 	bool _loader = false;

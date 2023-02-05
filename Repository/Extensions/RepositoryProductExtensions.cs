@@ -1,7 +1,4 @@
-﻿using Repository.Extensions.Utility;
-using System.Text;
-
-namespace Repository.Extensions;
+﻿namespace Repository.Extensions;
 
 internal static class RepositoryProductExtensions
 {

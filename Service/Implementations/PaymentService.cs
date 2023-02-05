@@ -1,10 +1,4 @@
-﻿using Stripe;
-using Configuration = Shared.ConfigurationModels.Configuration.Configuration;
-using Stripe.Checkout;
-using Shared.Extensions;
-using Service.QuestPdf;
-using QuestPDF.Fluent;
-using Microsoft.AspNetCore.Hosting;
+﻿using Configuration = Shared.ConfigurationModels.Configuration.Configuration;
 
 namespace Service.Implementations;
 

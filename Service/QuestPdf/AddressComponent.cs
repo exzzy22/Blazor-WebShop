@@ -1,7 +1,4 @@
-﻿using QuestPDF.Fluent;
-using QuestPDF.Infrastructure;
-
-namespace Service.QuestPdf;
+﻿namespace Service.QuestPdf;
 
 public class AddressComponent : IComponent
 {

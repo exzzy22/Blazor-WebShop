@@ -1,12 +1,4 @@
-﻿using Domain.Exceptions.ModelSpecific;
-using Domain.Models;
-using Shared.DataTransferObjects;
-using Shared.Extensions;
-using Shared.RequestFeatures;
-using System.Text.Json;
-using ViewModels;
-
-namespace ApiServices;
+﻿namespace ApiServices;
 
 public sealed class ApiService : IApiService
 {
@@ -261,6 +253,13 @@ public sealed class ApiService : IApiService
 
 		return _mapper.Map<UserVM>(user);
 	}
+
+	public async Task<bool> ChangePassword(ChangePasswordVM changePassword)
+	{
+		HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/account/user/changePassword", _mapper.Map<ChangePasswordDto>(changePassword));
+
+		return response.IsSuccessStatusCode;
+	}
 	#endregion
 
 	#region Category
@@ -487,5 +486,5 @@ public sealed class ApiService : IApiService
 
         return await response.Content.ReadAsStringAsync();
     }
-    #endregion
+	#endregion
 }

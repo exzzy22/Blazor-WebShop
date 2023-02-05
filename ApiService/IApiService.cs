@@ -1,8 +1,4 @@
-﻿using Domain.Models;
-using Shared.RequestFeatures;
-using System.Net.Http;
-
-namespace ApiServices;
+﻿namespace ApiServices;
 
 public interface IApiService
 {
@@ -35,6 +31,7 @@ public interface IApiService
     Task<bool> Register(UserForRegistrationVM userForRegistration);
 	Task<(bool,TokenVM?)> Login(UserForAuthenticationVM userForAuthentication);
     Task<UserVM> GetLoggedUser();
+    Task<bool> ChangePassword(ChangePasswordVM changePassword);
 	#endregion
 
 	#region Categories

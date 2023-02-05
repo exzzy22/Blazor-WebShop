@@ -1,10 +1,4 @@
-﻿using QuestPDF.Drawing;
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Service.QuestPdf;
+﻿namespace Service.QuestPdf;
 
 public class InvoiceDocument : IDocument
 {

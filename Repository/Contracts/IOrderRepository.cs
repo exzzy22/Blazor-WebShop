@@ -1,6 +1,4 @@
-﻿using Shared.RequestFeatures;
-
-namespace Repository.Contracts;
+﻿namespace Repository.Contracts;
 
 public interface IOrderRepository
 {

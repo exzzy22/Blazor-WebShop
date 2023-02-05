@@ -1,7 +1,4 @@
-﻿using Repository.Extensions;
-using Shared.RequestFeatures;
-
-namespace Repository.Implementations;
+﻿namespace Repository.Implementations;
 
 internal sealed class ReviewRepository : RepositoryBase<Review>, IReviewRepository
 {

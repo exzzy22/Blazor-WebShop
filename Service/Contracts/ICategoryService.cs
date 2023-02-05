@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Service.Contracts;
+﻿namespace Service.Contracts;
 
 public interface ICategoryService
 {

@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using System.Text;
-
-namespace Repository.Extensions.Utility;
+﻿namespace Repository.Extensions.Utility;
 
 public static class OrderByQueryBuilder
 {

@@ -9,3 +9,7 @@ global using Repository.Implementations;
 global using Repository.Extensions.Utility;
 global using Shared.RequestFeatures;
 global using System.Linq.Dynamic.Core;
+global using Repository.Extensions;
+global using System.Reflection;
+global using System.Text;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;

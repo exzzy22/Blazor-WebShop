@@ -1,8 +1,4 @@
-﻿using Domain.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-
-namespace Repository.Configuration;
+﻿namespace Repository.Configuration;
 
 public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {

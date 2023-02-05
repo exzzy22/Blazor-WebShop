@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace Service.Implementations;
+﻿namespace Service.Implementations;
 
 internal sealed class CategoryService : ICategoryService
 {

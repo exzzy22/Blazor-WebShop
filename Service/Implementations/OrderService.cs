@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Shared.RequestFeatures;
-using System.Collections.Generic;
-using Shared.ConfigurationModels.Configuration;
-
-namespace Service.Implementations;
+﻿namespace Service.Implementations;
 
 sealed class OrderService : IOrderService
 {

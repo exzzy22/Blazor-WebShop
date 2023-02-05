@@ -1,42 +1,45 @@
 ﻿@implements IDisposable
 
-@if (WishlistVM.Products.Count == 0)
-{
-	<div class="col-md-8">
-		<img src="./img/emptycart.png" />
-	</div>
-	return;
-}
-<div class="col-md-8">
-<table class="table">
-	<tbody>
-	@foreach (var product in WishlistVM.Products)
+<AuthorizeView Context="AuthorizeContext">    
+	@if (WishlistVM.Products.Count == 0)
 	{
-		<tr>
-			<td colspan="2">
-				<div class="product-img">
-					<img src="@(ShopConfiguration.ApiImageAddress + product.Images.First(i => i.MainImage).File)" width="70" alt="Product Image">
-				</div>
-			</td>
-			<td>@product.Name</td>
-			<td style="white-space:nowrap;">
-				<div>
-					@(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @product.GetPrice(StaticConfig.Currency).ToString("N2")
-				</div>
-			</td>
-			<td>
-				<button @onclick="async () => await AddRemoveFromWishlist(product.Id)" class="primary-btn d-block mx-auto" disabled="@_loader"><i class="fa fa-close"></i>
-                @if (_loader)
-                {
-                    <span class="loader"></span>
-                }
-            </button>
-			</td>
-		</tr>
+		<div class="col-md-8">
+			<img src="./img/emptycart.png" />
+		</div>
+		return;
 	}
-	</tbody>
-</table>
-</div>
+	<div class="col-md-8">
+	<table class="table">
+		<tbody>
+		@foreach (var product in WishlistVM.Products)
+		{
+			<tr>
+				<td colspan="2">
+					<div class="product-img">
+						<img src="@(ShopConfiguration.ApiImageAddress + product.Images.First(i => i.MainImage).File)" width="70" alt="Product Image">
+					</div>
+				</td>
+				<td>@product.Name</td>
+				<td style="white-space:nowrap;">
+					<div>
+						@(StaticConfig.Currency is not null ? StaticConfig.Currency.Symbol : "") @product.GetPrice(StaticConfig.Currency).ToString("N2")
+					</div>
+				</td>
+				<td>
+					<button @onclick="async () => await AddRemoveFromWishlist(product.Id)" class="primary-btn d-block mx-auto" disabled="@_loader"><i class="fa fa-close"></i>
+					@if (_loader)
+					{
+						<span class="loader"></span>
+					}
+				</button>
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+	</div>
+</AuthorizeView>
+
 @code {
 	bool _loader = false;
 
@@ -46,17 +49,15 @@
 	[Inject]
 	WebShopConfiguration ShopConfiguration { get; set; } = null!;
 
-	protected override async Task OnInitializedAsync()
+	protected override void OnInitialized()
 	{
 		WishlistVM = UserState.Wishlist;
 		UserState.PropertyChanged += PropertyChanged;
 		StaticConfig.PropertyChanged += OnCurrencyChanged;
 	}
 
-	private void OnCurrencyChanged(object? sender, PropertyChangedEventArgs e)
-	{
-		StateHasChanged();
-	}
+	private void OnCurrencyChanged(object? sender, PropertyChangedEventArgs e) => StateHasChanged();
+
 
 	private void PropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{

@@ -50,6 +50,25 @@
 			return Ok(user);
 		}
 
+		[HttpPost("user/changePassword")]
+		[ServiceFilter(typeof(ValidationFilterAttribute))]
+		[Authorize]
+		public async Task<IActionResult> ChangePassword(ChangePasswordDto changePassword)
+		{
+			IdentityResult result = await _service.AuthenticationService.ChangePasswordAsync(changePassword, User);
+
+			if (!result.Succeeded)
+			{
+				foreach (var error in result.Errors)
+				{
+					ModelState.TryAddModelError(error.Code, error.Description);
+				}
+				return BadRequest(ModelState);
+			}
+
+			return Ok();
+		}
+
 		[HttpGet("admin")]
         public async Task<IActionResult> GetAdmins()
         {

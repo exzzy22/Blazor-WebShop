@@ -1,6 +1,4 @@
-﻿using Shared.RequestFeatures;
-
-namespace Service.Contracts;
+﻿namespace Service.Contracts;
 
 public interface IOrderService
 {

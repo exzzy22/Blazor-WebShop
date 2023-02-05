@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Shared.ConfigurationModels.Configuration;
-using Shared.RequestFeatures;
-
-namespace API.Controllers;
+﻿namespace API.Controllers;
 
 [Route("api/order")]
 [ApiController]

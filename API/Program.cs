@@ -1,6 +1,3 @@
-using AutoMapper;
-using Shared.ConfigurationModels.Configuration;
-
 var builder = WebApplication.CreateBuilder(args);
 
 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));

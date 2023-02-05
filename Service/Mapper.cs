@@ -1,6 +1,7 @@
-﻿using Domain.Models;
-using Microsoft.AspNetCore.Http;
-using Shared.RequestFeatures;
+﻿using Address = Domain.Models.Address;
+using Price = Domain.Models.Price;
+using Product = Domain.Models.Product;
+using Review = Domain.Models.Review;
 
 namespace Service;
 

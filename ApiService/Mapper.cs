@@ -1,8 +1,4 @@
-﻿using Domain.Models;
-using Shared.RequestFeatures;
-using ViewModels;
-
-namespace ApiServices;
+﻿namespace ApiServices;
 
 public class Mapper : Profile
 {
@@ -40,5 +36,6 @@ public class Mapper : Profile
 		CreateMap<ProductPagedList<ProductDto>, ProductPagedList<ProductVM>>().ReverseMap();
         CreateMap<ReviewDto, ReviewVM>().ReverseMap();
 		CreateMap<SubmitReviewDto, SubmitReviewVM>().ReverseMap();
-	}
+        CreateMap<ChangePasswordVM, ChangePasswordDto>().ReverseMap();
+    }
 }

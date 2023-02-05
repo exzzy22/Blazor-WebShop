@@ -1,12 +1,4 @@
-﻿using Domain.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Shared.ConfigurationModels.Configuration;
-using Shared.DataTransferObjects;
-using Shared.Extensions;
-using Shared.RequestFeatures;
-
-namespace Service.Implementations;
+﻿namespace Service.Implementations;
 
 internal sealed class ProductService : IProductService
 {

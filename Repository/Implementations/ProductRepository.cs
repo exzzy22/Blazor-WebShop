@@ -1,6 +1,4 @@
-﻿using Repository.Extensions;
-
-namespace Repository.Implementations;
+﻿namespace Repository.Implementations;
 
 internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepository
 {

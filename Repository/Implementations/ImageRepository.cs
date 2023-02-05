@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Repository.Implementations;
+﻿namespace Repository.Implementations;
 
 internal sealed class ImageRepository : RepositoryBase<Image>, IImageRepository
 {
