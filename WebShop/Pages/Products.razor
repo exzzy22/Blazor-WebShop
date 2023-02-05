@@ -113,10 +113,11 @@
 					<div class="store-sort">
 						<label>
 							Sort By:
-							<select class="input-select">
-								<option value="0">Popular</option>
-								<option value="1">Position</option>
-							</select>
+							<InputSelect class="input-select" @bind-Value="ProductParameters.OrderBy" @bind-Value:after="Search">
+								<option value="@($"{nameof(ProductVM.Sold)} desc")">Popular</option>
+								<option value="Price">Price asc</option>
+								<option value="Price desc">Price desc</option>
+							</InputSelect>
 						</label>
 
 						<label>
@@ -187,7 +188,7 @@
 
 
 @code {
-	ProductParameters ProductParameters { get; set; } = new() { PageNumber = 1, PageSize = 12, Filter = new ProductFilter { CurrencyId = StaticConfig.Currency.Id } };
+	ProductParameters ProductParameters { get; set; } = new() { PageNumber = 1, PageSize = 6, Filter = new ProductFilter { CurrencyId = StaticConfig.Currency.Id } };
 	ProductPagedList<ProductVM> ProductsList { get; set; } = null!;
 	List<CategoryVM> Categories { get; set; } = null!;
 

@@ -63,9 +63,19 @@ internal sealed class ProductRepository : RepositoryBase<Product> , IProductRepo
 		}
 
 		products = products.FilterProducts(productParameters.Filter)
-            .Sort(productParameters.OrderBy)
 			.Include(p => p.Category)
 			.Include(p => p.Images);
+
+        if (productParameters.OrderBy is not null && productParameters.OrderBy.Contains("price", StringComparison.OrdinalIgnoreCase))
+        {
+            products = products.SortByPrice(productParameters.OrderBy,productParameters.Filter.CurrencyId);
+
+        }
+        else
+        {
+            products = products.Sort(productParameters.OrderBy);
+		}
+
 
 		return ProductPagedList<Product>.ToProductPagedList(await products.ToListAsync(), productParameters.PageNumber, productParameters.PageSize,categoryCount, manufacturerCount);
 	}

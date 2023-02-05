@@ -1,4 +1,7 @@
-﻿namespace Repository.Extensions;
+﻿using Repository.Extensions.Utility;
+using System.Text;
+
+namespace Repository.Extensions;
 
 internal static class RepositoryProductExtensions
 {
@@ -33,16 +36,27 @@ internal static class RepositoryProductExtensions
 		return products;
 	}
 
-	public static IQueryable<Product> Sort(this IQueryable<Product> orders, string orderByQueryString)
+	public static IQueryable<Product> Sort(this IQueryable<Product> products, string orderByQueryString)
 	{
 		if (string.IsNullOrWhiteSpace(orderByQueryString))
-			return orders.OrderByDescending(e => e.Sold);
+			return products.OrderByDescending(e => e.Sold);
 
 		string orderQuery = OrderByQueryBuilder.CreateOrderQuery<Product>(orderByQueryString);
 
 		if (string.IsNullOrWhiteSpace(orderQuery))
-			return orders.OrderByDescending(e => e.Sold);
+			return products.OrderByDescending(e => e.Sold);
 
-		return orders.OrderBy(orderQuery);
+		return products.OrderBy(orderQuery);
+	}
+
+	public static IQueryable<Product> SortByPrice(this IQueryable<Product> products, string orderByQueryString, int currencyId)
+	{
+		bool desc = orderByQueryString.EndsWith(" desc");
+
+		return desc 
+			? 
+			products.OrderByDescending(e => e.Prices.First(p => p.CurrencyId == currencyId).Value) 
+			: 
+			products.OrderBy(e => e.Prices.First(p => p.CurrencyId == currencyId).Value);
 	}
 }
