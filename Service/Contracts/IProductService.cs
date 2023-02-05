@@ -1,4 +1,6 @@
-﻿namespace Service.Contracts;
+﻿using Product = Domain.Models.Product;
+
+namespace Service.Contracts;
 
 public interface IProductService
 {

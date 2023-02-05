@@ -1,4 +1,8 @@
-﻿namespace Service.Implementations;
+﻿using File = System.IO.File;
+using Product = Domain.Models.Product;
+using Review = Domain.Models.Review;
+
+namespace Service.Implementations;
 
 internal sealed class ProductService : IProductService
 {

@@ -19,7 +19,7 @@ public sealed class ServiceManager : IServiceManager
         IWebHostEnvironment webHostEnvironment)
     {
         _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(logger, mapper, roleManager, userManager, jwtConfiguration));
-        _productService = new Lazy<IProductService>(()=> new ProductService(repositoryManager,logger,mapper,webHostEnvironment,accessor, configuration));
+        _productService = new Lazy<IProductService>(()=> new Implementations.ProductService(repositoryManager,logger,mapper,webHostEnvironment,accessor, configuration));
         _categoryService = new Lazy<ICategoryService>(() => new CategoryService(repositoryManager, logger, mapper));
         _currencyService = new Lazy<ICurrencyService>(() => new CurrencyService(repositoryManager, logger, mapper));
         _paymentService = new Lazy<IPaymentService>( () => new PaymentService(logger,configuration,repositoryManager,mapper, webHostEnvironment));

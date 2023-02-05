@@ -1,4 +1,6 @@
-﻿namespace Service.QuestPdf;
+﻿using Address = Domain.Models.Address;
+
+namespace Service.QuestPdf;
 
 public class AddressComponent : IComponent
 {
