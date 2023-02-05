@@ -188,7 +188,7 @@
 
 
 @code {
-	ProductParameters ProductParameters { get; set; } = new() { PageNumber = 1, PageSize = 6, Filter = new ProductFilter { CurrencyId = StaticConfig.Currency.Id } };
+	ProductParameters ProductParameters { get; set; } = new() { PageNumber = 1, PageSize = 6, OrderBy = $"{nameof(ProductVM.Sold)} desc", Filter = new ProductFilter { CurrencyId = StaticConfig.Currency.Id } };
 	ProductPagedList<ProductVM> ProductsList { get; set; } = null!;
 	List<CategoryVM> Categories { get; set; } = null!;
 
