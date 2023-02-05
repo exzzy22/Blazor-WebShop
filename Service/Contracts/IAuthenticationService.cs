@@ -5,7 +5,7 @@ public interface IAuthenticationService
     Task<UserDto> GetUserInfo(ClaimsPrincipal user);
     Task<IdentityResult> RegisterUserAsync(UserForRegistrationDto userForRegistration);
     Task<IdentityResult> ChangePasswordAsync(ChangePasswordDto changePassword, ClaimsPrincipal user);
-		Task<bool> ValidateUserAsync(UserForAuthenticationDto userForAuth);
+	Task<bool> ValidateUserAsync(UserForAuthenticationDto userForAuth);
     Task<TokenDto> CreateTokenAsync(bool populateExp);
     Task<TokenDto> RefreshTokenAsync(TokenDto tokenDto);
     Task<IList<User>> GetUsersInRoleAsync(string roleName);
@@ -13,4 +13,5 @@ public interface IAuthenticationService
     Task<IdentityResult> UpdateAdminAsync(AdminDto admin);
     Task<IdentityResult> UpdateUserAsync(UserDto user);
     Task<IdentityResult> DeleteAdminAsync(int adminId);
+    Task SubscribeNewsLetter(string email);
 }

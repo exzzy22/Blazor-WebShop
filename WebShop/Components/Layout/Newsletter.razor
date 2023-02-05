@@ -7,10 +7,10 @@
 			<div class="col-md-12">
 				<div class="newsletter">
 					<p>Sign Up for the <strong>NEWSLETTER</strong></p>
-					<form>
-						<input class="input" type="email" placeholder="Enter Your Email">
+					<EditForm Model="Model" OnValidSubmit="Subscribe">
+						<InputText class="input" type="email" placeholder="Enter Your Email" @bind-Value="Model.Email" />
 						<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
-					</form>
+					</EditForm>
 					<ul class="newsletter-follow">
 						<li>
 							<a href="#"><i class="fa fa-facebook"></i></a>
@@ -35,5 +35,15 @@
 <!-- /NEWSLETTER -->
 
 @code {
+	[Inject]
+	IApiService ApiService { get; set; } = null!;
+	SubscribeNewsLetterVM Model { get; set; } = new();
 
+	async Task Subscribe()
+	{
+		bool result = await ApiService.SubscribeNewsLetter(Model.Email);
+
+		if (result)
+			Model = new();
+	}
 }

@@ -67,4 +67,5 @@ public class RepositoryContext : IdentityDbContext<User, Role, int>
 	public DbSet<Address> Adresses { get; set; } = null!;
     public DbSet<ProductOrder> ProductOrders { get; set; } = null!;
     public DbSet<Review> Reviews { get; set; } = null!;
+	public DbSet<Newsletter> Newsletters { get; set; } = null!;
 }

@@ -8,11 +8,12 @@ internal sealed class AuthenticationService : IAuthenticationService
     private readonly RoleManager<Role> _roleManager;
     private readonly IOptions<JwtConfiguration> _configuration;
     private readonly JwtConfiguration _jwtConfiguration;
+	private readonly IRepositoryManager _repositoryManager;
 
-    private User? _user;
+	private User? _user;
 
     public AuthenticationService(ILoggerManager logger, IMapper mapper, RoleManager<Role> roleManager,
-        UserManager<User> userManager, IOptions<JwtConfiguration> configuration)
+        UserManager<User> userManager, IOptions<JwtConfiguration> configuration,IRepositoryManager repositoryManager)
     {
         _logger = logger;
         _mapper = mapper;
@@ -20,6 +21,7 @@ internal sealed class AuthenticationService : IAuthenticationService
         _roleManager = roleManager;
         _configuration = configuration;
         _jwtConfiguration = _configuration.Value;
+        _repositoryManager = repositoryManager;
     }
 
     public async Task<UserDto> GetUserInfo(ClaimsPrincipal user)
@@ -149,7 +151,18 @@ internal sealed class AuthenticationService : IAuthenticationService
         return result;
     }
 
-    private static string GenerateRefreshToken()
+	public async Task SubscribeNewsLetter(string email)
+	{
+        Newsletter? newsletter = await _repositoryManager.Newsletter.Get(email);
+
+        if (newsletter is null)
+        {
+			_repositoryManager.Newsletter.Create(new Newsletter { Email = email });
+            await _repositoryManager.SaveAsync();
+		}
+	}
+
+	private static string GenerateRefreshToken()
     {
         byte[] randomNumber = new byte[32];
         using var rng = RandomNumberGenerator.Create();
@@ -227,4 +240,4 @@ internal sealed class AuthenticationService : IAuthenticationService
 
         return tokenOptions;
     }
-	}
+}

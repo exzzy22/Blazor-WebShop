@@ -155,5 +155,13 @@
 
             return StatusCode(204);
         }
-    }
+
+		[HttpPost("newsLetter/subscribe/{email}")]
+		public async Task<IActionResult> SubscribeNewsLetter(string email)
+		{
+            await _service.AuthenticationService.SubscribeNewsLetter(email);
+
+            return Ok();
+		}
+	}
 }

@@ -72,8 +72,13 @@ public interface IApiService
     #region Order
     Task<PagedList<OrderVM>> GetOrders(OrderParameters orderParameters);
     Task<string> GetInvoice(string invoiceId);
-    #endregion
-    bool AuthenticationHeaderExits();
+	#endregion
+
+	#region Newsletter
+	Task<bool> SubscribeNewsLetter(string email);
+
+	#endregion
+	bool AuthenticationHeaderExits();
     void SetAuthenticationHeader(string jwtToken);
     void RemoveAuthenticationHeader();
 }

@@ -10,6 +10,7 @@
         <MudItem xs="6">
             <MudTextField @bind-Value="_model.Name" For="@(() => _model.Name)" Label="Name" Variant="Variant.Outlined"></MudTextField>
             <MudTextField @bind-Value="_model.ShortName" For="@(() => _model.ShortName)" Label="Short Name" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="_model.Description" For="@(() => _model.Description)" Label="Description" Variant="Variant.Outlined"></MudTextField>
             <MudTextField @bind-Value="_model.Discount" For="@(() => _model.Discount)" Label="Discount" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentText="%"></MudTextField>
             <MudTextField @bind-Value="_model.InStock" For="@(() => _model.InStock)" Label="In Stock" Variant="Variant.Outlined"></MudTextField>
             <MudTextField @bind-Value="_model.Sold" For="@(() => _model.Sold)" Label="Sold" Variant="Variant.Outlined"></MudTextField>

@@ -11,6 +11,7 @@ public interface IRepositoryManager
     IOrderRepository Order { get; }
     IWishlistRepository Wishlist { get; }
     IReviewRepository Review { get; }
+    INewsletterRepository Newsletter { get; }
 
 
     Task SaveAsync();

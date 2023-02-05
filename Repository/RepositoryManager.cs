@@ -12,6 +12,7 @@ public sealed class RepositoryManager : IRepositoryManager
     private readonly Lazy<IOrderRepository> _orderRepository;
     private readonly Lazy<IWishlistRepository> _wishlistRepository;
     private readonly Lazy<IReviewRepository> _reviewRepository;
+    private readonly Lazy<INewsletterRepository> _newsletterRepository;
 
 
     public RepositoryManager(RepositoryContext repositoryContext)
@@ -26,7 +27,7 @@ public sealed class RepositoryManager : IRepositoryManager
 		_orderRepository = new Lazy<IOrderRepository>(() => new OrderRepository(repositoryContext));
         _wishlistRepository = new Lazy<IWishlistRepository>( () => new WishlistRepository(repositoryContext));
         _reviewRepository = new Lazy<IReviewRepository> ( () => new ReviewRepository(repositoryContext));
-
+        _newsletterRepository = new Lazy<INewsletterRepository>( () => new NewsletterRepository(repositoryContext));
 	}
 
     public IProductRepository Product => _productRepository.Value;
@@ -38,6 +39,7 @@ public sealed class RepositoryManager : IRepositoryManager
     public IOrderRepository Order => _orderRepository.Value;
     public IWishlistRepository Wishlist => _wishlistRepository.Value;
     public IReviewRepository Review => _reviewRepository.Value;
+    public INewsletterRepository Newsletter => _newsletterRepository.Value;
 
     public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
     public void Save() => _repositoryContext.SaveChanges();

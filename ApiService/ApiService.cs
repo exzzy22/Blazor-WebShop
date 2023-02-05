@@ -1,4 +1,6 @@
-﻿namespace ApiServices;
+﻿using Domain.Models;
+
+namespace ApiServices;
 
 public sealed class ApiService : IApiService
 {
@@ -486,5 +488,15 @@ public sealed class ApiService : IApiService
 
         return await response.Content.ReadAsStringAsync();
     }
+	#endregion
+
+	#region Newsletter
+
+	public async Task<bool> SubscribeNewsLetter(string email)
+    {
+		HttpResponseMessage response = await _httpClient.PostAsync($"api/account/newsLetter/subscribe/{email}", null);
+
+        return response.IsSuccessStatusCode;
+	}
 	#endregion
 }
