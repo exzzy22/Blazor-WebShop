@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Shared.ConfigurationModels.Configuration;
 
 namespace ApiServices;
 
@@ -7,12 +8,14 @@ public sealed class ApiService : IApiService
     private readonly HttpClient _httpClient;
     private readonly IMapper _mapper;
     private string? _jwtToken;
+    private readonly WebShopConfiguration _configuration;
 
-    public ApiService(IHttpClientFactory httpClientFactory, IMapper mapper)
+	public ApiService(IHttpClientFactory httpClientFactory, IMapper mapper, WebShopConfiguration configuration)
     {
+        _configuration= configuration;
         _mapper = mapper;
         _httpClient = httpClientFactory.CreateClient();
-        _httpClient.BaseAddress = new Uri("https://localhost:5000/");
+        _httpClient.BaseAddress = new Uri(configuration.ApiBaseAddress);
         if(_jwtToken is not null)
             SetAuthenticationHeader(_jwtToken);
     }
