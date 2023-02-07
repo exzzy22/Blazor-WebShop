@@ -77,6 +77,8 @@
 	IApiService ApiService { get; set; } = null!;
 	[Inject]
 	IJSRuntime JSRuntime { get; set; } = null!;
+	[Inject]
+	WebShopConfiguration Configuration { get; set; } = null!;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -86,6 +88,6 @@
 
 	async Task GoToPage(int pageNumber) => Orders = await ApiService.GetOrders(new OrderParameters { PageSize = 8, PageNumber = pageNumber });
 
-	async Task OpenInvoice(string invoice) => await JSRuntime.InvokeVoidAsync("openPDF",await ApiService.GetInvoice(invoice));
+	async Task OpenInvoice(string invoice) => await JSRuntime.InvokeVoidAsync("openPDF", Configuration.ApiDocumentAddress + invoice);
 
 }

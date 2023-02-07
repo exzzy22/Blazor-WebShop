@@ -6,4 +6,5 @@ public class Configuration
 
     public Stripe Stripe { get; set; } = null!;
     public BaseUrls BaseUrls { get; set; } = null!;
+	public List<string> Origins { get; set; } = null!;
 }

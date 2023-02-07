@@ -22,3 +22,4 @@ global using Domain.ErrorModel;
 global using Domain.Exceptions;
 global using Microsoft.AspNetCore.Diagnostics;
 global using Domain.Models;
+global using Microsoft.AspNetCore.StaticFiles;

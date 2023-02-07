@@ -42,6 +42,18 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("SpecificOrgin",
+	policy =>
+	{
+		policy.WithOrigins(builder.Configuration.GetSection("Configuration").Get<Configuration>().Origins.ToArray())
+							.AllowAnyHeader()
+							.AllowAnyMethod();
+	});
+});
+
+
 var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILoggerManager>();
@@ -54,10 +66,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(builder => builder
-             .AllowAnyOrigin()
-             .AllowAnyMethod()
-             .AllowAnyHeader());
+app.UseCors("SpecificOrgin");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

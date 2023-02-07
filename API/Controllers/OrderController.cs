@@ -17,7 +17,8 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("page")]
-    public async Task<IActionResult> GetOrders([FromQuery] OrderParameters orderParameters)
+	[Authorize]
+	public async Task<IActionResult> GetOrders([FromQuery] OrderParameters orderParameters)
     {
         PagedList<OrderDto> orders = await _serviceManager.OrderService.GetOrdersAsync(orderParameters);
 
@@ -27,9 +28,8 @@ public class OrderController : ControllerBase
     [HttpGet("invoice/{invoiceId}")]
     public async Task<IActionResult> GetInvoice(string invoiceId)
     {
-		string filePath = Path.Combine(_webHostEnvironment.WebRootPath, _configuration.FilePathConfiguration.Document, $"{invoiceId}.pdf");
-		string fileLink = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/{filePath.Replace(@"\", "/")}";
+		FileStream invoice = System.IO.File.OpenRead(_webHostEnvironment.WebRootPath + _configuration.FilePathConfiguration.Document + invoiceId + ".pdf");
 
-		return Ok(fileLink);
+		return File(invoice, "application/pdf");
 	}
 }
