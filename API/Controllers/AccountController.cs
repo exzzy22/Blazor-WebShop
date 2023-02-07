@@ -2,10 +2,7 @@
 {
     [Route("api/account")]
     [ApiController]
-    [AllowAnonymous]// Fix rights later
-    // Fix rights later
-    // Fix rights later
-    // Fix rights later
+    [AllowAnonymous]
     public class AccountController : ControllerBase
     {
         private readonly IServiceManager _service;
@@ -70,7 +67,8 @@
 		}
 
 		[HttpGet("admin")]
-        public async Task<IActionResult> GetAdmins()
+		[Authorize(Roles = "Super Administrator")]
+		public async Task<IActionResult> GetAdmins()
         {
             var admins = await _service.AuthenticationService.GetUsersInRoleAsync(DatabaseConstants.RoleConstants.Administrator.Name);
 
@@ -78,7 +76,8 @@
         }
 
         [HttpGet("user")]
-        public async Task<IActionResult> GetUsers()
+		[Authorize(Roles = "Super Administrator,Administrator")]
+		public async Task<IActionResult> GetUsers()
         {
             var users = await _service.AuthenticationService.GetUsersInRoleAsync( DatabaseConstants.RoleConstants.User.Name);
 
@@ -86,7 +85,8 @@
         }
 
         [HttpPost("admin/new")]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
+		[Authorize(Roles = "Super Administrator")]
+		[ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateAdmin(AdminForCreationDto admin)
         {
             var result = await _service.AuthenticationService.CreateAdminAsync(admin);
@@ -104,7 +104,8 @@
         }
 
         [HttpPost("admin/edit")]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
+		[Authorize(Roles = "Super Administrator")]
+		[ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateAdmin(AdminDto admin)
         {
             var result = await _service.AuthenticationService.UpdateAdminAsync(admin);
@@ -122,7 +123,8 @@
         }
 
         [HttpPost("user/edit")]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
+		[Authorize(Roles = "Super Administrator,Administrator")]
+		[ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateUser(UserDto user)
         {
             var result = await _service.AuthenticationService.UpdateUserAsync(user);
@@ -140,7 +142,8 @@
         }
 
         [HttpDelete("admin/delete/{adminId}")]
-        public async Task<IActionResult> DeleteAdmin(int adminId)
+		[Authorize(Roles = "Super Administrator")]
+		public async Task<IActionResult> DeleteAdmin(int adminId)
         {
             var result = await _service.AuthenticationService.DeleteAdminAsync(adminId);
 

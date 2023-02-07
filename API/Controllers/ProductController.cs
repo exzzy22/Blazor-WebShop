@@ -17,13 +17,16 @@ public class ProductController : ControllerBase
 	}
 
 	[HttpGet("{productId}")]
+    [Authorize(Roles = "Super Administrator,Administrator")]
     public async Task<IActionResult> GetProduct(int productId) => Ok(await _serviceManager.ProductService.GetProductAsync(productId));
 
     [HttpGet("update/{productId}")]
-    public async Task<IActionResult> GetProductForUpdate(int productId) => Ok(await _serviceManager.ProductService.GetProductForUpdateAsync(productId));
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> GetProductForUpdate(int productId) => Ok(await _serviceManager.ProductService.GetProductForUpdateAsync(productId));
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetProducts() => Ok(await _serviceManager.ProductService.GetProductsAsync());
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> GetProducts() => Ok(await _serviceManager.ProductService.GetProductsAsync());
 
     [HttpGet("all/{categoryId}/{numberOfProducts}")]
     public async Task<IActionResult> GetProductsForCategory(int categoryId, int numberOfProducts) => Ok(await _serviceManager.ProductService.GetProductsForCategoryAsync(categoryId, numberOfProducts));
@@ -38,7 +41,8 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> GetCarouselTopSelling(int numberOfProducts) => Ok(await _serviceManager.ProductService.GetCarouselProductsAsync(p => (p.Sold), numberOfProducts));
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddProduct(ProductForCreationDto product)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> AddProduct(ProductForCreationDto product)
     {
         await _serviceManager.ProductService.AddProductAsync(product);
 
@@ -46,14 +50,16 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("delete/{productId}")]
-    public async Task<IActionResult> DeleteProduct(int productId)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> DeleteProduct(int productId)
     {
         await _serviceManager.ProductService.DeleteProductAsync(productId);
 
         return NoContent();
     }
     [HttpPost("update/detailed")]
-    public async Task<IActionResult> UpdateProduct(ProductForCreationDto product)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> UpdateProduct(ProductForCreationDto product)
     {
         await _serviceManager.ProductService.UpdateProductAsync(product);
 
@@ -61,7 +67,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("update")]
-    public async Task<IActionResult> UpdateProduct(ProductDto product)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> UpdateProduct(ProductDto product)
     {
         await _serviceManager.ProductService.UpdateProductAsync(product);
 
@@ -69,7 +76,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("category/add")]
-    public async Task<IActionResult> AddCategory(CategoryDto category)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> AddCategory(CategoryDto category)
     {
         await _serviceManager.CategoryService.AddCategory(category);
 
@@ -77,7 +85,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("category/delete/{categoryId}")]
-    public async Task<IActionResult> DeleteCategory(int categoryId)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> DeleteCategory(int categoryId)
     {
         await _serviceManager.CategoryService.DeleteCategory(categoryId);
 
@@ -85,7 +94,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("category/update")]
-    public async Task<IActionResult> UpdateCategory(CategoryDto category)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> UpdateCategory(CategoryDto category)
     {
         await _serviceManager.CategoryService.UpdateCategory(category);
 
@@ -99,7 +109,8 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> Getcurrencies() => Ok(await _serviceManager.CurrencyService.GetCurrenciesAsync());
 
     [HttpPost("currency/add")]
-    public async Task<IActionResult> Addcurrency(CurrencyDto currency)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> Addcurrency(CurrencyDto currency)
     {
         await _serviceManager.CurrencyService.AddCurrencyAsync(currency);
 
@@ -107,7 +118,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("currency/delete/{currencyId}")]
-    public async Task<IActionResult> Deletecurrency(int currencyId)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> Deletecurrency(int currencyId)
     {
         await _serviceManager.CurrencyService.DeleteCurrencyAsync(currencyId);
 
@@ -115,7 +127,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("currency/update")]
-    public async Task<IActionResult> Updatecurrency(CurrencyDto currency)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> Updatecurrency(CurrencyDto currency)
     {
         await _serviceManager.CurrencyService.UpdateCurrencyAsync(currency);
 
@@ -123,10 +136,12 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("image/unused")]
-    public async Task<IActionResult> GetUnusedImages() => Ok(await _serviceManager.ProductService.GetListOfUnusedImages());
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> GetUnusedImages() => Ok(await _serviceManager.ProductService.GetListOfUnusedImages());
 
     [HttpPost("image/delete")]
-    public async Task<IActionResult> DeleteImage(string image)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> DeleteImage(string image)
     {
         _serviceManager.ProductService.DeleteImage(image);
 
@@ -134,7 +149,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("image/delete/multiple")]
-    public async Task<IActionResult> DeleteImage(List<string> images)
+	[Authorize(Roles = "Super Administrator,Administrator")]
+	public async Task<IActionResult> DeleteImage(List<string> images)
     {
         _serviceManager.ProductService.DeleteImage(images);
 
