@@ -172,9 +172,32 @@ internal sealed class ProductService : IProductService
         return imageForTables;
     }
 
-    public async Task<CartDto> GetCart(int cartId) => _mapper.Map<CartDto>(await _repository.Cart.GetCartAsync(cartId, false));
+    public async Task<CartDto> GetCart(int cartId)
+    {
+        Cart? cart = await _repository.Cart.GetCartAsync(cartId, false);
+		Cart newCart = new ();
 
-    public async Task<CartDto> GetUserCart(int userId) => _mapper.Map<CartDto>(await _repository.Cart.GetUserCartAsync(userId, false) ?? throw new CartNotFound(userId));
+		if (cart is null)
+		{
+			_repository.Cart.Create(newCart);
+			await _repository.SaveAsync();
+		}
+
+		return _mapper.Map<CartDto>(cart ?? newCart);
+	}
+    public async Task<CartDto> GetUserCart(int userId)
+    {
+        Cart? cart = await _repository.Cart.GetUserCartAsync(userId, false);
+		Cart newCart = new Cart { UserId = userId };
+
+		if (cart is null)
+        {
+            _repository.Cart.Create(newCart);
+            await _repository.SaveAsync();
+        }
+
+		return _mapper.Map<CartDto>(cart ?? newCart);
+	}
 
     public async Task<CartDto> AddProductToCart(int productId, int cartId, int quantity, int? userId = null)
 	{
@@ -278,9 +301,33 @@ internal sealed class ProductService : IProductService
 		return _mapper.Map<WishlistDto>(await _repository.Wishlist.GetById(wishlistId, false));
 	}
 
-	public async Task<WishlistDto> GetWishlist(int id) => _mapper.Map<WishlistDto>(await _repository.Wishlist.GetById(id, false));
+    public async Task<WishlistDto> GetWishlist(int id)
+    {
+        Wishlist? wishlist = await _repository.Wishlist.GetById(id, false);
+		Wishlist newWishlist = new();
 
-    public async Task<WishlistDto> GetUserWishlist(int userId) => _mapper.Map<WishlistDto>(await _repository.Wishlist.GetUserWishList(userId, false));
+		if (wishlist is null)
+		{
+			_repository.Wishlist.Create(newWishlist);
+			await _repository.SaveAsync();
+		}
+
+		return _mapper.Map<WishlistDto>(wishlist ?? newWishlist);
+	}
+
+    public async Task<WishlistDto> GetUserWishlist(int userId)
+    {
+        Wishlist? wishlist = await _repository.Wishlist.GetUserWishList(userId, false);
+		Wishlist newWishlist = new();
+
+		if (wishlist is null)
+		{
+			_repository.Wishlist.Create(newWishlist);
+			await _repository.SaveAsync();
+		}
+
+		return _mapper.Map<WishlistDto>(wishlist ?? newWishlist);
+	}
     public async Task<WishlistDto> JoinWishlistToUser(int wishlistId, int userId)
 	{
 		Wishlist wishlist = await _repository.Wishlist.GetById(wishlistId, true);
