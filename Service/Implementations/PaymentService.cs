@@ -93,8 +93,10 @@ internal sealed class PaymentService : IPaymentService
         {
             InvoiceDocument document = new(order);
 
-            string guid = Guid.NewGuid().ToString();
-            document.GeneratePdf($"{_documentPath}{guid}.pdf");
+			string guid = Guid.NewGuid().ToString();
+			_logger.LogInfo($"Creating pdf invoice: {guid}");
+
+			document.GeneratePdf($"{_documentPath}{guid}.pdf");
             order.Invoice = guid;
 
             await _repositoryManager.SaveAsync();
