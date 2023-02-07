@@ -52,7 +52,7 @@ internal sealed class PaymentService : IPaymentService
                     Quantity = 1,
                     PriceData = new SessionLineItemPriceDataOptions 
                     { 
-                        UnitAmountDecimal = (decimal)GetCartTotal(order.CurrencyISO,cart.Products.ToList())*100, 
+                        UnitAmountDecimal = (int)(Math.Round(orderToCreate.Amount,2,MidpointRounding.AwayFromZero)*100), 
                         Currency = order.CurrencyISO, 
                         ProductData = new SessionLineItemPriceDataProductDataOptions 
                         { 
@@ -67,7 +67,8 @@ internal sealed class PaymentService : IPaymentService
             Currency= order.CurrencyISO,
         };
 
-        var service = new SessionService();
+		var service = new SessionService();
+
         Session session = service.Create(options);
 
         Order orderToUpdate = await _repositoryManager.Order.GetOrderAsync(orderToCreate.Id, true);

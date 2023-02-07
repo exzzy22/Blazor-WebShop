@@ -7,7 +7,6 @@ global using Microsoft.AspNetCore.Mvc.Filters;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.OpenApi.Models;
-global using NLog;
 global using Repository;
 global using Service;
 global using Service.Contracts;

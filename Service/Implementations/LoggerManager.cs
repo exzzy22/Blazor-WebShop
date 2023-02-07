@@ -1,9 +1,11 @@
-﻿namespace Service.Implementations;
+﻿using Serilog;
+
+namespace Service.Implementations;
 
 public class LoggerManager : ILoggerManager
 {
-    private static ILogger logger = LogManager.GetCurrentClassLogger();
-    public LoggerManager()
+    private static ILogger logger = Serilog.Log.Logger;
+	public LoggerManager()
     {
 
     }
@@ -11,7 +13,7 @@ public class LoggerManager : ILoggerManager
 
     public void LogError(string message) => logger.Error(message);
 
-    public void LogInfo(string message) => logger.Info(message);
+    public void LogInfo(string message) => logger.Information(message);
 
-    public void LogWarn(string message) => logger.Warn(message);
+    public void LogWarn(string message) => logger.Warning(message);
 }

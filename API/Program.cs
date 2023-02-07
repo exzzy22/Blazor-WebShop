@@ -1,7 +1,17 @@
+using Serilog;
+using Serilog.Events;
+
 var builder = WebApplication.CreateBuilder(args);
 
-LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+// Configure SeriLog
+Log.Logger = new LoggerConfiguration()
+				.MinimumLevel.Information()
+				.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+				.MinimumLevel.Override("System", LogEventLevel.Warning)
+				.WriteTo.File("wwwroot/logs/log-.log", rollingInterval: RollingInterval.Day)
+				.CreateLogger();
 
+builder.Logging.AddSerilog(Log.Logger);
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.Configure<Configuration>(builder.Configuration.GetSection("Configuration"));
 

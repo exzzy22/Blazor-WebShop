@@ -4,7 +4,6 @@ global using Domain.Models;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
-global using NLog;
 global using Repository;
 global using Service.Contracts;
 global using Shared.ConfigurationModels;
