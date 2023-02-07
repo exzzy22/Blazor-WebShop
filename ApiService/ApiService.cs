@@ -364,7 +364,8 @@ public sealed class ApiService : IApiService
 	{
 		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/{cartId}");
 
-		response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+            return new CartVM();
 
 		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -375,7 +376,8 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/cart/user/{userId}");
 
-		response.EnsureSuccessStatusCode();
+		if (!response.IsSuccessStatusCode)
+			return new CartVM();
 
 		CartDto cartResponse = await response.Content.ReadFromJsonAsync<CartDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -421,7 +423,8 @@ public sealed class ApiService : IApiService
 	{
 		HttpResponseMessage response = await _httpClient.GetAsync($"api/product/wishlist/{id}");
 
-		response.EnsureSuccessStatusCode();
+		if (!response.IsSuccessStatusCode)
+			return new WishlistVM();
 
 		WishlistDto wishlist = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 
@@ -432,7 +435,8 @@ public sealed class ApiService : IApiService
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"api/product/wishlist/user/{userId}");
 
-		response.EnsureSuccessStatusCode();
+		if (!response.IsSuccessStatusCode)
+			return new WishlistVM();
 
 		WishlistDto wishlist = await response.Content.ReadFromJsonAsync<WishlistDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
 

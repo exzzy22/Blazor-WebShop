@@ -1,4 +1,5 @@
-﻿using File = System.IO.File;
+﻿using Domain.Models;
+using File = System.IO.File;
 using Product = Domain.Models.Product;
 using Review = Domain.Models.Review;
 
@@ -174,29 +175,24 @@ internal sealed class ProductService : IProductService
 
     public async Task<CartDto> GetCart(int cartId)
     {
-        Cart? cart = await _repository.Cart.GetCartAsync(cartId, false);
-		Cart newCart = new ();
+        Cart cart = await _repository.Cart.GetCartAsync(cartId, false) ?? throw new CartNotFound(cartId);
+
+		return _mapper.Map<CartDto>(cart);
+	}
+    public async Task<CartDto> GetUserCart(int userId)
+    {
+        Cart? cart = await _repository.Cart.GetUserCartAsync(userId, false);
+
+		Cart newCart = new () { UserId = userId };
 
 		if (cart is null)
 		{
 			_repository.Cart.Create(newCart);
 			await _repository.SaveAsync();
+			return _mapper.Map<CartDto>(newCart);
 		}
 
-		return _mapper.Map<CartDto>(cart ?? newCart);
-	}
-    public async Task<CartDto> GetUserCart(int userId)
-    {
-        Cart? cart = await _repository.Cart.GetUserCartAsync(userId, false);
-		Cart newCart = new Cart { UserId = userId };
-
-		if (cart is null)
-        {
-            _repository.Cart.Create(newCart);
-            await _repository.SaveAsync();
-        }
-
-		return _mapper.Map<CartDto>(cart ?? newCart);
+		return _mapper.Map<CartDto>(cart);
 	}
 
     public async Task<CartDto> AddProductToCart(int productId, int cartId, int quantity, int? userId = null)
@@ -288,7 +284,7 @@ internal sealed class ProductService : IProductService
             return _mapper.Map<WishlistDto>(wishlist);
 		}
 
-		Wishlist wishlistDb = await _repository.Wishlist.GetById(wishlistId, true);
+		Wishlist wishlistDb = await _repository.Wishlist.GetById(wishlistId, true) ?? throw new WishlistNotFound(wishlistId);
 
 		if (wishlistDb.Products.Any(w => w.Id == productId))
 			wishlistDb.Products.Remove(wishlistDb.Products.First(w => w.Id == productId));
@@ -303,34 +299,30 @@ internal sealed class ProductService : IProductService
 
     public async Task<WishlistDto> GetWishlist(int id)
     {
-        Wishlist? wishlist = await _repository.Wishlist.GetById(id, false);
-		Wishlist newWishlist = new();
+        Wishlist wishlist = await _repository.Wishlist.GetById(id, false) ?? throw new WishlistNotFound(id);
 
-		if (wishlist is null)
-		{
-			_repository.Wishlist.Create(newWishlist);
-			await _repository.SaveAsync();
-		}
-
-		return _mapper.Map<WishlistDto>(wishlist ?? newWishlist);
+		return _mapper.Map<WishlistDto>(wishlist);
 	}
 
     public async Task<WishlistDto> GetUserWishlist(int userId)
     {
         Wishlist? wishlist = await _repository.Wishlist.GetUserWishList(userId, false);
-		Wishlist newWishlist = new();
+
+		Wishlist newWishlist = new() { UserId = userId };
 
 		if (wishlist is null)
 		{
 			_repository.Wishlist.Create(newWishlist);
 			await _repository.SaveAsync();
+
+			return _mapper.Map<WishlistDto>(newWishlist);
 		}
 
-		return _mapper.Map<WishlistDto>(wishlist ?? newWishlist);
+		return _mapper.Map<WishlistDto>(wishlist);
 	}
     public async Task<WishlistDto> JoinWishlistToUser(int wishlistId, int userId)
 	{
-		Wishlist wishlist = await _repository.Wishlist.GetById(wishlistId, true);
+		Wishlist wishlist = await _repository.Wishlist.GetById(wishlistId, true) ?? throw new WishlistNotFound(wishlistId);
 		wishlist.UserId = userId;
 
 		await _repository.SaveAsync();

@@ -77,8 +77,8 @@ public class UserState : INotifyPropertyChanged
 		}
 		else if (User is not null)
 		{ 
-			CartVM? cart = await _apiService.GetUserCart(User.Id);
-			if (cart is not null)
+			CartVM cart = await _apiService.GetUserCart(User.Id);
+			if (cart.Id != default)
 			{
 				Cart = cart;
                 await _localStorageService.SetItemAsStringAsync("CartId", Cart.Id.ToString());
@@ -92,8 +92,8 @@ public class UserState : INotifyPropertyChanged
 		}
 		else if (User is not null)
 		{
-            WishlistVM? wishlist = await _apiService.GetUserWishlist(User.Id);
-			if (wishlist is not null)
+            WishlistVM wishlist = await _apiService.GetUserWishlist(User.Id);
+			if (wishlist.Id != default)
 			{
 				Wishlist = wishlist;
                 await _localStorageService.SetItemAsStringAsync("WishlistId", Wishlist.Id.ToString());
