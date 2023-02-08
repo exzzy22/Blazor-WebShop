@@ -56,6 +56,8 @@
     IJSRuntime JSRuntime { get; set; } = null!;
     [Inject]
     NavigationManager NavigationManager { get; set; } = null!;
+    [Inject]
+    UserState UserState { get; set; } = null!;
 
     protected override void OnParametersSet()
     {
@@ -66,6 +68,7 @@
     async Task LogOut()
     {
         await DeleteCookie();
+        await UserState.ClearLocalStorage();
         var authState = await AuthenticationState.GetAuthenticationStateAsync();
         NavigationManager.NavigateTo("/");
     }

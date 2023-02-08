@@ -21,7 +21,7 @@
 </div>
 <!-- /BREADCRUMB -->
 <!-- SECTION -->
-<EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+<EditForm Model="Model" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInValidSubmit">
 <ObjectGraphDataAnnotationsValidator   />
 <div class="section">
 	<!-- container -->
@@ -196,13 +196,9 @@
 
 		if (UserState.User is not null)
 			LoadAddress();
-
 	}
 
-	private void OnCurrencyChanged(object? sender, PropertyChangedEventArgs e)
-	{
-		StateHasChanged();
-	}
+	private void OnCurrencyChanged(object? sender, PropertyChangedEventArgs e) => StateHasChanged();
 
 	async Task OnValidSubmit()
 	{
@@ -212,6 +208,19 @@
 		string payementUrl = await ApiService.CreatePayment(Model);
 		NavigationManager.NavigateTo(payementUrl);
 		_loader = false;
+	}
+
+	async Task OnInValidSubmit()
+	{
+		if (UserState.User is not null)
+			return;
+
+		var context = new EditContext(Model);
+		if (!_shipToDifferentAddress)
+			Model.ShippingAddress = Model.BillingAddress;
+
+		if (context.Validate())
+			await OnValidSubmit();
 	}
 
 	async Task ChangeQuantity(int quantity, int productId)

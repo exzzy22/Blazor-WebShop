@@ -141,5 +141,20 @@ public class UserState : INotifyPropertyChanged
 		}
 	}
 
+	public async Task ClearLocalStorage()
+	{
+		if (await _localStorageService.ContainKeyAsync("WishlistId"))
+		{
+			await _localStorageService.RemoveItemAsync("WishlistId");
+			Wishlist = new();
+		}
+
+		if (await _localStorageService.ContainKeyAsync("CartId"))
+		{
+			await _localStorageService.RemoveItemAsync("CartId");
+			Cart = new();
+		}
+	}
+
 	private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }

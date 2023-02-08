@@ -211,7 +211,7 @@ internal sealed class ProductService : IProductService
 
 				await _repository.SaveAsync();
 
-				return _mapper.Map<CartDto>(cartToCreate);
+                return _mapper.Map<CartDto>(await _repository.Cart.GetCartAsync(cartToCreate.Id, false));
 			}
 
 			dBcart.Products = new List<ProductCart> { new ProductCart { ProductId = productId, Quantity = 1 } };

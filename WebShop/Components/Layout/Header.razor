@@ -1,4 +1,5 @@
-﻿<!-- HEADER -->
+﻿@if (isLoading) return;
+<!-- HEADER -->
 <header>
 	<!-- TOP HEADER -->
 	<div id="top-header">
@@ -142,6 +143,7 @@
 	List<CurrencyVM> Currencies { get; set; } = null!;
 	List<CategoryVM> Categories { get; set; } = null!;
 	HeaderSearchVM HeaderSearchVM { get; set; } = new();
+	bool isLoading = true;
 
 	[CascadingParameter]
 	public ClaimsPrincipal User { get; set; } = null!;
@@ -163,6 +165,7 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		isLoading = true;
 		Cart = UserState.Cart;
 		Wishlist = UserState.Wishlist;
 		UserState.PropertyChanged += PropertyChanged;
@@ -173,6 +176,7 @@
 			await LocalStorageService.SetItemAsync<CurrencyVM>("Currency",Currencies.First());
 		}
 		StaticConfig.Currency = await LocalStorageService.GetItemAsync<CurrencyVM>("Currency");
+		isLoading = false;
 	}
 
 	private void PropertyChanged(object? sender, PropertyChangedEventArgs e)
