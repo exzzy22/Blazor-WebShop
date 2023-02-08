@@ -1,15 +1,82 @@
 # Blazor WebShop with CMS
 
-This is example project using blazor webassembly and showing some of its features. Project includes Blazor WASM WebShop, Blazor WASM CMS and REST API that booth of those connect.
+## Information
 
-## Blazor WebShop
+This is an example project showcasing some of the features of Blazor WebAssembly. The project includes a Blazor WebShop, a Blazor CMS, and a REST API connecting both of them.
 
-For WebShop project the base template that is used is Electro-template, you can check it [here](https://www.templateshub.net/template/Electro-eCommerce-Website-Templates). Project is Blazor WebAssembly. Its an example of computer components shop.
+### Blazor WebShop
 
-## Blazor CMS
+The Blazor WebShop is based on the Electro-template, which can be viewed [here](https://www.templateshub.net/template/Electro-eCommerce-Website-Templates). The project is a Blazor WebAssembly and serves as an example of a computer components shop.
 
-CMS is created with MudBlazor component library, you can check it [here](https://mudblazor.com/). Project is Blazor WebAssembly.
+#### Main Features
 
-## API
+- Shopping Cart
+- Wishlist
+- Currency Conversion
+- Product Search and Filtering
+- User Information Editing
+- Order Viewing and PDF Invoice Generation
+- Stripe Payment Implementation
 
-API is a basic REST API with controllers implementing onion architecture.
+### Blazor CMS
+
+The CMS is created using the MudBlazor component library, which can be checked out [here](https://mudblazor.com/). The project is a Blazor WebAssembly.
+
+### API
+
+The API is a basic REST API with controllers implementing the onion architecture.
+
+## How to run it
+
+First you need to fill **appsettings.json**, or respective environment settings files in API project. Here is an example:
+
+```javascript
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Your database string"
+  },
+  "JwtConfiguration": {
+    "Secret": "your secret string",
+    "ValidIssuer": "https://localhost:5000",
+    "ValidAudience": "Audience",
+    "AccessTokenExpiration": 72,
+    "RefreshTokenExpiration": 96
+  },
+  "Configuration": {
+    "FilePathConfiguration": {
+      "Image": "/image/",
+      "Document": "/document/"
+    },
+    "Stripe": {
+      "PubKey": "Stripe Publishable key",
+      "SecretKey": "Stripe Secret key"
+    },
+    "BaseUrls": {
+      "WebShop": "https://localhost:7061/"
+    },
+    "Origins": [ "https://localhost:7061" ]
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  }
+}
+```
+You will also need to create database you can use Entity Framework migrations to do so, but I also provided database creation script including some dummy data. If you're going to use my dummy data, make sure to also copy the image folder to the wwwroot of the API project. Both are in the [GithubFiles folder](GithubFiles)
+
+## Live Version
+
+If you want to check the hosted version, it is available online at https://webshop.myexzzy.uk/. Feel free to test the features including the payment system (you can use [test cards](https://stripe.com/docs/testing) from Stripe). Everything should work as expected.
+
+For registered users, there is no need for email activation after registration. Everything works as an anonymous user, except you will not have access to user information and orders. If you want to use existing user, you can use the following credentials:
+
+    Email: lukeBenson@rhyta.com
+    Password: ei4DU8FdGpmHuXi
+
+**Important**
+
+The website is hosted on my home server and includes the database, API, and Blazor project, so it may be slow due to my internet connection.
+
+For those interested in the setup, it uses NGINX for the API and Blazor project, and everything is served to the internet using Cloudflare tunnel.
