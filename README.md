@@ -4,6 +4,16 @@
 
 This is an example project showcasing some of the features of Blazor WebAssembly. The project includes a Blazor WebShop, a Blazor CMS, and a REST API connecting both of them.
 
+# Table of Contents
+1. [Blazor WebShop with CMS](#blazor-webshop-with-cms)
+   - [Information](#information)
+     - [Blazor WebShop](#blazor-webshop)
+       - [Main Features](#main-features)
+     - [Blazor CMS](#blazor-cms)
+     - [API](#api)
+   - [How to run it](#how-to-run-it)
+   - [Live Version](#live-version)
+
 ### Blazor WebShop
 
 The Blazor WebShop is based on the Electro-template, which can be viewed [here](https://www.templateshub.net/template/Electro-eCommerce-Website-Templates). The project is a Blazor WebAssembly and serves as an example of a computer components shop.
