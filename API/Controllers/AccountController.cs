@@ -38,7 +38,19 @@
             return Ok(tokenDto);
         }
 
-		[HttpGet("user/logged")]
+        [HttpPost("login/cms")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> AuthenticateCMS([FromBody] UserForAuthenticationDto user)
+        {
+            if (!await _service.AuthenticationService.ValidateAdminAsync(user))
+                return Unauthorized();
+
+            var tokenDto = await _service.AuthenticationService.CreateTokenAsync(populateExp: true);
+
+            return Ok(tokenDto);
+        }
+
+        [HttpGet("user/logged")]
         [Authorize]
 		public async Task<IActionResult> GeetLoggedUser()
 		{

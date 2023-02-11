@@ -9,4 +9,7 @@ global using Shared.DataTransferObjects;
 global using static MudBlazor.CategoryTypes;
 global using CMS.Components;
 global using Shared.Extensions;
-
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
+global using Microsoft.AspNetCore.Components.Authorization;
+global using Microsoft.JSInterop;

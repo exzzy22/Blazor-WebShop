@@ -37,5 +37,6 @@ public class Mapper : Profile
         CreateMap<ReviewDto, ReviewVM>().ReverseMap();
 		CreateMap<SubmitReviewDto, SubmitReviewVM>().ReverseMap();
         CreateMap<ChangePasswordVM, ChangePasswordDto>().ReverseMap();
+        CreateMap<AdminVM, UserDto>().ReverseMap();
     }
 }

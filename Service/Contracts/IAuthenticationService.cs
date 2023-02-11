@@ -6,6 +6,7 @@ public interface IAuthenticationService
     Task<IdentityResult> RegisterUserAsync(UserForRegistrationDto userForRegistration);
     Task<IdentityResult> ChangePasswordAsync(ChangePasswordDto changePassword, ClaimsPrincipal user);
 	Task<bool> ValidateUserAsync(UserForAuthenticationDto userForAuth);
+    Task<bool> ValidateAdminAsync(UserForAuthenticationDto userForAuth);
     Task<TokenDto> CreateTokenAsync(bool populateExp);
     Task<TokenDto> RefreshTokenAsync(TokenDto tokenDto);
     Task<IList<User>> GetUsersInRoleAsync(string roleName);

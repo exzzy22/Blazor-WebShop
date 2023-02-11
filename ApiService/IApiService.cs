@@ -30,7 +30,9 @@ public interface IApiService
     Task<bool> UpdateUser(UserVM user);
     Task<bool> Register(UserForRegistrationVM userForRegistration);
 	Task<(bool,TokenVM?)> Login(UserForAuthenticationVM userForAuthentication);
+    Task<(bool, TokenVM?)> LoginCMS(UserForAuthenticationVM userForAuthentication);
     Task<UserVM> GetLoggedUser();
+    Task<AdminVM> GetLoggedAdmin();
     Task<bool> ChangePassword(ChangePasswordVM changePassword);
 	#endregion
 

@@ -3,7 +3,7 @@
 
 <MudGrid Justify="Justify.Center">
     <MudItem xs="12">
-        <EditForm Model="@Model">
+        <EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator/>
             <MudGrid Justify="Justify.Center">
                 <MudItem xs="6">
@@ -23,5 +23,37 @@
 </MudGrid>
 
 @code {
+    bool _loader = false;
+
     UserForAuthenticationVM Model = new();
+
+    [Inject]
+    IJSRuntime JSRuntime { get; set; } = null!;
+    [Inject]
+    IApiService ApiService { get; set; } = null!;
+    [Inject]
+    AuthenticationStateProvider AuthenticationState { get; set; } = null!;
+    [Inject]
+    NavigationManager NavigationManager { get; set; } = null!;
+
+    async Task OnValidSubmit()
+    {
+        _loader = true;
+        (bool result, TokenVM? token) = await ApiService.LoginCMS(Model);
+
+        if (result && token is not null)
+        {
+            await CreateCookie(token.AccessToken, 3);
+            var authState = await AuthenticationState.GetAuthenticationStateAsync();
+            _loader = false;
+            NavigationManager.NavigateTo("/");
+        }
+
+        _loader = false;
+    }
+
+    async Task CreateCookie(string value, int durationDays)
+    {
+        await JSRuntime.InvokeAsync<object>("createCookie", "jwtToken", value, durationDays);
+    }
 }

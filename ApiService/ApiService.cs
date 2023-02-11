@@ -248,7 +248,19 @@ public sealed class ApiService : IApiService
 		return (true,_mapper.Map<TokenVM>(token));
 	}
 
-	public async Task<UserVM> GetLoggedUser()
+    public async Task<(bool, TokenVM?)> LoginCMS(UserForAuthenticationVM userForAuthentication)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/account/login/cms", _mapper.Map<UserForAuthenticationDto>(userForAuthentication));
+
+        if (!response.IsSuccessStatusCode)
+            return (false, null);
+
+        TokenDto token = await response.Content.ReadFromJsonAsync<TokenDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+        return (true, _mapper.Map<TokenVM>(token));
+    }
+
+    public async Task<UserVM> GetLoggedUser()
 	{
 		HttpResponseMessage response = await _httpClient.GetAsync("api/account/user/logged");
 
@@ -259,7 +271,18 @@ public sealed class ApiService : IApiService
 		return _mapper.Map<UserVM>(user);
 	}
 
-	public async Task<bool> ChangePassword(ChangePasswordVM changePassword)
+    public async Task<AdminVM> GetLoggedAdmin()
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync("api/account/user/logged");
+
+        response.EnsureSuccessStatusCode();
+
+        UserDto user = await response.Content.ReadFromJsonAsync<UserDto>() ?? throw new JsonParsingException(await response.Content.ReadAsStringAsync());
+
+        return _mapper.Map<AdminVM>(user);
+    }
+
+    public async Task<bool> ChangePassword(ChangePasswordVM changePassword)
 	{
 		HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/account/user/changePassword", _mapper.Map<ChangePasswordDto>(changePassword));
 

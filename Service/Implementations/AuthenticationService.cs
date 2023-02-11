@@ -1,4 +1,6 @@
-﻿namespace Service.Implementations;
+﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace Service.Implementations;
 
 internal sealed class AuthenticationService : IAuthenticationService
 {
@@ -28,10 +30,10 @@ internal sealed class AuthenticationService : IAuthenticationService
     {
         User dbUser = await _userManager.FindByNameAsync(user.Identity.Name) ?? throw new UserNotFound();
 
-			return _mapper.Map<UserDto>(dbUser);
-		}
+		return _mapper.Map<UserDto>(dbUser);
+	}
 
-		public async Task<IdentityResult> RegisterUserAsync(UserForRegistrationDto userForRegistration)
+	public async Task<IdentityResult> RegisterUserAsync(UserForRegistrationDto userForRegistration)
     {
         User user = _mapper.Map<User>(userForRegistration);
         user.UserName = Guid.NewGuid().ToString();
@@ -46,16 +48,16 @@ internal sealed class AuthenticationService : IAuthenticationService
         return result;
     }
 
-		public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordDto changePassword, ClaimsPrincipal user)
-		{
-			User dbUser = await _userManager.FindByNameAsync(user.Identity.Name) ?? throw new UserNotFound();
+	public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordDto changePassword, ClaimsPrincipal user)
+	{
+		User dbUser = await _userManager.FindByNameAsync(user.Identity.Name) ?? throw new UserNotFound();
 
         IdentityResult result = await _userManager.ChangePasswordAsync(dbUser,changePassword.OldPassword,changePassword.NewPassword);
 
         return result;
-		}
+	}
 
-		public async Task<bool> ValidateUserAsync(UserForAuthenticationDto userForAuth)
+	public async Task<bool> ValidateUserAsync(UserForAuthenticationDto userForAuth)
     {
         _user = await _userManager.FindByEmailAsync(userForAuth.Email);
 
@@ -66,6 +68,31 @@ internal sealed class AuthenticationService : IAuthenticationService
 
         return result;
     }
+
+    public async Task<bool> ValidateAdminAsync(UserForAuthenticationDto userForAuth)
+    {
+        _user = await _userManager.FindByEmailAsync(userForAuth.Email);
+
+        if(_user is null)
+            return false;
+
+        if (!await _userManager.IsInRoleAsync(_user, DatabaseConstants.RoleConstants.SuperAdministrator.Name) &&
+            !await _userManager.IsInRoleAsync(_user, DatabaseConstants.RoleConstants.Administrator.Name))
+        {
+            _logger.LogWarn($"{nameof(ValidateUserAsync)}: Authentication failed. Invalid role.");
+            return false;
+        }
+
+
+        if (!await _userManager.CheckPasswordAsync(_user, userForAuth.Password))
+        {
+            _logger.LogWarn($"{nameof(ValidateUserAsync)}: Authentication failed. Wrong user name or password.");
+            return false;
+        }
+
+        return true;
+    }
+
 
     public async Task<TokenDto> CreateTokenAsync(bool populateExp)
     {
