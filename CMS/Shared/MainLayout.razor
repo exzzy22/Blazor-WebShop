@@ -6,11 +6,17 @@
 
 <MudLayout>
     <AuthorizeView>
-            <MudAppBar Elevation="0">
+        <MudAppBar Elevation="0">
             <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
             <MudSpacer />
-            <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Link="https://mudblazor.com/" Target="_blank" />
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/MudBlazor/MudBlazor/" Target="_blank" />
+            <MudAvatar Color="Color.Secondary" @onmouseover="() => _userMenuOpen = true">@(User is null ? "" : User.FirstName.First())
+            </MudAvatar>
+            <MudPopover AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" Open="@_userMenuOpen" @onmouseleave="() => _userMenuOpen = false">
+                <MudTabs Outlined="false" MinimumTabWidth="30px" Position="Position.Right" >
+                    <MudTabPanel Text="Edit" Icon="@Icons.Material.Filled.Edit" />
+                    <MudTabPanel Text="Logout" Icon="@Icons.Material.Filled.Logout" OnClick="LogOut" />
+                </MudTabs>
+            </MudPopover>
         </MudAppBar>
         <MudDrawer @bind-Open="_drawerOpen" Elevation="1" ClipMode="DrawerClipMode.Never">
             <MudDrawerHeader>
@@ -18,7 +24,7 @@
             </MudDrawerHeader>
             <NavMenu />
         </MudDrawer>
-        <MudMainContent>
+        <MudMainContent @onmouseover="() => _userMenuOpen = false">
             <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
                 @Body
             </MudContainer>
@@ -28,18 +34,26 @@
 
 @code {
     bool _drawerOpen = true;
+    bool _userMenuOpen = false;
+    public AdminVM User { get; set; } = null!;
 
     [Inject]
     AuthenticationStateProvider AuthenticationState { get; set; } = null!;
     [Inject]
     NavigationManager NavigationManager { get; set; } = null!;
+    [Inject]
+    UserState UserState { get; set; } = null!;
+    [Inject]
+    IJSRuntime JSRuntime { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationState.GetAuthenticationStateAsync();
 
         if (authState.User is not null && authState.User.Identity is not null && authState.User.Identity.IsAuthenticated)
-        { }
+        {
+            User = UserState.User;
+        }
         else
         {
             NavigationManager.NavigateTo("login");   
@@ -47,8 +61,14 @@
 
     }
 
-    void DrawerToggle()
+    async Task LogOut()
     {
-        _drawerOpen = !_drawerOpen;
+        await DeleteCookie();
+        var authState = await AuthenticationState.GetAuthenticationStateAsync();
+        NavigationManager.NavigateTo("/",true);
     }
+
+    async Task DeleteCookie() => await JSRuntime.InvokeVoidAsync("deleteCookie", "jwtToken");
+
+    void DrawerToggle() => _drawerOpen = !_drawerOpen;
 }

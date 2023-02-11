@@ -13,7 +13,17 @@
                             <MudTextField Label="Password" Class="mt-3" @bind-Value="Model.Password" For="@(() => Model.Password)" InputType="InputType.Password" />
                         </MudCardContent>
                         <MudCardActions>
-                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="@_loader" Class="ml-auto">
+                                @if (_loader)
+                                {
+                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                                    <MudText Class="ms-2">Login</MudText>
+                                }
+                                else
+                                {
+                                    <MudText>Login</MudText>
+                                }                            
+                            </MudButton>
                         </MudCardActions>
                     </MudCard>
                 </MudItem>
@@ -24,7 +34,6 @@
 
 @code {
     bool _loader = false;
-
     UserForAuthenticationVM Model = new();
 
     [Inject]
