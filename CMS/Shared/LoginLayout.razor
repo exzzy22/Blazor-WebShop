@@ -1,0 +1,15 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider IsDarkMode="true" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudMainContent>
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="d-flex align-center flex-grow-1 gap-4" Style="position:absolute;top:40%;left:25%">
+        @Body
+    </MudContainer>
+</MudMainContent>
+
+@code {
+
+}

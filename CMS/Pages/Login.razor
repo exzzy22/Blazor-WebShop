@@ -1,0 +1,27 @@
+﻿@page "/login"
+@layout LoginLayout
+
+<MudGrid Justify="Justify.Center">
+    <MudItem xs="12">
+        <EditForm Model="@Model">
+        <DataAnnotationsValidator/>
+            <MudGrid Justify="Justify.Center">
+                <MudItem xs="6">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudTextField Label="Email" Class="mt-3" @bind-Value="Model.Email" For="@(() => Model.Email)"/>
+                            <MudTextField Label="Password" Class="mt-3" @bind-Value="Model.Password" For="@(() => Model.Password)" InputType="InputType.Password" />
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        </EditForm>   
+    </MudItem>
+</MudGrid>
+
+@code {
+    UserForAuthenticationVM Model = new();
+}
