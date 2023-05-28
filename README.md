@@ -76,11 +76,11 @@ First you need to fill **appsettings.json**, or respective environment settings 
 ```
 You will also need to create database you can use Entity Framework migrations to do so, but I also provided database creation script including some dummy data. If you're going to use my dummy data, make sure to also copy the image folder to the wwwroot of the API project. Both are in the [GithubFiles folder](GithubFiles)
 
-## Live Version
+## Live Version - Not working currently
 
-If you want to check the hosted version, it is available online at https://webshop.myexzzy.uk/. Feel free to test the features including the payment system (you can use [test cards](https://stripe.com/docs/testing) from Stripe). Everything should work as expected.
+~~If you want to check the hosted version, it is available online at https://webshop.myexzzy.uk/. Feel free to test the features including the payment system (you can use [test cards](https://stripe.com/docs/testing) from Stripe). Everything should work as expected
 
-For registered users, there is no need for email activation after registration. Everything works as an anonymous user, except you will not have access to user information and orders. If you want to use existing user, you can use the following credentials:
+~~For registered users, there is no need for email activation after registration. Everything works as an anonymous user, except you will not have access to user information and orders. If you want to use existing user, you can use the following credentials:
 
     Email: lukeBenson@rhyta.com
     Password: ei4DU8FdGpmHuXi
