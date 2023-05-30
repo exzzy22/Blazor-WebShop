@@ -46,6 +46,13 @@
 	{
 		await UserState.TryLoadData();
 		StaticConfig.PropertyChanged += OnCurrencyChanged;
+		Console.WriteLine("OnInitializedAsync");
+	}
+
+	protected override void OnParametersSet()
+	{
+		Console.WriteLine("OnParametersSet");
+		StateHasChanged();
 	}
 
 	private void OnCurrencyChanged(object? sender, PropertyChangedEventArgs e)
